@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HomeActions } from "@/components/HomeActions";
+import { TestnetPanel } from "@/components/TestnetPanel";
 
 export default function HomePage() {
   return (
@@ -27,6 +28,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <TestnetPanel />
 
       <section className="section">
         <h2>One product. One proof.</h2>

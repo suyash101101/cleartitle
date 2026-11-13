@@ -10,6 +10,7 @@ On-chain **title insurance** for memberships that earn. Demo world: **Nearnight 
 | Stack | NEAR · Rust contract · TypeScript SDK · Next.js |
 | Repo | https://github.com/suyash101101/cleartitle |
 | Live | https://web-khaki-iota-17.vercel.app |
+| Testnet contract | [`cleartitle562464.testnet`](https://explorer.testnet.near.org/accounts/cleartitle562464.testnet) |
 
 ## Quick start
 
@@ -48,9 +49,11 @@ pnpm verify:all
 | --- | --- |
 | Domain engine (`packages/sdk`) | Real state machine — powers UI + Vitest |
 | Rust contract (`contracts/cleartitle`) | Real near-sdk unit tests (ticket split, mid-payout, epoch freeze) |
-| Web UI | Demo network using the shared SDK (same logic as tests) |
-| Chain Signatures mainnet spend | Not in P0 — continuity hash + refuse-while-listed are proven in engine/contract |
-| USDC NEP-141 | Demo uses numeric USDC units; contract uses attached deposit as stand-in |
+| Web UI | Demo engine for interactive story + **live RPC panel** reading testnet |
+| Testnet contract | Deployed · club minted · ticket bought · diligence CLEAN on-chain |
+| Wallet connect (near-connect) | Not wired yet — scripted txs signed with local faucet key |
+| Chain Signatures MPC spend | Not yet — continuity hash proven in contract/engine |
+| USDC NEP-141 | Numeric / yocto stand-in (ticket_price = 10 yocto on testnet) |
 
 ## Architecture
 

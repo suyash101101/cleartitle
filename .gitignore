@@ -18,3 +18,4 @@ scripts/.tmp-*
 .tools/
 apps/web/e2e/.auth/
 .vercel
+.env.local
