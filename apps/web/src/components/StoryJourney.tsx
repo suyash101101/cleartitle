@@ -121,7 +121,7 @@ export function StoryJourney() {
 
       <section className="live-strip" aria-label="Live testnet">
         <TestnetPanel />
-        <TicketRiver limit={5} compact />
+        <TicketRiver limit={2} compact />
       </section>
 
       <section className="mishap-rail" aria-label="Why ClearTitle">
