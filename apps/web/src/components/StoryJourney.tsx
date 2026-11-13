@@ -43,14 +43,10 @@ function HeroVisual() {
     <div className="hero-stage">
       <div className="hero-stage-glow" aria-hidden />
       <div className="hero-stage-ticket">
-        <TiltCard maxTilt={10}>
-          <NightTicketCard />
-        </TiltCard>
+        <NightTicketCard />
       </div>
-      <div className="hero-stage-primary">
-        <TiltCard className="hero-visual-card" maxTilt={8}>
-          <SeatDeedCard />
-        </TiltCard>
+      <div className="hero-stage-primary hero-visual-card">
+        <SeatDeedCard />
       </div>
     </div>
   );
