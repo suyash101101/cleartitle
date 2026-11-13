@@ -40,15 +40,19 @@ export function TestnetPanel() {
       const c = await viewMethod<Club>("get_club", {});
       const d = await viewMethod<Diligence>("diligence", { token_id: "3" });
       const ids = ["1", "2", "3", "4", "5"];
-      const settled = await Promise.allSettled(
-        ids.map((token_id) => viewMethod<SeatView | null>("nft_token", { token_id })),
+      const rows = await Promise.all(
+        ids.map(async (token_id) => {
+          try {
+            const s = await viewMethod<SeatView | null>("get_seat", { token_id });
+            return s ? { ...s, token_id: s.token_id ?? token_id } : null;
+          } catch {
+            return null;
+          }
+        }),
       );
-      const loaded = settled
-        .map((r) => (r.status === "fulfilled" ? r.value : null))
-        .filter((s): s is SeatView => Boolean(s));
       setClub(c);
       setDiligence(d);
-      setSeats(loaded);
+      setSeats(rows.filter((s): s is SeatView => Boolean(s)));
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     } finally {

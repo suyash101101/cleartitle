@@ -152,9 +152,9 @@ h3,
 }
 .dock a {
   color: var(--color-mute);
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  padding: 0.5rem 0.8rem;
+  padding: 0.48rem 0.68rem;
   border-radius: 999px;
   white-space: nowrap;
 }
