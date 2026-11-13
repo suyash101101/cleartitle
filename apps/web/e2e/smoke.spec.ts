@@ -208,10 +208,18 @@ test("mobile home brand @smoke", async ({ page }) => {
 });
 
 test("box office buy ticket @smoke", async ({ page }) => {
+  await enterPreview(page);
   await page.goto("/box-office");
   await hideDevChrome(page);
   await expect(page.getByLabel(/QuitClaim wedge/i)).toBeVisible();
   await expect(page.getByLabel(/Door NFT versus earning seat/i)).toHaveCount(0);
   await page.getByRole("button", { name: /^Buy ticket$/i }).click({ force: true });
   await expect(page.getByText(/Treasury|Seat #|0xct/i).first()).toBeVisible();
+});
+
+test("organizer five minute path @smoke", async ({ page }) => {
+  await page.goto("/console");
+  await hideDevChrome(page);
+  await expect(page.getByLabel(/Five minute organizer path/i)).toBeVisible();
+  await expect(page.getByText(/Live club/i).first()).toBeVisible();
 });
