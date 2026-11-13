@@ -9,7 +9,7 @@ export function ActorBar() {
   const setActor = useApp((s) => s.setActor);
   return (
     <div className="actor-bar" role="group" aria-label="Act as">
-      <span className="meta">Act as</span>
+      <span className="meta">Film cast</span>
       {ACTORS.map((a) => (
         <button
           key={a}

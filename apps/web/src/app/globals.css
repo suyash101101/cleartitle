@@ -68,8 +68,9 @@ h3,
   position: relative;
   z-index: 1;
   margin: 0 auto;
-  max-width: 1180px;
-  padding: 0 1rem 6.5rem;
+  width: min(100%, 1360px);
+  max-width: 100%;
+  padding: 0 clamp(0.75rem, 2.5vw, 1.5rem) 6.5rem;
   overflow: visible;
 }
 
