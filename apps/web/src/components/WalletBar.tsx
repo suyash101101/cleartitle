@@ -6,7 +6,7 @@ import { EXPLORER } from "@/lib/near";
 export function WalletBar() {
   const { accountId, connecting, connect, disconnect } = useWallet();
   return (
-    <div className="actor-bar" style={{ marginBottom: 0 }}>
+    <div className="wallet-bar">
       {accountId ? (
         <>
           <span className="badge ok">TESTNET</span>

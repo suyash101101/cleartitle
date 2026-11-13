@@ -1,6 +1,6 @@
 "use client";
 
-/** Dimensional story props — seat deed, night ticket, diligence stamp, fail slip */
+/** Dimensional story props — seat deed, diligence stamp, fail slip, title score */
 
 export function SeatDeedCard({ owner = "ada.near", epoch = 1 }: { owner?: string; epoch?: number }) {
   return (
@@ -27,15 +27,17 @@ export function NightTicketCard() {
       <div className="asset-card-inner">
         <p className="asset-kicker">Nearnight Live</p>
         <h3>Door ticket</h3>
-        <p className="asset-price">10 <small>USDC</small></p>
+        <p className="asset-price">
+          10 <small>USDC</small>
+        </p>
         <ul className="asset-split">
           <li>
             <span>Treasury</span>
-            <b>20%</b>
+            <b>50%</b>
           </li>
           <li>
             <span>Five seats</span>
-            <b>80%</b>
+            <b>50%</b>
           </li>
         </ul>
         <p className="asset-line mute">ft_transfer_call → ticket_cut events</p>
@@ -57,8 +59,8 @@ export function DiligenceStampCard({ verdict = "PROVABLY CLEAN" }: { verdict?: s
 }
 
 export function FailSlipCard({
-  title = "Old owner withdraw",
-  reason = "not current owner",
+  title = "Seller recall",
+  reason = "old holder still controls access",
 }: {
   title?: string;
   reason?: string;
@@ -78,24 +80,76 @@ export function FailSlipCard({
 export function OwnershipFlipCard() {
   return (
     <div className="asset-card flip-card">
-      <div className="flip-row">
-        <div>
-          <p className="asset-kicker">Seller</p>
-          <p className="flip-name">ada.near</p>
-          <p className="asset-line">loses claim path</p>
-        </div>
-        <div className="flip-arrow" aria-hidden>
-          →
-        </div>
-        <div>
-          <p className="asset-kicker">Buyer</p>
-          <p className="flip-name">priya.near</p>
-          <p className="asset-line">pending rebounds</p>
+      <div className="asset-card-inner">
+        <p className="asset-kicker">Mid-payout · one breath · clear title</p>
+        <div className="flip-row">
+          <div>
+            <span className="meta">Seller</span>
+            <strong>ada.near</strong>
+            <p className="meta">loses claim path</p>
+          </div>
+          <div className="flip-arrow" aria-hidden>
+            →
+          </div>
+          <div>
+            <span className="meta">Buyer</span>
+            <strong>priya.near</strong>
+            <p className="meta">pending rebounds</p>
+          </div>
         </div>
       </div>
-      <p className="asset-line highlight" style={{ marginTop: "1rem" }}>
-        Mid-payout · one breath · clear title
-      </p>
+    </div>
+  );
+}
+
+export function TitleScoreCard() {
+  return (
+    <div className="asset-card title-score-card">
+      <div className="asset-card-inner">
+        <p className="asset-kicker">Title clarity</p>
+        <p className="title-score-card-num">
+          100 <span>A</span>
+        </p>
+        <p className="asset-line highlight">0 keys · wash clean · no raw sigs</p>
+        <p className="asset-line mute">Owner alone is not enough. We score the title.</p>
+      </div>
+    </div>
+  );
+}
+
+export function ClaimClockCard() {
+  return (
+    <div className="asset-card claim-clock-card">
+      <div className="asset-card-inner">
+        <p className="asset-kicker">After the door</p>
+        <div className="claim-clock-card-row">
+          <div>
+            <span className="meta">Escrow</span>
+            <strong>48h</strong>
+          </div>
+          <div className="flip-arrow" aria-hidden>
+            →
+          </div>
+          <div>
+            <span className="meta">QuietTitle</span>
+            <strong>∞</strong>
+          </div>
+        </div>
+        <p className="asset-line mute">Door fee ends. Seat earnings do not.</p>
+      </div>
+    </div>
+  );
+}
+
+export function DiligenceCard() {
+  return (
+    <div className="asset-card fanpass-card">
+      <div className="asset-card-inner">
+        <p className="asset-kicker">Explainable diligence</p>
+        <p className="asset-line">Six named checks · RPC replay</p>
+        <p className="asset-line highlight">CLEAN gate before buy_seat</p>
+        <p className="asset-line mute">0 keys · wash · held-sig · continuity</p>
+      </div>
     </div>
   );
 }

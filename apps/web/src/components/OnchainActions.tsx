@@ -28,8 +28,14 @@ export function OnchainActions() {
 
   return (
     <div className="panel" style={{ marginTop: "1.25rem" }}>
-      <h3>Signed testnet actions</h3>
-      <p className="meta">Uses your connected wallet against cleartitle562464.testnet</p>
+      <h3>
+        <span className="badge rpc">Testnet wallet</span> Signed actions
+      </h3>
+      <p className="meta">
+        {accountId
+          ? `Signing as ${accountId} against cleartitle562464.testnet`
+          : "Connect a testnet wallet above to enable buy_ticket / list / buy_seat."}
+      </p>
       <div className="cta-row" style={{ marginTop: "0.75rem" }}>
         <button type="button" disabled={busy || !accountId} onClick={() => void run("buy_ticket", buyTicket)}>
           Buy ticket (10 yocto)

@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import { DM_Sans, IBM_Plex_Mono, Syne } from "next/font/google";
+import { IBM_Plex_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Flash } from "@/components/Flash";
 import { Providers } from "@/components/Providers";
 
-const sans = DM_Sans({
+/** X Ads–adjacent geometric sans (Chirp-like weight + tracking). */
+const sans = Manrope({
   subsets: ["latin"],
   variable: "--font-sans",
-  display: "swap",
-});
-
-const brand = Syne({
-  subsets: ["latin"],
-  variable: "--font-brand",
   display: "swap",
 });
 
@@ -25,17 +20,17 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ClearTitle | Sell the seat. Keep nothing.",
+  title: "QuietTitle · Nearnight seat NFTs",
   description:
-    "Title insurance for ticket-earning seat NFTs on NEAR. Pending cuts follow the buyer. Live testnet proofs.",
+    "Quiet title = undisputed ownership of every future cut. Five NEP-171 seat NFTs earn on Nearnight. Live testnet proofs on NEAR.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${brand.variable} ${mono.variable}`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body>
         <Providers>
-          <div className="shell">
+          <div className="shell x-ads-shell">
             <Nav />
             {children}
           </div>

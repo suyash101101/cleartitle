@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@hot-labs/near-connect", "chainsig.js"],
+  devIndicators: false,
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

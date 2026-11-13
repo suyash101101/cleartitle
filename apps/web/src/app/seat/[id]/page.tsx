@@ -7,6 +7,16 @@ import { LiveDiligence } from "@/components/LiveDiligence";
 import { SeatCharter } from "@/components/SeatCharter";
 import { JudgeStampPanel } from "@/components/JudgeStampPanel";
 import { SessionBar } from "@/components/SessionBar";
+import { ContinuityStrip } from "@/components/ContinuityStrip";
+import { EarningsLedger } from "@/components/EarningsLedger";
+import { PendingFollow } from "@/components/PendingFollow";
+import { TitleChain } from "@/components/TitleChain";
+import { TitleScore } from "@/components/TitleScore";
+import { EpochBump } from "@/components/EpochBump";
+import { TipContinuity } from "@/components/TipContinuity";
+import { TransferTape } from "@/components/TransferTape";
+import { TrustExplain } from "@/components/TrustExplain";
+import { WedgeBadge } from "@/components/WedgeBadge";
 import { useApp } from "@/lib/store";
 
 export default function SeatPage() {
@@ -32,31 +42,48 @@ export default function SeatPage() {
 
   const isOwner = actor === seat.owner;
   const report = diligence?.tokenId === id ? diligence : null;
+  const clean =
+    report?.verdict === "PROVABLY CLEAN" &&
+    !seat.washFlagged &&
+    seat.accessKeyCount === 0;
+  const pendingTotal = seat.pending.reduce((sum, p) => sum + p.amount, 0);
+  const buyLocked = seat.encumbrance === "LISTED" && !isOwner && !clean;
 
   return (
-    <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
-      <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
-        <h2 style={{ margin: 0 }} className="font-display text-4xl md:text-[2.6rem]">
-          Seat #{seat.tokenId}
-        </h2>
-        <span className="badge ok">0 keys</span>
-        <span className="badge signal">{seat.kind}</span>
-        <span className="badge amber">{seat.encumbrance}</span>
+    <section className="section seat-desk" style={{ borderTop: "none", paddingTop: 0 }}>
+      <p className="chapter-kicker">Seat desk · Nearnight</p>
+      <div className="seat-desk-head">
+        <h1 className="page-title">Seat #{seat.tokenId}</h1>
+        <div className="seat-desk-chips">
+          <span className="badge ok">0 keys</span>
+          <span className="badge">{seat.kind}</span>
+          <span className="badge">{seat.encumbrance}</span>
+        </div>
       </div>
       <p className="lede">
         {seat.vaultAccountId} · owner {seat.owner} · epoch {seat.keyEpoch}
       </p>
+      <WedgeBadge />
       <SessionBar />
-      <JudgeStampPanel />
 
-      <div style={{ marginBottom: "1.25rem" }}>
-        <SeatCharter seat={seat} />
-      </div>
-      <ChainSigPanel vaultAccountId={`seat-${id}.cleartitle562464.testnet`} />
-      <LiveDiligence tokenId={id} />
+      <div className="seat-grid">
+        <div className="seat-charter-wrap">
+          <SeatCharter seat={seat} />
+        </div>
 
-      <div className="grid-2">
-        <div className="panel">
+        <div className="panel seat-cell">
+          <h3>Transfer tape</h3>
+          <TransferTape />
+        </div>
+
+        <div className="panel seat-cell seat-cell-wide">
+          <h3>Live diligence</h3>
+          <p className="meta">Six named checks before buy unlocks.</p>
+          <JudgeStampPanel />
+          <LiveDiligence tokenId={id} />
+        </div>
+
+        <div className="panel seat-cell">
           <h3>Charter details</h3>
           <p className="meta">tickets accrued · {seat.ticketsAccrued}</p>
           <p className="meta">vault balance · {seat.balance}</p>
@@ -64,7 +91,7 @@ export default function SeatPage() {
           <p className="meta mono">BTC · {seat.btcAddress}</p>
           <p className="meta mono">SOL · {seat.solAddress}</p>
           <p className="meta mono">continuity · {seat.continuityHash}</p>
-          <div className="cta-row" style={{ marginTop: "1rem" }}>
+          <div className="cta-row" style={{ marginTop: "0.85rem" }}>
             {isOwner && (
               <>
                 <button type="button" onClick={() => doClaim(id)}>
@@ -76,18 +103,31 @@ export default function SeatPage() {
               </>
             )}
             {seat.encumbrance === "LISTED" && !isOwner && (
-              <button type="button" onClick={() => doBuySeat(id)}>
-                Buy mid-payout
+              <button
+                type="button"
+                onClick={() => doBuySeat(id)}
+                disabled={buyLocked}
+                title={buyLocked ? "Run diligence — buy unlocks on PROVABLY CLEAN" : undefined}
+              >
+                {buyLocked ? "Buy locked · run diligence" : "Buy mid-payout"}
+              </button>
+            )}
+            {buyLocked && (
+              <button type="button" className="ghost" onClick={() => doDiligence(id)}>
+                Unlock with diligence
               </button>
             )}
             <Link className="btn ghost" href={`/member/${id}`}>
               Member Room
             </Link>
+            <Link className="btn ghost" href={`/title/${id}`}>
+              Title certificate
+            </Link>
           </div>
         </div>
 
-        <div className="panel">
-          <h3>Diligence Packet</h3>
+        <div className="panel seat-cell">
+          <h3>Diligence packet</h3>
           <button type="button" className="ghost" onClick={() => doDiligence(id)}>
             Run diligence
           </button>
@@ -95,7 +135,7 @@ export default function SeatPage() {
             <>
               <div
                 className={`stamp ${report.verdict === "PROVABLY CLEAN" ? "clean" : "fix"}`}
-                style={{ marginTop: "1rem" }}
+                style={{ marginTop: "0.85rem" }}
               >
                 {report.verdict}
               </div>
@@ -116,7 +156,29 @@ export default function SeatPage() {
         </div>
       </div>
 
-      <div className="grid-2" style={{ marginTop: "1.25rem" }}>
+      <div className="seat-strip-grid">
+        <PendingFollow amount={pendingTotal} owner={seat.owner} />
+        <TipContinuity btc={seat.btcAddress} sol={seat.solAddress} />
+        <ContinuityStrip seat={seat} />
+        <EpochBump />
+      </div>
+
+      <ChainSigPanel vaultAccountId={`seat-${id}.cleartitle562464.testnet`} />
+
+      <div className="cert-bottom-grid">
+        <TitleChain seat={seat} />
+        <EarningsLedger seat={seat} />
+        <TitleScore
+          seat={seat}
+          verdict={report?.verdict ?? (seat.washFlagged ? "FIX BEFORE BUY" : "PROVABLY CLEAN")}
+        />
+        <TrustExplain
+          seat={seat}
+          verdict={report?.verdict ?? (seat.washFlagged ? "FIX BEFORE BUY" : "PROVABLY CLEAN")}
+        />
+      </div>
+
+      <div className="grid-2 seat-tail-grid">
         <div className="panel">
           <h3>Pending payouts</h3>
           {seat.pending.length === 0 ? (
@@ -139,8 +201,8 @@ export default function SeatPage() {
 
         <div className="panel">
           <h3>Seat history</h3>
-          <p className="meta" style={{ marginBottom: "0.75rem" }}>
-            Earned · paid · who held it. Transfer path judges ask for this.
+          <p className="meta" style={{ marginBottom: "0.65rem" }}>
+            Earned · paid · who held it.
           </p>
           <ol className="seat-timeline">
             {seat.ledger

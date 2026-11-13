@@ -1,9 +1,15 @@
+import Link from "next/link";
+import { FlaskConical, LayoutGrid, ShieldCheck, Ticket } from "lucide-react";
 import { VERIFY_CLAIMS } from "@/sdk";
 import { LAB_ATTACKS, ONCHAIN, txUrl } from "@/lib/evidence";
+import { ClaimClock } from "@/components/ClaimClock";
 import { JudgeStampPanel } from "@/components/JudgeStampPanel";
+import { ProofShare } from "@/components/ProofShare";
+import { WarrantyStrip } from "@/components/WarrantyStrip";
+import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { PageHeader } from "@/components/ui/page-header";
-import { CompareStrip } from "./CompareStrip";
 
+/** Lean proof page — claims, receipts, threat model. */
 export default function VerifyPage() {
   return (
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
@@ -17,119 +23,114 @@ export default function VerifyPage() {
         }
       />
 
+      <BentoGrid className="page-bento">
+        <BentoCard
+          name="Transfer Lab"
+          Icon={FlaskConical}
+          description="Arm seller-recall, listed drain, held-sig. Each refuses with receipts."
+          href="/lab"
+          cta="Open Lab"
+        />
+        <BentoCard
+          name="Title certificate"
+          Icon={ShieldCheck}
+          description="PROVABLY CLEAN stamp. Six named checks."
+          href="/title/3"
+          cta="Open cert"
+        />
+        <BentoCard
+          name="Seat inventory"
+          Icon={LayoutGrid}
+          description="Five NEP-171 founding seats on FastNear."
+          href="/inventory"
+          cta="Browse seats"
+        />
+        <BentoCard
+          name="Box office"
+          className="bento-span-2"
+          Icon={Ticket}
+          description="Buy a ticket. Splits hit seat vaults live."
+          href="/box-office"
+          cta="Buy ticket"
+        />
+      </BentoGrid>
+
       <JudgeStampPanel />
 
-      <div className="panel" style={{ marginBottom: "1.25rem" }}>
-        <CompareStrip />
+      <div className="grid-2" style={{ marginBottom: "1.25rem" }}>
+        <ClaimClock />
+        <ProofShare />
       </div>
+
+      <WarrantyStrip />
 
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
         <h3>Transfer threat model</h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          Every way a seller tries to keep the money, and how ClearTitle refuses it.
+          Every way a seller tries to keep the money, and how QuietTitle refuses it.
         </p>
         <ul className="checklist">
           <li>
             <span className="fail">✕</span>
-            <span>
-              Old owner withdraws after sale
-              <br />
-              <span className="meta">Access keys = 0 · owner check on withdraw · epoch bump</span>
-            </span>
+            <span>Old owner withdraw after sale · refused · not current owner</span>
           </li>
           <li>
             <span className="fail">✕</span>
-            <span>
-              Drain vault while listed
-              <br />
-              <span className="meta">Encumbrance freeze · listing nonce · withdraw refused</span>
-            </span>
+            <span>Withdraw while listed · refused · encumbered</span>
           </li>
           <li>
             <span className="fail">✕</span>
-            <span>
-              Held raw Chain Signature while listed
-              <br />
-              <span className="meta">Epoch freeze · raw sign refused while encumbered</span>
-            </span>
+            <span>Held raw sign while listed · refused · epoch freeze</span>
           </li>
           <li>
             <span className="pass">✓</span>
-            <span>
-              Mid-payout sale keeps pending cut
-              <br />
-              <span className="meta">Pending rebinds to buyer · seller claim path dies</span>
-            </span>
+            <span>Mid-payout buy · pending rebound + ownership flip</span>
           </li>
         </ul>
       </div>
 
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
-        <h3>On-chain receipts</h3>
-        <table className="verify">
-          <thead>
-            <tr>
-              <th>Event</th>
-              <th>Explorer</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(ONCHAIN).map(([k, id]) => (
-              <tr key={k}>
-                <td className="mono">{k}</td>
-                <td>
-                  <a className="mono" href={txUrl(id)} target="_blank" rel="noreferrer">
-                    {id}
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h3>Claim ↔ tx matrix</h3>
+        <div className="claim-table">
+          {VERIFY_CLAIMS.map((c) => (
+            <div key={c.test} className="claim-row">
+              <code className="mono">{c.test}</code>
+              <p>{c.claim}</p>
+              <p className="meta">{c.method}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="panel" style={{ marginBottom: "1.25rem" }}>
-        <h3>Lab attack proofs</h3>
-        <ul className="checklist">
+      <div className="panel lab-receipt-wall" style={{ marginBottom: "2.5rem" }}>
+        <h3>
+          <span className="badge rpc">Testnet RPC</span> Receipt wall
+        </h3>
+        <p className="meta" style={{ marginBottom: "0.85rem" }}>
+          Explorer-linked refuses and the mid-payout success path.
+        </p>
+        <ul className="lab-receipt-grid">
           {LAB_ATTACKS.map((a) => (
-            <li key={a.id}>
-              <span className={a.success ? "pass" : "fail"}>{a.success ? "✓" : "✕"}</span>
-              <span>
-                {a.title}: {a.reason}
-                <br />
-                <a className="mono" href={txUrl(a.tx)} target="_blank" rel="noreferrer">
-                  {a.tx}
-                </a>
+            <li key={a.id} className={a.success ? "pass" : "fail"}>
+              <span className="lab-receipt-mark" aria-hidden>
+                {a.success ? "✓" : "✕"}
               </span>
+              <div>
+                <strong>{a.title}</strong>
+                <p className="meta">{a.reason}</p>
+                <a className="mono" href={txUrl(a.tx)} target="_blank" rel="noreferrer">
+                  {a.tx.slice(0, 18)}…
+                </a>
+              </div>
             </li>
           ))}
         </ul>
-      </div>
-
-      <div className="panel">
-        <h3>Automated tests</h3>
-        <table className="verify">
-          <thead>
-            <tr>
-              <th>Claim</th>
-              <th>Method</th>
-              <th>Test</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {VERIFY_CLAIMS.map((row) => (
-              <tr key={row.test}>
-                <td>{row.claim}</td>
-                <td className="mono">{row.method}</td>
-                <td className="mono">{row.test}</td>
-                <td>
-                  <span className="badge ok">wired</span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <p className="meta mono" style={{ marginTop: "1rem" }}>
+          Contract · {ONCHAIN.contractId} ·{" "}
+          <Link className="pin-link" href="/lab">
+            re-run in Lab →
+          </Link>
+        </p>
       </div>
     </section>
   );

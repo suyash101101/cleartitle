@@ -52,6 +52,49 @@ function flashErr(text: string): Flash {
   return { kind: "err", text };
 }
 
+const JUDGE_STATE_KEY = "cleartitle-judge-state";
+
+type PersistedJudge = {
+  world: WorldState;
+  diligence: DiligenceReport | null;
+  lastLab: LabResult | null;
+  judgeStamps: JudgeStamp[];
+  actor: string;
+};
+
+function readJudgeState(): PersistedJudge | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(JUDGE_STATE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as PersistedJudge;
+  } catch {
+    return null;
+  }
+}
+
+function writeJudgeState(state: PersistedJudge) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(JUDGE_STATE_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore quota */
+  }
+}
+
+/** Restore Judge Run stamps/world after full navigation reload. */
+export function hydrateJudgeFromSession() {
+  const saved = readJudgeState();
+  if (!saved) return;
+  useApp.setState({
+    world: saved.world,
+    diligence: saved.diligence,
+    lastLab: saved.lastLab,
+    judgeStamps: saved.judgeStamps,
+    actor: saved.actor,
+  });
+}
+
 export const useApp = create<AppState>((set, get) => ({
   world: seedDemoNight(),
   diligence: null,
@@ -258,21 +301,28 @@ export const useApp = create<AppState>((set, get) => ({
         ok: diligence.verdict === "PROVABLY CLEAN",
       });
 
-      set({
+      const next = {
         world,
         actor: "priya.near",
         diligence,
         lastLab: old,
         judgeStamps: stamps,
         flash: {
-          kind: "lab",
+          kind: "lab" as const,
           text: `Judge path ✓ · old withdraw refused · ${old.reason}`,
         },
+      };
+      set(next);
+      writeJudgeState({
+        world,
+        diligence,
+        lastLab: old,
+        judgeStamps: stamps,
+        actor: "priya.near",
       });
 
       if (typeof window !== "undefined") {
         window.sessionStorage.setItem("cleartitle-judge", "1");
-        window.location.assign("/seat/3");
       }
     } catch (e) {
       set({

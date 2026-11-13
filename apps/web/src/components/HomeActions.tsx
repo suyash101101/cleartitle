@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useApp } from "@/lib/store";
 
 export function HomeActions() {
+  const router = useRouter();
   const resetDemo = useApp((s) => s.resetDemo);
   const runMidPayoutScenario = useApp((s) => s.runMidPayoutScenario);
   return (
@@ -12,23 +14,23 @@ export function HomeActions() {
         type="button"
         onClick={() => {
           resetDemo();
-          window.location.assign("/seat/3");
+          router.push("/seat/3");
         }}
       >
-        Open Seat #3 live
+        Open Seat #3
       </button>
       <button
         type="button"
         className="ghost"
         onClick={() => {
           runMidPayoutScenario();
-          window.location.assign("/lab");
+          router.push("/lab");
         }}
       >
-        Mid-payout attack
+        Prove seller recall fails
       </button>
-      <Link className="btn ghost" href="/verify">
-        Proof matrix
+      <Link className="btn ghost" href="/inventory">
+        All seat NFTs
       </Link>
     </div>
   );

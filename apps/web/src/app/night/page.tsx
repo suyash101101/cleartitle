@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { SessionBar } from "@/components/SessionBar";
+import { CutTicker } from "@/components/CutTicker";
+import { SettlementPulse } from "@/components/SettlementPulse";
 import { TicketRiver } from "@/components/TicketRiver";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
@@ -14,23 +17,35 @@ export default function NightPage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="Nearnight Live"
-        lede="Every ticket sale splits treasury and seat vaults in real time. Scenario engine mirrors the same buy_ticket rules as testnet."
+        lede="Every ticket sale splits treasury and seat vaults in real time. Same buy_ticket rules as live testnet."
       />
+      <div className="grid-2" style={{ marginBottom: "1.25rem" }}>
+        <SettlementPulse />
+        <CutTicker />
+      </div>
+      <SessionBar />
       {club && (
         <div className="cta-row" style={{ marginBottom: "1.25rem" }}>
           <button type="button" onClick={doBuyTicket} disabled={club.paused}>
             Sell one more ticket
           </button>
-          <span className="badge rpc">Testnet RPC</span>
           <span className="meta">
+            <span className="badge scenario">Scenario</span>
             {ticketsSold} sold · treasury {club.treasuryBalance}
           </span>
           <Link className="btn ghost" href="/box-office">
             Box office
           </Link>
+          <Link className="btn ghost" href="/title/3">
+            Seat #3 certificate
+          </Link>
+          <Link className="btn ghost" href="/lab">
+            Transfer Lab
+          </Link>
         </div>
       )}
       <TicketRiver limit={24} />
+      <div className="console-end-spacer" aria-hidden />
     </section>
   );
 }

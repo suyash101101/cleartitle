@@ -42,99 +42,83 @@ async function loadSeats(): Promise<SeatView[]> {
   return rows.filter((s): s is SeatView => Boolean(s));
 }
 
-export function TestnetPanel() {
+/** Compact single-row live strip — no sprawling empty cards. */
+export function TestnetPanel({ compact = false }: { compact?: boolean }) {
   const [club, setClub] = useState<Club | null>(null);
   const [diligence, setDiligence] = useState<Diligence | null>(null);
   const [seats, setSeats] = useState<SeatView[]>([]);
   const [err, setErr] = useState<string | null>(null);
-  const [seatsLoading, setSeatsLoading] = useState(true);
-  const [metaLoading, setMetaLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    setSeatsLoading(true);
-    setMetaLoading(true);
+    setLoading(true);
     setErr(null);
-    const seatPromise = loadSeats()
-      .then((rows) => {
-        setSeats(rows);
-        if (rows.length === 0) setErr((prev) => prev ?? "No seats from get_seat on RPC");
-      })
-      .catch((e) => {
-        setSeats([]);
-        setErr(e instanceof Error ? e.message : String(e));
-      })
-      .finally(() => setSeatsLoading(false));
+    const hardStop = window.setTimeout(() => {
+      setLoading(false);
+      setErr((prev) => prev ?? "RPC slow · retry");
+    }, 7000);
 
-    void Promise.all([
-      seatPromise,
-      viewMethod<Club>("get_club", {})
-        .then(setClub)
-        .catch(() => setClub(null))
-        .finally(() => {}),
-      viewMethod<Diligence>("diligence", { token_id: "3" })
-        .then(setDiligence)
-        .catch(() => setDiligence(null)),
-    ]).finally(() => setMetaLoading(false));
+    try {
+      const [rows, clubView, dil] = await Promise.all([
+        loadSeats(),
+        viewMethod<Club>("get_club", {}).catch(() => null),
+        viewMethod<Diligence>("diligence", { token_id: "3" }).catch(() => null),
+      ]);
+      setSeats(rows);
+      setClub(clubView);
+      setDiligence(dil);
+      if (rows.length === 0) setErr("No seats from RPC");
+    } catch (e) {
+      setSeats([]);
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      window.clearTimeout(hardStop);
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
     void refresh();
   }, [refresh]);
 
-  const showChips = seats.length > 0 || seatsLoading;
+  const seat3 = seats.find((s) => s.token_id === "3") ?? seats[0];
+  const clean = diligence?.verdict?.includes("CLEAN");
 
   return (
-    <div className="live-rail">
-      <div className="live-rail-head">
-        <span className="badge rpc">Testnet RPC</span>
-        <a className="mono meta" href={`${EXPLORER}/accounts/${CONTRACT_ID}`} target="_blank" rel="noreferrer">
+    <div className={`live-rail live-rail-line${compact ? " live-rail-compact" : ""}`}>
+      <div className="live-rail-row">
+        <span className="badge rpc">Testnet</span>
+        <a className="mono live-rail-id" href={`${EXPLORER}/accounts/${CONTRACT_ID}`} target="_blank" rel="noreferrer">
           {CONTRACT_ID}
         </a>
+        {club && (
+          <span className="live-rail-stat">
+            sold {club.tickets_sold} · treasury {club.treasury_balance}
+          </span>
+        )}
+        {diligence && (
+          <span className={`badge ${clean ? "ok" : "warn"} live-rail-verdict`}>
+            {clean ? "CLEAN" : diligence.verdict}
+          </span>
+        )}
+        {seat3 && (
+          <Link href={`/seat/${seat3.token_id}`} className="live-rail-seat mono">
+            #{seat3.token_id} · {seat3.owner_id}
+          </Link>
+        )}
         <button
           type="button"
           className="ghost live-rail-refresh"
           onClick={() => void refresh()}
-          disabled={seatsLoading || metaLoading}
+          disabled={loading}
         >
-          {seatsLoading || metaLoading ? "Reading…" : "Refresh"}
+          {loading ? "…" : "Refresh"}
         </button>
         <Link className="live-rail-link" href="/inventory">
-          All seat NFTs →
+          Seats →
         </Link>
       </div>
-      {err && <p className="meta" style={{ color: "var(--color-warn)" }}>{err}</p>}
-      {club && (
-        <p className="meta live-rail-stats">
-          {club.name} · sold {club.tickets_sold} · treasury {club.treasury_balance} · organizer {club.organizer}
-          {diligence ? (
-            <>
-              {" "}
-              · Seat #3{" "}
-              <span className={`badge ${diligence.verdict.includes("CLEAN") ? "ok" : "warn"}`}>
-                {diligence.verdict}
-              </span>
-            </>
-          ) : null}
-        </p>
-      )}
-      {showChips && (
-        <div className="nft-chip-row" aria-label="Live seat NFTs" aria-busy={seatsLoading}>
-          {seatsLoading && seats.length === 0
-            ? SEAT_IDS.map((tid) => (
-                <span key={tid} className="nft-chip nft-chip-skeleton" aria-hidden>
-                  <strong>#{tid}</strong>
-                  <span className="mono">get_seat…</span>
-                </span>
-              ))
-            : seats.map((s) => (
-                <Link key={s.token_id} href={`/seat/${s.token_id}`} className="nft-chip">
-                  <strong>#{s.token_id}</strong>
-                  <span className="mono">{s.owner_id}</span>
-                  <span className="badge ok">{s.access_key_count} keys</span>
-                </Link>
-              ))}
-        </div>
-      )}
+      {err && <p className="meta live-rail-err">{err}</p>}
     </div>
   );
 }

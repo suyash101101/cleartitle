@@ -2,24 +2,30 @@
 
 import { useApp } from "@/lib/store";
 
-const ACTORS = ["organizer.near", "ada.near", "priya.near", "fan.near"];
+const FILM = ["organizer.near", "ada.near", "priya.near", "fan.near"];
 
 export function ActorBar() {
   const actor = useApp((s) => s.actor);
   const setActor = useApp((s) => s.setActor);
+  const cast = FILM.includes(actor) ? FILM : [...FILM, actor];
+
   return (
     <div className="actor-bar" role="group" aria-label="Scenario cast">
       <span className="badge scenario">Scenario</span>
-      {ACTORS.map((a) => (
-        <button
-          key={a}
-          type="button"
-          className={actor === a ? "active" : "ghost"}
-          onClick={() => setActor(a)}
-        >
-          {a}
-        </button>
-      ))}
+      {cast.map((a) => {
+        const live = !FILM.includes(a);
+        return (
+          <button
+            key={a}
+            type="button"
+            className={actor === a ? "active" : "ghost"}
+            onClick={() => setActor(a)}
+            title={live ? "Live RPC owner" : undefined}
+          >
+            {live ? `live · ${a}` : a}
+          </button>
+        );
+      })}
     </div>
   );
 }

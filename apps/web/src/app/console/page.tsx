@@ -1,18 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ActorBar } from "@/components/ActorBar";
+import { JudgeCheatSheet } from "@/components/JudgeCheatSheet";
 import { JudgeStampPanel } from "@/components/JudgeStampPanel";
+import { NinetySecondPath } from "@/components/NinetySecondPath";
+import { TicketRoll3D } from "@/components/TicketRoll3D";
+import { WedgeBadge } from "@/components/WedgeBadge";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
 
 export default function ConsolePage() {
+  const router = useRouter();
   const world = useApp((s) => s.world);
   const bootstrapClub = useApp((s) => s.bootstrapClub);
   const resetDemo = useApp((s) => s.resetDemo);
   const runJudgePath = useApp((s) => s.runJudgePath);
   const club = world.club;
   const seats = Object.values(world.seats);
+  const seedNight = () => {
+    resetDemo();
+    router.push("/seat/3");
+  };
 
   return (
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
@@ -20,6 +30,7 @@ export default function ConsolePage() {
         title="Club Console"
         lede="Organizer controls for Nearnight Live: BPS, mint, pause, treasury."
       />
+      <WedgeBadge />
       <div className="console-cast">
         <ActorBar />
       </div>
@@ -27,21 +38,17 @@ export default function ConsolePage() {
         <button
           type="button"
           className="judge-run-btn"
-          onClick={runJudgePath}
+          onClick={() => {
+            runJudgePath();
+            router.push("/seat/3");
+          }}
         >
           Judge Run
         </button>
         <button type="button" onClick={bootstrapClub}>
           Create club + mint 5 seats
         </button>
-        <button
-          type="button"
-          className="ghost"
-          onClick={() => {
-            resetDemo();
-            window.location.assign("/seat/3");
-          }}
-        >
+        <button type="button" className="ghost" onClick={seedNight}>
           Seed Nearnight
         </button>
         <Link className="btn ghost" href="/night">
@@ -49,6 +56,10 @@ export default function ConsolePage() {
         </Link>
       </div>
 
+      <TicketRoll3D mode="mint" onMint={bootstrapClub} />
+
+      <JudgeCheatSheet />
+      <NinetySecondPath />
       <JudgeStampPanel />
 
       <div className="panel" style={{ marginBottom: "1.5rem" }}>
@@ -64,10 +75,7 @@ export default function ConsolePage() {
                 type="button"
                 className="ghost"
                 style={{ padding: "0.2rem 0.65rem", fontSize: "0.8rem" }}
-                onClick={() => {
-                  resetDemo();
-                  window.location.assign("/seat/3");
-                }}
+                onClick={seedNight}
               >
                 Load live night → Seat #3
               </button>{" "}
@@ -139,6 +147,7 @@ export default function ConsolePage() {
           </div>
         </div>
       )}
+      <div className="console-end-spacer" aria-hidden />
     </section>
   );
 }

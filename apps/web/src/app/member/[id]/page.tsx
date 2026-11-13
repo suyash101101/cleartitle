@@ -1,8 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { SessionBar } from "@/components/SessionBar";
+import { TitleScore } from "@/components/TitleScore";
+import { OffChainRoyalty } from "@/components/OffChainRoyalty";
+import { WarrantyStrip } from "@/components/WarrantyStrip";
+import { WedgeBadge } from "@/components/WedgeBadge";
 import { PageHeader } from "@/components/ui/page-header";
 import { viewMethod } from "@/lib/near";
 import { useWallet } from "@/lib/wallet";
@@ -32,6 +37,10 @@ export default function MemberRoomPage() {
   const refreshOwner = useCallback(async () => {
     setRpcLoading(true);
     setRpcErr(null);
+    const hardStop = window.setTimeout(() => {
+      setRpcLoading(false);
+      setRpcErr((prev) => prev ?? "RPC slow · retry Refresh");
+    }, 9000);
     try {
       const s = await viewMethod<SeatView | null>("get_seat", { token_id: id });
       setRpcOwner(s?.owner_id ?? null);
@@ -40,6 +49,7 @@ export default function MemberRoomPage() {
       setRpcOwner(null);
       setRpcErr(e instanceof Error ? e.message : String(e));
     } finally {
+      window.clearTimeout(hardStop);
       setRpcLoading(false);
     }
   }, [id]);
@@ -68,6 +78,9 @@ export default function MemberRoomPage() {
         title={`Member Room · Seat #${id}`}
         lede="Gated by on-chain owner_id from FastNear RPC. Scenario cast must match to unlock."
       />
+      <WedgeBadge />
+      <WarrantyStrip />
+      <OffChainRoyalty />
       <SessionBar />
 
       <div className="panel owner-gate" style={{ marginBottom: "1.25rem" }}>
@@ -110,54 +123,89 @@ export default function MemberRoomPage() {
       </div>
 
       {unlocked ? (
-        <div className="panel">
-          <span className="badge ok">UNLOCKED</span>
-          <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
-            {walletMatchesRpc && !scenarioMatchesRpc
-              ? "Wallet matches on-chain owner. Connect scenario cast for engine actions."
-              : `Scenario ${actor} matches RPC owner for seat #${id}.`}
-          </p>
-          <p className="meta" style={{ marginTop: "0.5rem" }}>
-            Continuity {seat.continuityHash} · epoch {seat.keyEpoch} · {seat.encumbrance}
-          </p>
-          <div className="cta-row" style={{ marginTop: "1rem" }}>
-            <button type="button" onClick={() => doClaim(id)} disabled={!engineReady || seat.encumbrance !== "FREE"}>
-              Claim payout
-            </button>
-            <button
-              type="button"
-              className="ghost"
-              onClick={() => doList(id, 100)}
-              disabled={!engineReady || seat.encumbrance !== "FREE"}
-            >
-              List seat @ 100
-            </button>
-          </div>
-          {!engineReady && (
-            <p className="meta" style={{ marginTop: "0.65rem", color: "var(--color-warn)" }}>
-              Engine still lists owner {seat.owner}. Run Club Console judge path or align scenario.
+        <div className="member-unlocked-grid">
+          <div className="panel">
+            <span className="badge ok">UNLOCKED</span>
+            <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
+              {walletMatchesRpc && !scenarioMatchesRpc
+                ? "Wallet matches on-chain owner. Connect scenario cast for engine actions."
+                : `Scenario ${actor} matches RPC owner for seat #${id}.`}
             </p>
-          )}
+            <p className="meta" style={{ marginTop: "0.5rem" }}>
+              Continuity {seat.continuityHash} · epoch {seat.keyEpoch} · {seat.encumbrance}
+            </p>
+            <div className="cta-row" style={{ marginTop: "1rem" }}>
+              <button type="button" onClick={() => doClaim(id)} disabled={!engineReady || seat.encumbrance !== "FREE"}>
+                Claim payout
+              </button>
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => doList(id, 100)}
+                disabled={!engineReady || seat.encumbrance !== "FREE"}
+              >
+                List seat @ 100
+              </button>
+              <Link className="btn ghost" href={`/title/${id}`}>
+                Certificate
+              </Link>
+            </div>
+            {!engineReady && (
+              <div style={{ marginTop: "0.85rem" }}>
+                <p className="meta" style={{ color: "var(--color-warn)" }}>
+                  Room unlocked via live RPC owner. Engine actions still need cast = {seat.owner}.
+                </p>
+                <div className="cta-row" style={{ marginTop: "0.55rem" }}>
+                  <button type="button" className="ghost" onClick={() => setActor(seat.owner)}>
+                    Align cast to engine owner
+                  </button>
+                  <Link className="btn ghost" href="/console">
+                    Club Console judge path
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+          <TitleScore
+            seat={seat}
+            verdict={seat.washFlagged || seat.accessKeyCount > 0 ? "FIX BEFORE BUY" : "PROVABLY CLEAN"}
+          />
         </div>
       ) : (
-        <div className="panel">
-          <span className="badge warn">LOCKED</span>
-          <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
-            Member controls stay hidden until scenario actor matches the RPC owner
-            {rpcOwner ? (
-              <>
-                {" "}
-                (<strong className="mono">{rpcOwner}</strong>).
-              </>
-            ) : (
-              "."
-            )}
-          </p>
-          <p className="meta" style={{ marginTop: "0.5rem" }}>
-            Or connect a testnet wallet that holds this seat NFT.
-          </p>
+        <div className="member-unlocked-grid">
+          <div className="panel">
+            <span className="badge warn">LOCKED</span>
+            <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
+              Member controls stay hidden until scenario actor matches the RPC owner
+              {rpcOwner ? (
+                <>
+                  {" "}
+                  (<strong className="mono">{rpcOwner}</strong>).
+                </>
+              ) : (
+                "."
+              )}
+            </p>
+            <p className="meta" style={{ marginTop: "0.5rem" }}>
+              Or connect a testnet wallet that holds this seat NFT. Seats (#34) gates a vault vote —
+              we gate the earning seat with live owner_id.
+            </p>
+            <div className="cta-row" style={{ marginTop: "0.85rem" }}>
+              <Link className="btn ghost" href={`/title/${id}`}>
+                View title certificate
+              </Link>
+              <Link className="btn ghost" href="/lab">
+                Transfer Lab
+              </Link>
+            </div>
+          </div>
+          <TitleScore
+            seat={seat}
+            verdict={seat.washFlagged || seat.accessKeyCount > 0 ? "FIX BEFORE BUY" : "PROVABLY CLEAN"}
+          />
         </div>
       )}
+      <div className="console-end-spacer" aria-hidden />
     </section>
   );
 }
