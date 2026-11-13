@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { HomeActions } from "@/components/HomeActions";
 import { TestnetPanel } from "@/components/TestnetPanel";
 import { TiltCard } from "@/components/TiltCard";
@@ -39,27 +39,20 @@ function Reveal({
 }
 
 function HeroVisual() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [16, -24]);
-
   return (
-    <motion.div ref={ref} className="hero-stage" style={{ y }}>
+    <div className="hero-stage">
       <div className="hero-stage-glow" aria-hidden />
-      <div className="hero-stage-primary">
-        <TiltCard className="hero-visual-card" maxTilt={8}>
-          <SeatDeedCard />
-        </TiltCard>
-      </div>
       <div className="hero-stage-ticket">
         <TiltCard maxTilt={10}>
           <NightTicketCard />
         </TiltCard>
       </div>
-    </motion.div>
+      <div className="hero-stage-primary">
+        <TiltCard className="hero-visual-card" maxTilt={8}>
+          <SeatDeedCard />
+        </TiltCard>
+      </div>
+    </div>
   );
 }
 
