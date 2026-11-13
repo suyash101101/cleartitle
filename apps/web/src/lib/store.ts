@@ -155,6 +155,21 @@ export const useApp = create<AppState>((set, get) => ({
   },
   runLab: (kind, tokenId) => {
     const world = JSON.parse(JSON.stringify(get().world)) as WorldState;
+    const seat = world.seats[tokenId];
+    if (!seat) {
+      set({ flash: flashErr(`Seat ${tokenId} missing — Load demo night first.`) });
+      return;
+    }
+    // Arm the threat so one-click Lab buttons always demonstrate the refusal.
+    if (kind === "old" && seat.owner === "ada.near") {
+      const nonce = listSeat(world, "ada.near", tokenId, 100);
+      buySeat(world, "priya.near", tokenId, 100, nonce);
+    } else if (kind === "listed" && seat.encumbrance !== "LISTED") {
+      listSeat(world, seat.owner, tokenId, 100);
+    } else if (kind === "held" && seat.encumbrance !== "LISTED") {
+      listSeat(world, seat.owner, tokenId, 100);
+    }
+
     let lastLab: LabResult;
     if (kind === "old") lastLab = labOldOwnerWithdraw(world, "ada.near", tokenId);
     else if (kind === "listed") lastLab = labListedWithdraw(world, world.seats[tokenId]!.owner, tokenId);
