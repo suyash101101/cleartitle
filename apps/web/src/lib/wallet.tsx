@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { NearConnector } from "@hot-labs/near-connect";
+import { encodeBuySeat, encodeBuyTicket, encodeListSeat } from "@/sdk";
 import { CONTRACT_ID } from "@/lib/near";
 
 type WalletCtx = {
@@ -107,10 +108,18 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       connecting,
       connect,
       disconnect,
-      buyTicket: () => call("buy_ticket", {}, "10"),
-      listSeat: (tokenId, ask) => call("list_seat", { token_id: tokenId, ask }, "0"),
-      buySeat: (tokenId, syncNonce, ask) =>
-        call("buy_seat", { token_id: tokenId, sync_nonce: syncNonce }, ask),
+      buyTicket: () => {
+        const e = encodeBuyTicket();
+        return call(e.methodName, e.args, e.depositYocto);
+      },
+      listSeat: (tokenId, ask) => {
+        const e = encodeListSeat(tokenId, ask);
+        return call(e.methodName, e.args, e.depositYocto);
+      },
+      buySeat: (tokenId, syncNonce, ask) => {
+        const e = encodeBuySeat(tokenId, syncNonce, ask);
+        return call(e.methodName, e.args, e.depositYocto);
+      },
     }),
     [accountId, connecting, connect, disconnect, call],
   );
