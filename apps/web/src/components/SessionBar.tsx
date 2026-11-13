@@ -2,13 +2,15 @@
 
 import { ActorBar } from "@/components/ActorBar";
 import { WalletBar } from "@/components/WalletBar";
+import { useApp } from "@/lib/store";
 
-/** Wallet + scenario cast — no divider hairlines. */
+/** Wallet always; scenario cast only in Preview. */
 export function SessionBar() {
+  const productMode = useApp((s) => s.productMode);
   return (
     <div className="session-bar">
       <WalletBar />
-      <ActorBar />
+      {productMode === "preview" && <ActorBar />}
     </div>
   );
 }

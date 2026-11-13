@@ -24,6 +24,31 @@ type Flash = { kind: "ok" | "err" | "lab"; text: string } | null;
 
 export type JudgeStamp = { step: string; detail: string; ok: boolean };
 
+/** live = wallet + RPC product path; preview = local scenario / film. */
+export type ProductMode = "live" | "preview";
+
+const MODE_KEY = "cleartitle-product-mode";
+
+function readProductMode(): ProductMode {
+  if (typeof window === "undefined") return "live";
+  try {
+    const raw = window.sessionStorage.getItem(MODE_KEY);
+    if (raw === "preview" || raw === "live") return raw;
+  } catch {
+    /* ignore */
+  }
+  return "live";
+}
+
+function writeProductMode(mode: ProductMode) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(MODE_KEY, mode);
+  } catch {
+    /* ignore */
+  }
+}
+
 interface AppState {
   world: WorldState;
   diligence: DiligenceReport | null;
@@ -32,6 +57,8 @@ interface AppState {
   flash: Flash;
   judgeStamps: JudgeStamp[];
   actor: string;
+  productMode: ProductMode;
+  setProductMode: (mode: ProductMode) => void;
   setActor: (a: string) => void;
   resetDemo: () => void;
   bootstrapClub: () => void;
@@ -103,16 +130,29 @@ export const useApp = create<AppState>((set, get) => ({
   flash: null,
   judgeStamps: [],
   actor: "ada.near",
+  productMode: "live",
+  setProductMode: (productMode) => {
+    writeProductMode(productMode);
+    set({
+      productMode,
+      flash: flashOk(
+        productMode === "live"
+          ? "Live mode · connect wallet · RPC diligence and signed list/buy."
+          : "Preview mode · local scenario engine · Film ready still available.",
+      ),
+    });
+  },
   setActor: (actor) => set({ actor }),
   resetDemo: () =>
     set({
       world: seedDemoNight(),
       actor: "ada.near",
+      productMode: "preview",
       diligence: null,
       lastLab: null,
       lastSplit: null,
       judgeStamps: [],
-      flash: flashOk("Nearnight seeded. Seat #3 suite pending. Ready for mid-payout."),
+      flash: flashOk("Nearnight seeded (Preview). Seat #3 suite pending. Ready for mid-payout."),
     }),
   bootstrapClub: () => {
     try {
@@ -259,6 +299,7 @@ export const useApp = create<AppState>((set, get) => ({
   runJudgePath: () => {
     try {
       // Film-ready seed — do NOT auto list/buy. Demo must click List @ 100.
+      writeProductMode("preview");
       const world = seedDemoNight();
       const stamps: JudgeStamp[] = [
         {
@@ -275,11 +316,12 @@ export const useApp = create<AppState>((set, get) => ({
       const next = {
         world,
         actor: "ada.near" as const,
+        productMode: "preview" as const,
         diligence: null,
         lastLab: null,
         judgeStamps: stamps,
         flash: flashOk(
-          "Film ready · Seat #3 · ada · pending · FREE. Click List @ 100 on the seat desk.",
+          "Film ready (Preview) · Seat #3 · ada · pending · FREE. Click List @ 100 on the seat desk.",
         ),
       };
       set(next);
@@ -303,3 +345,11 @@ export const useApp = create<AppState>((set, get) => ({
     }
   },
 }));
+
+/** Hydrate product mode from session after mount (avoids SSR mismatch). */
+export function hydrateProductMode() {
+  const mode = readProductMode();
+  if (useApp.getState().productMode !== mode) {
+    useApp.setState({ productMode: mode });
+  }
+}

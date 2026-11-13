@@ -184,3 +184,27 @@ describe("settle + delist", () => {
     withdrawVault(world, "ada.near", "3", 0.1);
   });
 });
+
+describe("film-ready seed (no auto sale)", () => {
+  it("seed leaves seat 3 FREE with pending so List is clickable", () => {
+    const world = seedDemoNight();
+    const seat = world.seats["3"]!;
+    expect(seat.owner).toBe("ada.near");
+    expect(seat.encumbrance).toBe("FREE");
+    expect(seat.pending.some((p) => p.status === "PENDING")).toBe(true);
+    expect(seat.accessKeyCount).toBe(0);
+    const d = runDiligence(world, "3");
+    expect(d.verdict).toBe("PROVABLY CLEAN");
+    const nonce = listSeat(world, "ada.near", "3", 100);
+    expect(world.seats["3"]!.encumbrance).toBe("LISTED");
+    expect(nonce).toBeGreaterThan(0);
+  });
+
+  it("full mid-payout after explicit list is CLEAN", () => {
+    const world = seedDemoNight();
+    const nonce = listSeat(world, "ada.near", "3", 100);
+    buySeat(world, "priya.near", "3", 100, nonce);
+    expect(runDiligence(world, "3").verdict).toBe("PROVABLY CLEAN");
+    expect(labOldOwnerWithdraw(world, "ada.near", "3").reason).toMatch(/not current owner/);
+  });
+});

@@ -12,6 +12,16 @@ async function hideDevChrome(page: import("@playwright/test").Page) {
   });
 }
 
+/** Live is product default; Preview unlocks scenario cast + Film ready. */
+async function enterPreview(page: import("@playwright/test").Page) {
+  await page.goto("/console");
+  await hideDevChrome(page);
+  const preview = page.getByRole("button", { name: /^Preview$/i });
+  if (await preview.count()) {
+    await preview.click({ force: true });
+  }
+}
+
 test("home brand @smoke", async ({ page }) => {
   await page.goto("/");
   await hideDevChrome(page);
@@ -28,9 +38,17 @@ test("home brand @smoke", async ({ page }) => {
   await expect(page.getByText(/Against the field/i)).toHaveCount(0);
 });
 
-test("demo night mid-payout journey @smoke", async ({ page }) => {
+test("console live mode default @smoke", async ({ page }) => {
   await page.goto("/console");
   await hideDevChrome(page);
+  await expect(page.getByRole("group", { name: /Product mode/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Live$/i })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("link", { name: /Open seat #3 \(live\)/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Film ready/i })).toHaveCount(0);
+});
+
+test("demo night mid-payout journey @smoke", async ({ page }) => {
+  await enterPreview(page);
   await page.getByRole("button", { name: /Load live night/i }).click({ noWaitAfter: true });
   await page.waitForURL(/\/seat\/3/);
   await hideDevChrome(page);
@@ -39,13 +57,13 @@ test("demo night mid-payout journey @smoke", async ({ page }) => {
   await expect(page.getByLabel(/Cross-chain tip continuity/i)).toBeVisible();
   await page.getByRole("group", { name: /Scenario cast/i }).getByRole("button", { name: /^ada\.near$/ }).click({ force: true });
   await page.getByRole("button", { name: /List @ 100/i }).click({ force: true });
-  await page.getByRole("button", { name: /Run diligence/i }).click({ force: true });
+  await page.getByRole("button", { name: /Run preview diligence|Run diligence/i }).click({ force: true });
   await expect(page.locator(".stamp")).toContainText(/PROVABLY CLEAN|FIX BEFORE BUY/);
   await page.getByRole("group", { name: /Scenario cast/i }).getByRole("button", { name: /^priya\.near$/ }).click({ force: true });
   const buyBtn = page.getByRole("button", { name: /Buy mid-payout|Buy locked/i });
   await expect(buyBtn).toBeVisible();
   if (await page.getByRole("button", { name: /Buy locked/i }).count()) {
-    await page.getByRole("button", { name: /Unlock with diligence|Run diligence/i }).first().click({ force: true });
+    await page.getByRole("button", { name: /Unlock with diligence|Run preview diligence|Run diligence/i }).first().click({ force: true });
     await expect(page.locator(".stamp")).toContainText(/PROVABLY CLEAN/i);
   }
   await page.getByRole("button", { name: /^Buy mid-payout$/i }).click({ force: true });
@@ -57,8 +75,7 @@ test("demo night mid-payout journey @smoke", async ({ page }) => {
 });
 
 test("transfer lab expected fail @smoke", async ({ page }) => {
-  await page.goto("/console");
-  await hideDevChrome(page);
+  await enterPreview(page);
   await page.getByRole("button", { name: /Load live night/i }).click({ noWaitAfter: true });
   await page.waitForURL(/\/seat\/3/);
   await page.goto("/lab");
@@ -80,8 +97,7 @@ test("lab mid-payout scenario @smoke", async ({ page }) => {
 });
 
 test("member room locked @smoke", async ({ page }) => {
-  await page.goto("/console");
-  await hideDevChrome(page);
+  await enterPreview(page);
   await page.getByRole("button", { name: /Load live night/i }).click({ noWaitAfter: true });
   await page.waitForURL(/\/seat\/3/);
   await page.goto("/member/3");
@@ -105,8 +121,7 @@ test("verify matrix @smoke", async ({ page }) => {
 });
 
 test("console cast no overlap @smoke", async ({ page }) => {
-  await page.goto("/console");
-  await hideDevChrome(page);
+  await enterPreview(page);
   const cast = page.getByRole("group", { name: /Scenario cast/i });
   const seed = page.getByRole("button", { name: /Seed Nearnight/i });
   await expect(cast).toBeVisible();
@@ -123,8 +138,7 @@ test("console cast no overlap @smoke", async ({ page }) => {
 });
 
 test("title certificate @smoke", async ({ page }) => {
-  await page.goto("/console");
-  await hideDevChrome(page);
+  await enterPreview(page);
   await page.getByRole("button", { name: /Load live night/i }).click({ noWaitAfter: true });
   await page.waitForURL(/\/seat\/3/);
   await page.goto("/title/3");
@@ -170,15 +184,16 @@ test("home brand once @smoke", async ({ page }) => {
   await expect(page.getByLabel(/Product story/i)).toBeVisible();
 });
 
-test("judge run stamps @smoke", async ({ page }) => {
-  await page.goto("/console");
-  await hideDevChrome(page);
-  await page.getByRole("button", { name: /^Judge Run$/i }).click({ force: true });
+test("film ready leaves List clickable @smoke", async ({ page }) => {
+  await enterPreview(page);
+  await page.getByRole("button", { name: /Film ready/i }).click({ force: true });
   await page.waitForURL(/\/seat\/3/);
   await hideDevChrome(page);
   await expect(page.locator(".judge-stamp-panel")).toBeVisible({ timeout: 10_000 });
-  await expect(page.getByText(/PROVABLY CLEAN/i).first()).toBeVisible();
-  await expect(page.getByText(/04 attack|withdraw refused|old_owner/i).first()).toBeVisible();
+  await expect(page.getByText(/Film ready/i).first()).toBeVisible();
+  await page.getByRole("group", { name: /Scenario cast/i }).getByRole("button", { name: /^ada\.near$/ }).click({ force: true });
+  await expect(page.getByRole("button", { name: /List @ 100/i })).toBeVisible();
+  await expect(page.getByText(/FREE/i).first()).toBeVisible();
 });
 
 test("mobile home brand @smoke", async ({ page }) => {

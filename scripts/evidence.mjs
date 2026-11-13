@@ -73,6 +73,23 @@ console.log("  club:", club.name, "tickets_sold:", club.tickets_sold);
 console.log("  seat3 owner:", seat3.owner_id, "epoch:", seat3.key_epoch, "keys:", seat3.access_key_count);
 console.log("  diligence:", dil.verdict);
 
+console.log("\nEvidence artifact check (apps/web/src/lib/evidence.ts)…");
+const { readFileSync } = await import("node:fs");
+const evidenceSrc = readFileSync(join(root, "apps/web/src/lib/evidence.ts"), "utf8");
+const bad =
+  /N\/A|PLACEHOLDER|TODO_TX|0xct[0-9a-f]{8}|your_tx_hash_here/i.test(evidenceSrc) ||
+  /:\s*""\s*,/.test(evidenceSrc);
+if (bad) {
+  console.error("EVIDENCE FAIL — placeholder or demo hash in evidence.ts");
+  process.exit(1);
+}
+const hashMatches = [...evidenceSrc.matchAll(/:\s*"([A-Za-z0-9]{40,})"\s*,?/g)];
+if (hashMatches.length < 8) {
+  console.error(`EVIDENCE FAIL — expected >=8 base58-like tx hashes, found ${hashMatches.length}`);
+  process.exit(1);
+}
+console.log(`  ${hashMatches.length} on-chain tx hashes present · no placeholders`);
+
 console.log("\n/verify claims covered:");
 for (const c of claims) console.log(`  ✓ ${c}`);
 console.log("\nEVIDENCE OK");

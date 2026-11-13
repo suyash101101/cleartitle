@@ -11,6 +11,7 @@
     "test:e2e": "pnpm --filter @cleartitle/web test:e2e",
     "test:e2e:smoke": "pnpm --filter @cleartitle/web test:e2e:smoke",
     "evidence": "node scripts/evidence.mjs",
+    "evidence:refresh": "node scripts/refresh-onchain-evidence.mjs",
     "demo:night": "node scripts/demo-night.mjs",
     "test:hostile": "node scripts/hostile-mid-payout.mjs",
     "sync:sdk": "bash scripts/sync-sdk.sh",

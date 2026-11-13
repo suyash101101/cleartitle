@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import { ActorBar } from "@/components/ActorBar";
 import { JudgeCheatSheet } from "@/components/JudgeCheatSheet";
 import { JudgeStampPanel } from "@/components/JudgeStampPanel";
+import { ModeToggle } from "@/components/ModeToggle";
 import { NinetySecondPath } from "@/components/NinetySecondPath";
+import { TestnetPanel } from "@/components/TestnetPanel";
 import { TicketRoll3D } from "@/components/TicketRoll3D";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
@@ -13,6 +15,7 @@ import { useApp } from "@/lib/store";
 export default function ConsolePage() {
   const router = useRouter();
   const world = useApp((s) => s.world);
+  const productMode = useApp((s) => s.productMode);
   const bootstrapClub = useApp((s) => s.bootstrapClub);
   const resetDemo = useApp((s) => s.resetDemo);
   const runJudgePath = useApp((s) => s.runJudgePath);
@@ -27,43 +30,67 @@ export default function ConsolePage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="Club Console"
-        lede="Organizer controls for Nearnight Live: BPS, mint, pause, treasury."
+        lede="Organizer controls for Nearnight Live: BPS, mint, pause, treasury. Live mode talks to testnet; Preview is film-only."
       />
-      <div className="console-cast">
-        <ActorBar />
-      </div>
+      <ModeToggle />
+      {productMode === "live" && <TestnetPanel />}
+      {productMode === "preview" && (
+        <div className="console-cast">
+          <ActorBar />
+        </div>
+      )}
       <div className="cta-row console-actions">
-        <button
-          type="button"
-          className="judge-run-btn"
-          onClick={() => {
-            runJudgePath();
-            router.push("/seat/3");
-          }}
-        >
-          Film ready · Seat #3
-        </button>
-        <button type="button" onClick={bootstrapClub}>
-          Create club + mint 5 seats
-        </button>
-        <button type="button" className="ghost" onClick={seedNight}>
-          Seed Nearnight
-        </button>
+        {productMode === "preview" && (
+          <button
+            type="button"
+            className="judge-run-btn"
+            onClick={() => {
+              runJudgePath();
+              router.push("/seat/3");
+            }}
+          >
+            Film ready · Seat #3
+          </button>
+        )}
+        {productMode === "preview" && (
+          <>
+            <button type="button" onClick={bootstrapClub}>
+              Create club + mint 5 seats
+            </button>
+            <button type="button" className="ghost" onClick={seedNight}>
+              Seed Nearnight
+            </button>
+          </>
+        )}
+        {productMode === "live" && (
+          <Link className="btn" href="/seat/3">
+            Open seat #3 (live)
+          </Link>
+        )}
+        <Link className="btn ghost" href="/box-office">
+          Box office
+        </Link>
         <Link className="btn ghost" href="/night">
           Ticket river
         </Link>
       </div>
 
-      <TicketRoll3D mode="mint" onMint={bootstrapClub} />
+      {productMode === "preview" && <TicketRoll3D mode="mint" onMint={bootstrapClub} />}
 
-      <JudgeCheatSheet />
-      <NinetySecondPath />
-      <JudgeStampPanel />
+      {productMode === "preview" && (
+        <>
+          <JudgeCheatSheet />
+          <NinetySecondPath />
+          <JudgeStampPanel />
+        </>
+      )}
 
       <div className="panel" style={{ marginBottom: "1.5rem" }}>
-        <h3>Judge path · manual</h3>
+        <h3>{productMode === "live" ? "Live organizer path" : "Judge path · manual (Preview)"}</h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          Film path: seed leaves Seat #3 FREE for Ada — you click List @ 100 and Buy live.
+          {productMode === "live"
+            ? "Connect wallet → Box office buy_ticket → Seat desk list/buy with fresh RPC nonce → Lab → /verify."
+            : "Film path: seed leaves Seat #3 FREE for Ada. You click List @ 100 and Buy in Preview."}
         </p>
         <ol className="seat-timeline">
           <li className="hot">

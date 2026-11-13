@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ChainSigPanel } from "@/components/ChainSigPanel";
 import { LiveDiligence } from "@/components/LiveDiligence";
+import { LiveSeatActions } from "@/components/LiveSeatActions";
 import { SeatCharter } from "@/components/SeatCharter";
 import { SessionBar } from "@/components/SessionBar";
 import { ContinuityStrip } from "@/components/ContinuityStrip";
@@ -21,6 +22,7 @@ export default function SeatPage() {
   const params = useParams();
   const id = String(params.id ?? "3");
   const world = useApp((s) => s.world);
+  const productMode = useApp((s) => s.productMode);
   const diligence = useApp((s) => s.diligence);
   const doDiligence = useApp((s) => s.doDiligence);
   const doClaim = useApp((s) => s.doClaim);
@@ -28,6 +30,7 @@ export default function SeatPage() {
   const doBuySeat = useApp((s) => s.doBuySeat);
   const actor = useApp((s) => s.actor);
   const seat = world.seats[id];
+  const isLive = productMode === "live";
 
   if (!seat) {
     return (
@@ -70,11 +73,13 @@ export default function SeatPage() {
         </div>
         <div className="desk-cell panel desk-diligence">
           <h3>Live diligence</h3>
-          <p className="meta">Six named checks before buy unlocks.</p>
+          <p className="meta">Six named checks before buy unlocks · testnet RPC.</p>
           <LiveDiligence tokenId={id} />
-          <button type="button" className="ghost desk-btn-block" onClick={() => doDiligence(id)}>
-            Run diligence
-          </button>
+          {!isLive && (
+            <button type="button" className="ghost desk-btn-block" onClick={() => doDiligence(id)}>
+              Run preview diligence
+            </button>
+          )}
         </div>
         <div className="desk-cell">
           <TitleScore seat={seat} verdict={verdict} />
@@ -97,50 +102,66 @@ export default function SeatPage() {
           <EpochBump />
         </div>
 
-        <div className="desk-cell panel desk-actions">
-          <h3>Charter actions</h3>
-          <p className="meta">
-            tickets · {seat.ticketsAccrued} · balance · {seat.balance}
-            <br />
-            <span className="mono">continuity · {seat.continuityHash}</span>
-          </p>
-          <div className="desk-actions-grid">
-            {isOwner && seat.encumbrance === "FREE" && (
-              <>
-                <button type="button" onClick={() => doClaim(id)}>
-                  Claim payout
-                </button>
-                <button type="button" className="ghost" onClick={() => doList(id, 100)}>
-                  List @ 100
-                </button>
-              </>
-            )}
-            {isOwner && seat.encumbrance === "LISTED" && (
-              <p className="meta">Listed @ {seat.listingAsk ?? 100} · switch cast to a buyer to purchase</p>
-            )}
-            {seat.encumbrance === "LISTED" && !isOwner && (
-              <button
-                type="button"
-                onClick={() => doBuySeat(id)}
-                disabled={buyLocked}
-                title={buyLocked ? "Run diligence — buy unlocks on PROVABLY CLEAN" : undefined}
-              >
-                {buyLocked ? "Buy locked · run diligence" : "Buy mid-payout"}
-              </button>
-            )}
-            {buyLocked && (
-              <button type="button" className="ghost" onClick={() => doDiligence(id)}>
-                Unlock with diligence
-              </button>
-            )}
-            <Link className="btn ghost" href={`/member/${id}`}>
-              Member Room
-            </Link>
-            <Link className="btn ghost" href={`/title/${id}`}>
-              Title certificate
-            </Link>
+        {isLive ? (
+          <div className="desk-cell">
+            <LiveSeatActions tokenId={id} />
+            <div className="desk-actions-grid" style={{ marginTop: "0.65rem" }}>
+              <Link className="btn ghost" href={`/member/${id}`}>
+                Member Room
+              </Link>
+              <Link className="btn ghost" href={`/title/${id}`}>
+                Title certificate
+              </Link>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="desk-cell panel desk-actions">
+            <h3>
+              <span className="badge">Preview</span> Charter actions
+            </h3>
+            <p className="meta">
+              tickets · {seat.ticketsAccrued} · balance · {seat.balance}
+              <br />
+              <span className="mono">continuity · {seat.continuityHash}</span>
+            </p>
+            <div className="desk-actions-grid">
+              {isOwner && seat.encumbrance === "FREE" && (
+                <>
+                  <button type="button" onClick={() => doClaim(id)}>
+                    Claim payout
+                  </button>
+                  <button type="button" className="ghost" onClick={() => doList(id, 100)}>
+                    List @ 100
+                  </button>
+                </>
+              )}
+              {isOwner && seat.encumbrance === "LISTED" && (
+                <p className="meta">Listed @ {seat.listingAsk ?? 100} · switch cast to a buyer to purchase</p>
+              )}
+              {seat.encumbrance === "LISTED" && !isOwner && (
+                <button
+                  type="button"
+                  onClick={() => doBuySeat(id)}
+                  disabled={buyLocked}
+                  title={buyLocked ? "Run diligence — buy unlocks on PROVABLY CLEAN" : undefined}
+                >
+                  {buyLocked ? "Buy locked · run diligence" : "Buy mid-payout"}
+                </button>
+              )}
+              {buyLocked && (
+                <button type="button" className="ghost" onClick={() => doDiligence(id)}>
+                  Unlock with diligence
+                </button>
+              )}
+              <Link className="btn ghost" href={`/member/${id}`}>
+                Member Room
+              </Link>
+              <Link className="btn ghost" href={`/title/${id}`}>
+                Title certificate
+              </Link>
+            </div>
+          </div>
+        )}
         <div className="desk-cell desk-span-8">
           <TitleChain seat={seat} />
         </div>
