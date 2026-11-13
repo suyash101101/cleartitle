@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HomeActions } from "@/components/HomeActions";
 
 export default function HomePage() {
   return (
@@ -15,12 +16,13 @@ export default function HomePage() {
             Sell the seat. Keep nothing. Ticket money follows clear title — founding memberships that
             earn, with a live attack lab that proves the transfer is clean.
           </p>
-          <div className="cta-row">
-            <Link className="btn" href="/box-office">
-              Buy a ticket
+          <HomeActions />
+          <div className="cta-row" style={{ marginTop: "0.75rem" }}>
+            <Link className="btn ghost" href="/box-office">
+              Box Office
             </Link>
             <Link className="btn ghost" href="/lab">
-              Open Transfer Lab
+              Transfer Lab
             </Link>
           </div>
         </div>
