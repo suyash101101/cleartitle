@@ -1,14 +1,12 @@
 "use client";
 
 import type { Seat } from "@/sdk";
-import { TiltCard } from "@/components/TiltCard";
 
 export function SeatCharter({ seat }: { seat: Seat }) {
   const pending = seat.pending.filter(
     (p) => p.status === "PENDING" || p.status === "REBOUND_TO_BUYER",
   ).length;
   return (
-    <TiltCard>
       <svg
         viewBox="0 0 420 240"
         width="100%"
@@ -51,6 +49,5 @@ export function SeatCharter({ seat }: { seat: Seat }) {
           {seat.continuityHash}
         </text>
       </svg>
-    </TiltCard>
   );
 }
