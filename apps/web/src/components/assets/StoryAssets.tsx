@@ -131,7 +131,7 @@ export function ClaimClockCard() {
             →
           </div>
           <div>
-            <span className="meta">QuietTitle</span>
+            <span className="meta">QuitClaim</span>
             <strong>∞</strong>
           </div>
         </div>

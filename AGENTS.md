@@ -1,4 +1,4 @@
-# AGENTS.md — ClearTitle
+# AGENTS.md — QuitClaim
 
 - Product: title insurance for ticket-earning seat NFTs (Nearnight Live demo).
 - Do **not** name competitor projects in code, UI, README, or commits.

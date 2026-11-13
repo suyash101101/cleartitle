@@ -67,7 +67,7 @@ export default function VerifyPage() {
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
         <h3>Transfer threat model</h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          Every way a seller tries to keep the money, and how QuietTitle refuses it.
+          Every way a seller tries to keep the money, and how QuitClaim refuses it.
         </p>
         <ul className="checklist">
           <li>

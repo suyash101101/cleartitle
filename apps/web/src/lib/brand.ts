@@ -1,11 +1,11 @@
 /**
- * QuietTitle — from the legal “quiet title” action:
- * a court proceeding that establishes undisputed ownership.
- * Here: undisputed ownership of every future cut from a seat NFT.
+ * QuitClaim — from the legal quitclaim deed:
+ * the seller abandons every claim to the property.
+ * Here: abandon keys, pending cuts, and held signatures — enforced on chain.
  */
-export const BRAND = "QuietTitle";
+export const BRAND = "QuitClaim";
 export const BRAND_TAGLINE = "Own the seat. Own every future cut.";
 export const BRAND_MEANING =
-  "Quiet title is the legal action that settles who owns a property — no clouds, no rival claims.";
+  "A quitclaim is when the seller abandons every claim to a property. We force that on-chain for earning seats.";
 export const BRAND_BLURB =
-  "QuietTitle does that for earning seats: undisputed ownership of who gets paid after the door closes. Five NEP-171 seat NFTs earn on Nearnight.";
+  "QuitClaim makes the seller quit every leftover claim: keys, pending ticket cuts, held signatures. Five NEP-171 seat NFTs earn on Nearnight.";

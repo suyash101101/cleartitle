@@ -4,7 +4,7 @@ import Link from "next/link";
 export function DynamicQrStrip() {
   return (
     <aside className="warranty-strip" aria-label="Rotating QR versus clear title">
-      <p className="chapter-kicker">GUTS · rotating QR vs QuietTitle</p>
+      <p className="chapter-kicker">GUTS · rotating QR vs QuitClaim</p>
       <div className="warranty-strip-grid">
         <div>
           <p className="meta">Door anti-clone</p>

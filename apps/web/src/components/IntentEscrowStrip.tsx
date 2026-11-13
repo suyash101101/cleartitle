@@ -14,7 +14,7 @@ export function IntentEscrowStrip() {
           </p>
         </div>
         <div className="ours">
-          <p className="meta">QuietTitle</p>
+          <p className="meta">QuitClaim</p>
           <strong>NEAR-native clear title</strong>
           <p className="meta">
             One chain for vault, refuse, and rebound. Pending cuts rebind on buy_seat — no escrow timer.

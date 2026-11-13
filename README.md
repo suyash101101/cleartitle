@@ -1,4 +1,4 @@
-# ClearTitle
+# QuitClaim
 
 **Sell the seat. Keep nothing. Ticket money follows clear title.**
 

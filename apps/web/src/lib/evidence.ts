@@ -1,4 +1,4 @@
-/** Live proof artifacts from testnet QuietTitle deployment. */
+/** Live proof artifacts from testnet QuitClaim deployment. */
 
 export const CONTRACT_ID = "cleartitle562464.testnet";
 export const EXPLORER = "https://explorer.testnet.near.org";

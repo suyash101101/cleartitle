@@ -1,6 +1,6 @@
-# ClearTitle — PLAN.md
+# QuitClaim — PLAN.md
 
-**One-line:** Sell the seat. Keep nothing. Ticket money follows clear title.
+**One-line:** Sell the seat. Keep nothing. Seller quits every claim.
 
 **Product category:** On-chain **title insurance** for memberships that earn.  
 **Specimen (demo world):** A live club that sells tickets; founding **seat NFTs** each own a keyless wallet that automatically receives a cut of every ticket — and can be sold mid-payout without the seller keeping a dime, a key, or a held signature.
@@ -16,19 +16,19 @@
 | **Status** | Plan only — **do not implement until explicitly told to build**. |
 
 **Strategy:** Proof depth > feature sprawl.  
-**Novelty:** Prompt’s *membership + tickets* example + **clear title as the product** (not field leader-lite AI company).  
+**Novelty:** Prompt’s *membership + tickets* example + **quitclaim as the product** (not field leader-lite AI company).  
 **Build leverage:** Official NEAR agent skills + near-kit universal pattern + layered E2E tests + Impeccable/Taste/Vercel design skills + shadcn primitives (Astryx optional). Every P0 step has a failing test first.
 
 ---
 
 ## 1. The idea — comprehensive product vision
 
-### 1.1 What ClearTitle is
+### 1.1 What QuitClaim is
 
-ClearTitle is two layers:
+QuitClaim is two layers:
 
 1. **Club Night (the world you feel)** — create a club, mint founding seats, sell tickets, watch money split live into seat wallets and a club treasury.  
-2. **Clear Title (the product you prove)** — Diligence Packet, Transfer Lab, Sign Record, mid-payout atomic sale, `/verify` — so a seat sale is *provably clean*.
+2. **QuitClaim (the product you prove)** — Diligence Packet, Transfer Lab, Sign Record, mid-payout atomic sale, `/verify` — so a seat sale is *provably clean*.
 
 Judges should leave saying:  
 > “They didn’t just make an NFT wallet. They made **selling an earning membership** safe enough to watch someone attack it live.”
@@ -37,7 +37,7 @@ Judges should leave saying:
 
 **Problem:** Creator clubs, fan clubs, and event collectives sell memberships and tickets off-chain. When a founding seat is resold, the buyer cannot know if the seller kept admin access, a payout in flight, or a pre-signed drain.
 
-**ClearTitle answer:** The seat *is* the wallet. Ticket cuts land in that wallet by contract. Sale moves ownership + pending money + Chain Sig control. Attacks fail on chain.
+**QuitClaim answer:** The seat *is* the wallet. Ticket cuts land in that wallet by contract. Sale moves ownership + pending money + Chain Sig control. Attacks fail on chain.
 
 **Concrete world — “Nearnight Live”**
 - Club sells **10 USDC** tickets to a show.  
@@ -122,7 +122,7 @@ Pending always references `token_id`.
 
 ### 2.1 Official NFT prompt map
 
-| Prompt piece | ClearTitle |
+| Prompt piece | QuitClaim |
 | --- | --- |
 | Membership NFT + own wallet | Seat NFT → `seat-<id>.<club>.near` keyless vault |
 | Club treasury share | `treasury_bps` + treasury account/balance |
@@ -367,9 +367,9 @@ npx skills add emilkowalski/skills                         # motion / interactio
 # Optional NEAR MCP (local only — handles keys): nearai/near-mcp
 ```
 
-### 10.2 Skill → ClearTitle job map
+### 10.2 Skill → QuitClaim job map
 
-| Skill | When the agent must load it | ClearTitle use |
+| Skill | When the agent must load it | QuitClaim use |
 | --- | --- | --- |
 | **near-smart-contracts** | Writing/editing Rust contracts | club/registry/vault, BPS invariants, reentrancy |
 | **near-contract-audit** | After each contract milestone | Threat T1–T14 review + findings → tests |
@@ -491,7 +491,7 @@ next P0 item
 
 ### 11.2 UX principles (product, not dashboard soup)
 
-1. **One composition first viewport** — brand **ClearTitle** / world **Nearnight Live**, one headline, one sentence, one CTA group, one dominant visual (live split or seat charter). No stats strip in the hero.  
+1. **One composition first viewport** — brand **QuitClaim** / world **Nearnight Live**, one headline, one sentence, one CTA group, one dominant visual (live split or seat charter). No stats strip in the hero.  
 2. **Brand first** — product name is hero-level, not nav crumb.  
 3. **One job per section** — Console ≠ Lab ≠ Diligence.  
 4. **Proof is the UI** — explorer links, 0-keys badge, CLEAN stamp are first-class, not footnotes.  
@@ -786,9 +786,9 @@ When told to build:
 
 ## Appendix B — Name / brand
 
-**ClearTitle** (SeatTitle / ClubClear).  
+**QuitClaim** (SeatTitle / ClubClear).  
 World name for demo: **Nearnight Live**.  
-Taglines: “Sell the seat. Keep nothing.” · “Ticket money follows clear title.” · “The transfer is the product.”
+Taglines: “Sell the seat. Keep nothing.” · “Seller quits every claim.” · “The transfer is the product.”
 
 ## Appendix C — Skill conflict cheat-sheet
 

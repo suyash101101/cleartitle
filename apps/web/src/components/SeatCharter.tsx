@@ -2,7 +2,7 @@
 
 import type { Seat } from "@/sdk";
 
-/** Theme-aware quiet-title deed — ink on fog, never stuck black in light mode. */
+/** Theme-aware quitclaim deed — ink on fog, never stuck black in light mode. */
 export function SeatCharter({ seat }: { seat: Seat }) {
   const pending = seat.pending.filter(
     (p) => p.status === "PENDING" || p.status === "REBOUND_TO_BUYER",
@@ -11,7 +11,7 @@ export function SeatCharter({ seat }: { seat: Seat }) {
   return (
     <article className="seat-charter" aria-label={`Seat ${seat.tokenId} charter`}>
       <div className="seat-charter-frame">
-        <p className="seat-charter-kicker">NEP-171 · Quiet Title Deed</p>
+        <p className="seat-charter-kicker">NEP-171 · Quitclaim Deed</p>
         <h2 className="seat-charter-title">Seat #{seat.tokenId}</h2>
         <p className="seat-charter-vault mono">{seat.vaultAccountId}</p>
         <p className="seat-charter-facts">

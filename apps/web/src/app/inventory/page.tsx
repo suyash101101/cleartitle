@@ -111,7 +111,7 @@ export default function InventoryPage() {
         <BentoCard
           name="Seat #3 cert"
           Icon={ShieldCheck}
-          description="Quiet title deed · PROVABLY CLEAN."
+          description="Quitclaim deed · PROVABLY CLEAN."
           href="/title/3"
           cta="Open cert"
         />

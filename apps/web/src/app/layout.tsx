@@ -20,9 +20,9 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "QuietTitle · Nearnight seat NFTs",
+  title: "QuitClaim · Nearnight seat NFTs",
   description:
-    "Quiet title = undisputed ownership of every future cut. Five NEP-171 seat NFTs earn on Nearnight. Live testnet proofs on NEAR.",
+    "Seller quits every claim to the seat and its future cuts. Five NEP-171 seat NFTs earn on Nearnight. Live testnet proofs on NEAR.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

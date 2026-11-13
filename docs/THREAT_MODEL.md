@@ -1,4 +1,4 @@
-# Threat model — ClearTitle
+# Threat model — QuitClaim
 
 Written before implementation. Each row maps to a Transfer Lab button and/or automated test.
 

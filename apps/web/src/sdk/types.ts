@@ -1,4 +1,4 @@
-/** QuietTitle domain types: title insurance for ticket-earning seat NFTs. */
+/** QuitClaim domain types: title insurance for ticket-earning seat NFTs. */
 
 export type Encumbrance = "FREE" | "LISTED" | "SETTLING";
 export type PayoutStatus = "NONE" | "PENDING" | "SETTLED" | "REBOUND_TO_BUYER";

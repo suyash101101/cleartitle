@@ -1,4 +1,4 @@
-# Judges — ClearTitle
+# Judges — QuitClaim
 
 **One-liner:** Sell the seat. Keep nothing. Pending ticket money follows clear title on NEAR.
 
@@ -31,7 +31,7 @@ Declare **`nfts` only** (optional `social` only if named-club story is used).
 
 ## Why we win this field
 
-Crowd is full of “NFT owns a wallet” demos (agent spend guards, DAO seats, AI business treasuries). ClearTitle one-ups the **transfer threat** the track prompt asks for:
+Crowd is full of “NFT owns a wallet” demos (agent spend guards, DAO seats, AI business treasuries). QuitClaim one-ups the **transfer threat** the track prompt asks for:
 
 | Differentiator | What judges see |
 | --- | --- |

@@ -16,7 +16,7 @@ import { WedgeBadge } from "@/components/WedgeBadge";
 import { BRAND } from "@/lib/brand";
 import { useApp } from "@/lib/store";
 
-/** Shareable quiet-title certificate — judges can screenshot this alone. */
+/** Shareable quitclaim certificate — judges can screenshot this alone. */
 export default function TitleCertificatePage() {
   const params = useParams();
   const id = String(params.id ?? "3");
@@ -49,7 +49,7 @@ export default function TitleCertificatePage() {
 
   return (
     <section className="section cert-page" style={{ borderTop: "none", paddingTop: 0 }}>
-      <p className="chapter-kicker">NEP-171 · Quiet Title Deed</p>
+      <p className="chapter-kicker">NEP-171 · Quitclaim Deed</p>
       <WedgeBadge />
       <div className="cert-sheet">
         <div className="cert-sheet-top">

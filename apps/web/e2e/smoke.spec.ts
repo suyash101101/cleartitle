@@ -15,7 +15,7 @@ async function hideDevChrome(page: import("@playwright/test").Page) {
 test("home brand @smoke", async ({ page }) => {
   await page.goto("/");
   await hideDevChrome(page);
-  await expect(page.locator("h1")).toContainText(/QuietTitle/i);
+  await expect(page.locator("h1")).toContainText(/QuitClaim/i);
   await expect(page.getByText(/Own the seat\. Own every future cut/i)).toBeVisible();
   await expect(page.getByLabel(/Graphic ticket roll/i)).toBeVisible();
   await expect(page.getByLabel(/Pull paper to mint seat NFT/i)).toBeVisible();
@@ -127,7 +127,7 @@ test("title certificate @smoke", async ({ page }) => {
   await page.waitForURL(/\/seat\/3/);
   await page.goto("/title/3");
   await hideDevChrome(page);
-  await expect(page.getByText(/NEP-171 · Quiet Title Deed/i)).toBeVisible();
+  await expect(page.getByText(/NEP-171 · Quitclaim Deed/i)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Seat #3", exact: true })).toBeVisible();
   await expect(page.getByText(/Clear title chain/i)).toBeVisible();
   await expect(page.getByLabel(/Title clarity score/i)).toBeVisible();
@@ -158,13 +158,13 @@ test("home brand once @smoke", async ({ page }) => {
   await hideDevChrome(page);
   const brands = page.locator("h1");
   await expect(brands).toHaveCount(1);
-  await expect(brands).toContainText(/QuietTitle/i);
-  await expect(page.getByRole("link", { name: /^QuietTitle$/i })).toHaveCount(0);
+  await expect(brands).toContainText(/QuitClaim/i);
+  await expect(page.getByRole("link", { name: /^QuitClaim$/i })).toHaveCount(0);
   await expect(page.getByLabel(/Graphic ticket roll/i)).toBeVisible();
   await expect(page.getByRole("heading", { name: /Buy while money is still in flight/i })).toBeVisible();
-  await expect(page.getByText(/Built for quiet title/i)).toBeVisible();
+  await expect(page.getByText(/Built so sellers quit every claim/i)).toBeVisible();
   await expect(page.getByText(/01 · Real mishaps/i)).toBeVisible();
-  await expect(page.getByText(/quiet title is the legal action/i)).toBeVisible();
+  await expect(page.getByText(/A quitclaim is when the seller abandons every claim/i)).toBeVisible();
   await expect(page.getByLabel(/Product story/i)).toBeVisible();
 });
 
@@ -183,7 +183,7 @@ test("mobile home brand @smoke", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await hideDevChrome(page);
-  await expect(page.locator("h1")).toContainText(/QuietTitle/i);
+  await expect(page.locator("h1")).toContainText(/QuitClaim/i);
   await expect(page.getByRole("navigation", { name: /Primary/i })).toBeVisible();
   await expect(page.getByRole("link", { name: /^Home$/i })).toBeVisible();
   await page.getByRole("link", { name: /^Club$/i }).click();
@@ -193,7 +193,7 @@ test("mobile home brand @smoke", async ({ page }) => {
 test("box office buy ticket @smoke", async ({ page }) => {
   await page.goto("/box-office");
   await hideDevChrome(page);
-  await expect(page.getByLabel(/QuietTitle wedge/i)).toBeVisible();
+  await expect(page.getByLabel(/QuitClaim wedge/i)).toBeVisible();
   await expect(page.getByLabel(/Door NFT versus earning seat/i)).toHaveCount(0);
   await page.getByRole("button", { name: /^Buy ticket$/i }).click({ force: true });
   await expect(page.getByText(/Treasury|Seat #|0xct/i).first()).toBeVisible();

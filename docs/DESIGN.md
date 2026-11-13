@@ -1,4 +1,4 @@
-# DESIGN.md — ClearTitle / Nearnight Live
+# DESIGN.md — QuitClaim / Nearnight Live
 
 ## Direction
 Nightclub title-insurance. Ink black stage, amber spotlight, paper-warm type. Proof UI is the product — not a generic SaaS dashboard.

@@ -140,7 +140,7 @@ export function StoryJourney() {
       <section className="bento-section dense" aria-label="Product paths">
         <p className="chapter-kicker">Paths</p>
         <h2>
-          Built for quiet title.
+          Built so sellers quit every claim.
           <span className="mute"> Proven on testnet.</span>
         </h2>
         <BentoGrid>
