@@ -13,12 +13,13 @@ const DEFAULTS: RollTicket[] = [
   { id: "5", tier: "Press", owner: "organizer.near", keys: 0 },
 ];
 
-const TEAR_AT = 220;
-const SHEET_MIN = 140;
+/** Resting flap length (px) — short hang like the inspiration. */
+const FLAP_MIN = 72;
+const TEAR_AT = 200;
 
 /**
- * Side-view toilet-paper roll (2D illusion):
- * wrap bands scroll with pull; hanging sheet is pure white.
+ * Side-view toilet-paper roll matching the Graphic Ticket / Roll Paper reference:
+ * fat wound cylinder + cardboard core on the right + short hanging flap.
  */
 export function TicketRoll3D({
   tickets = DEFAULTS,
@@ -30,7 +31,7 @@ export function TicketRoll3D({
   onMint?: () => void;
 }) {
   const [torn, setTorn] = useState<RollTicket[]>(mode === "display" ? tickets : []);
-  const [pull, setPull] = useState(SHEET_MIN);
+  const [pull, setPull] = useState(FLAP_MIN);
   const [wrapBase, setWrapBase] = useState(0);
   const [ripping, setRipping] = useState(false);
   const drag = useRef<{ active: boolean; startY: number; base: number }>({
@@ -41,17 +42,17 @@ export function TicketRoll3D({
   const remaining = Math.max(0, tickets.length - torn.length);
   const next = tickets[torn.length];
   const canPull = mode === "mint" && remaining > 0 && !ripping;
-  const wrapShift = wrapBase + (pull - SHEET_MIN) * 1.05;
-  const sheetH = Math.max(SHEET_MIN, pull);
+  const wrapShift = wrapBase + (pull - FLAP_MIN) * 0.9;
+  const flapH = Math.max(FLAP_MIN, pull);
 
   const tear = useCallback(() => {
     if (!next || ripping) return;
     setRipping(true);
-    setPull(TEAR_AT + 32);
+    setPull(TEAR_AT + 28);
     window.setTimeout(() => {
       setTorn((t) => [...t, next]);
-      setWrapBase((s) => s + (TEAR_AT - SHEET_MIN) * 1.05);
-      setPull(SHEET_MIN);
+      setWrapBase((s) => s + (TEAR_AT - FLAP_MIN) * 0.9);
+      setPull(FLAP_MIN);
       setRipping(false);
       onMint?.();
     }, 520);
@@ -67,7 +68,7 @@ export function TicketRoll3D({
   const onPointerMove = (e: React.PointerEvent) => {
     if (!drag.current.active || !canPull) return;
     const delta = e.clientY - drag.current.startY;
-    const nextPull = Math.max(SHEET_MIN, Math.min(TEAR_AT + 40, drag.current.base + delta));
+    const nextPull = Math.max(FLAP_MIN, Math.min(TEAR_AT + 36, drag.current.base + delta));
     setPull(nextPull);
     if (nextPull >= TEAR_AT) {
       drag.current.active = false;
@@ -79,7 +80,7 @@ export function TicketRoll3D({
     if (!drag.current.active) return;
     drag.current.active = false;
     if (pull >= TEAR_AT) tear();
-    else setPull(SHEET_MIN);
+    else setPull(FLAP_MIN);
   };
 
   return (
@@ -95,75 +96,70 @@ export function TicketRoll3D({
         </p>
       </div>
 
-      <div className="tp-stage">
-        <div className="tp-shadow" aria-hidden />
+      <div className="tpv-stage">
+        <div className="tpv-roll" style={{ ["--wrap" as string]: `${wrapShift}px` }}>
+          {/* Fat wound body */}
+          <div className="tpv-wound" aria-hidden>
+            <span className="tpv-wraps" />
+            <span className="tpv-wound-sheen" />
+            <span className="tpv-wound-rim" />
+          </div>
 
-        <div className="tp-dispenser">
+          {/* Cardboard core — right end, hollow ring */}
+          <div className="tpv-core" aria-hidden>
+            <span className="tpv-core-wall" />
+            <span className="tpv-core-hole" />
+          </div>
+
+          {/* Short hanging flap — peels from underside */}
           <div
-            className="tp-roll-2d"
-            style={{ ["--wrap" as string]: `${wrapShift}px` }}
+            className={`tpv-flap-wrap ${canPull ? "draggable" : ""}`}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            role={canPull ? "slider" : undefined}
+            aria-valuemin={canPull ? FLAP_MIN : undefined}
+            aria-valuemax={canPull ? TEAR_AT : undefined}
+            aria-valuenow={canPull ? Math.round(pull) : undefined}
+            aria-label={canPull ? "Pull paper to mint seat NFT" : undefined}
+            tabIndex={canPull ? 0 : undefined}
           >
-            <span className="tp-end tp-end-l" aria-hidden />
-            <span className="tp-cylinder">
-              <span className="tp-cylinder-clip" aria-hidden>
-                <span className="tp-paper-layers" />
-                <span className="tp-paper-curve" />
-                <span className="tp-cylinder-shade" />
-                <span className="tp-curl" />
-              </span>
-
-              {/* Long rectangle sheet — curled out of the roll */}
-              <div
-                className={`tp-sheet-wrap ${canPull ? "draggable" : ""}`}
-                onPointerDown={onPointerDown}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerUp}
-                role={canPull ? "slider" : undefined}
-                aria-valuemin={canPull ? SHEET_MIN : undefined}
-                aria-valuemax={canPull ? TEAR_AT : undefined}
-                aria-valuenow={canPull ? Math.round(pull) : undefined}
-                aria-label={canPull ? "Pull paper to mint seat NFT" : undefined}
-                tabIndex={canPull ? 0 : undefined}
-              >
-                <motion.div
-                  className={`tp-sheet tp-sheet-white ${ripping ? "tearing" : ""}`}
-                  style={{ height: sheetH }}
-                  animate={ripping ? { rotate: 2, x: 4, y: 16 } : { rotate: 0, x: 0, y: 0 }}
-                >
-                  <span className="tp-sheet-blank" />
-                  <span className="tp-sheet-perfs" />
-                  {next && canPull && (
-                    <span className="tp-sheet-label mono">
-                      #{next.id} · {next.tier}
-                    </span>
-                  )}
-                </motion.div>
-              </div>
-            </span>
-            <span className="tp-end tp-end-r" aria-hidden />
+            <motion.div
+              className={`tpv-flap ${ripping ? "tearing" : ""}`}
+              style={{ height: flapH }}
+              animate={ripping ? { rotate: 1.5, y: 18, opacity: 0.85 } : { rotate: 0, y: 0, opacity: 1 }}
+            >
+              <span className="tpv-flap-curl" aria-hidden />
+              <span className="tpv-flap-face" />
+              {next && canPull && (
+                <span className="tpv-flap-label mono">
+                  #{next.id} · {next.tier}
+                </span>
+              )}
+            </motion.div>
           </div>
         </div>
 
         {canPull && (
-          <p className="meta tp-hint">
-            {pull < SHEET_MIN + 20
-              ? "Drag the white paper down"
+          <p className="meta tpv-hint">
+            {pull < FLAP_MIN + 16
+              ? "Pull the flap down to tear a seat"
               : pull < TEAR_AT
                 ? "Keep pulling…"
                 : "Tearing…"}
           </p>
         )}
         {mode === "mint" && remaining === 0 && (
-          <p className="meta tp-hint">Roll empty · all founding seats torn.</p>
+          <p className="meta tpv-hint">Roll empty · all founding seats torn.</p>
         )}
 
         <AnimatePresence>
           {ripping && (
             <motion.div
-              className="tp-rip-flash"
-              initial={{ opacity: 0.6, y: 0 }}
-              animate={{ opacity: 0, y: 70 }}
+              className="tpv-flash"
+              initial={{ opacity: 0.5, y: 0 }}
+              animate={{ opacity: 0, y: 48 }}
               exit={{ opacity: 0 }}
             />
           )}

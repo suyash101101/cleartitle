@@ -7183,3 +7183,275 @@ html[data-theme="light"] .claim-clock-col {
 .bento-card {
   min-height: 0 !important;
 }
+
+/* ========== Orbit title between rings ========== */
+.orbital-stage {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  width: min(92vw, 36rem) !important;
+  height: 14rem !important;
+  margin: 0 auto !important;
+}
+.orbital-title {
+  position: relative;
+  z-index: 4;
+  margin: 0;
+  max-width: 14rem;
+  text-align: center;
+  font-size: clamp(1.45rem, 3.6vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  pointer-events: none;
+}
+.orbital-copy h2 { display: none !important; }
+.orbital-copy {
+  display: flex !important;
+  justify-content: center !important;
+  padding-top: 0.15rem !important;
+}
+html[data-theme="light"] .orbital-title {
+  color: #0a0a0a;
+}
+html:not([data-theme="light"]) .orbital-title {
+  color: #fff;
+}
+
+/* ========== Toilet paper v2 — fat roll + cardboard core + short flap ========== */
+.tp-dispenser,
+.tp-stage,
+.tp-roll-2d,
+.tp-shadow {
+  /* hide legacy markup if any leftover */
+}
+
+.tpv-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 16rem;
+  padding: 1.25rem 0 0.5rem;
+}
+
+.tpv-roll {
+  position: relative;
+  width: min(17.5rem, 78vw);
+  height: 7.25rem;
+  margin: 0 auto 4.5rem; /* room for resting flap */
+  filter: drop-shadow(0 10px 14px rgb(0 0 0 / 0.1));
+}
+
+/* Wound paper body — thick oval cylinder */
+.tpv-wound {
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  right: 1.55rem;
+  bottom: 0.35rem;
+  border-radius: 48% / 50%;
+  background:
+    radial-gradient(120% 90% at 18% 35%, #fff 0%, #f4f4f4 42%, #e6e6e6 78%, #d0d0d0 100%);
+  border: 1px solid #c8c8c8;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow:
+    inset 0 14px 18px rgb(255 255 255 / 0.65),
+    inset 0 -16px 22px rgb(0 0 0 / 0.1),
+    inset 18px 0 22px rgb(0 0 0 / 0.05);
+}
+
+.tpv-wraps {
+  position: absolute;
+  inset: -20% -8%;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 5px,
+      rgb(0 0 0 / 0.045) 5px 6px
+    );
+  background-position: 0 var(--wrap, 0px);
+  transform: rotate(-2deg);
+  opacity: 0.9;
+}
+
+.tpv-wound-sheen {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.45) 48%, transparent 62%),
+    radial-gradient(80% 60% at 70% 50%, transparent 40%, rgb(0 0 0 / 0.08) 100%);
+  pointer-events: none;
+}
+
+.tpv-wound-rim {
+  position: absolute;
+  left: 0;
+  top: 6%;
+  bottom: 6%;
+  width: 10px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #bdbdbd, #ececec 55%, transparent);
+  opacity: 0.85;
+}
+
+/* Cardboard tube — right end hollow ring */
+.tpv-core {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.35rem;
+  height: 5.6rem;
+  z-index: 3;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 42% 48%, #f0d9b0 0%, #d4a574 38%, #b8824a 72%, #8f6234 100%);
+  border: 1px solid #9a6b3a;
+  box-shadow:
+    inset -6px 0 10px rgb(0 0 0 / 0.18),
+    inset 4px 0 8px rgb(255 255 255 / 0.25),
+    2px 0 6px rgb(0 0 0 / 0.08);
+}
+
+.tpv-core-wall {
+  position: absolute;
+  inset: 0.55rem;
+  border-radius: 50%;
+  border: 5px solid #c9955c;
+  background: radial-gradient(circle at 40% 45%, #3a2a1a 0%, #1a120c 70%);
+  box-shadow: inset 0 0 8px rgb(0 0 0 / 0.55);
+}
+
+.tpv-core-hole {
+  position: absolute;
+  inset: 1.05rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 40%, #2a1c12, #0a0705 80%);
+}
+
+/* Short flap peeling from underside of roll */
+.tpv-flap-wrap {
+  position: absolute;
+  left: 18%;
+  right: 22%;
+  top: calc(100% - 1.65rem);
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+}
+.tpv-flap-wrap.draggable {
+  cursor: grab;
+}
+.tpv-flap-wrap.draggable:active {
+  cursor: grabbing;
+}
+
+.tpv-flap {
+  position: relative;
+  width: 100%;
+  max-width: 9.5rem;
+  min-height: 4.5rem;
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  border-top: none;
+  border-radius: 0 0 0.85rem 0.85rem;
+  box-shadow: 0 14px 18px rgb(0 0 0 / 0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.tpv-flap.tearing {
+  border-style: dashed;
+}
+
+.tpv-flap-curl {
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: -0.85rem;
+  height: 1.35rem;
+  background:
+    linear-gradient(180deg, transparent 0%, #fff 55%, #fff 100%);
+  border-radius: 50% 50% 0 0 / 70% 70% 0 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tpv-flap-face {
+  flex: 1;
+  background:
+    linear-gradient(180deg, #fafafa 0%, #fff 30%, #fff 100%);
+  min-height: 2.5rem;
+}
+
+.tpv-flap-label {
+  display: block;
+  padding: 0.35rem 0.55rem 0.55rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  color: #111;
+}
+
+.tpv-hint {
+  margin: 0;
+  text-align: center;
+}
+.tpv-flash {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 6rem;
+  height: 2rem;
+  margin-left: -3rem;
+  background: rgb(0 0 0 / 0.08);
+  filter: blur(10px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+html:not([data-theme="light"]) .tpv-wound {
+  background:
+    radial-gradient(120% 90% at 18% 35%, #1a1a1a 0%, #111 50%, #0a0a0a 100%);
+  border-color: #333;
+}
+html:not([data-theme="light"]) .tpv-wraps {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 5px,
+      rgb(255 255 255 / 0.06) 5px 6px
+    );
+  background-position: 0 var(--wrap, 0px);
+}
+html:not([data-theme="light"]) .tpv-flap {
+  background: #111;
+  border-color: #333;
+  box-shadow: 0 14px 18px rgb(0 0 0 / 0.45);
+}
+html:not([data-theme="light"]) .tpv-flap-curl {
+  background: linear-gradient(180deg, transparent 0%, #111 55%, #111 100%);
+}
+html:not([data-theme="light"]) .tpv-flap-face {
+  background: #111;
+}
+html:not([data-theme="light"]) .tpv-flap-label {
+  color: #eee;
+}
+
+@media (max-width: 520px) {
+  .tpv-roll {
+    width: min(15rem, 86vw);
+    height: 6.4rem;
+    margin-bottom: 4rem;
+  }
+  .tpv-core {
+    width: 2rem;
+    height: 4.9rem;
+  }
+}

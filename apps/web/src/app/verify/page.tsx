@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FlaskConical, LayoutGrid, ShieldCheck, Ticket } from "lucide-react";
 import { VERIFY_CLAIMS } from "@/sdk";
-import { LAB_ATTACKS, ONCHAIN, txUrl } from "@/lib/evidence";
+import { CONTRACT_ID, LAB_ATTACKS, ONCHAIN, txUrl } from "@/lib/evidence";
 import { ClaimClock } from "@/components/ClaimClock";
 import { JudgeStampPanel } from "@/components/JudgeStampPanel";
 import { ProofShare } from "@/components/ProofShare";
@@ -126,7 +126,7 @@ export default function VerifyPage() {
           ))}
         </ul>
         <p className="meta mono" style={{ marginTop: "1rem" }}>
-          Contract · {ONCHAIN.contractId} ·{" "}
+          Contract · {CONTRACT_ID} ·{" "}
           <Link className="pin-link" href="/lab">
             re-run in Lab →
           </Link>
