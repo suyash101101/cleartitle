@@ -2,6 +2,9 @@
 
 **One-liner:** Sell the seat. Keep nothing. Ticket money follows clear title.
 
+**Live:** https://web-khaki-iota-17.vercel.app  
+**Repo:** https://github.com/suyash101101/cleartitle
+
 ## What to click (3 minutes)
 
 1. **Home** — brand + problem.  
