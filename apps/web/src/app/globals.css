@@ -69,7 +69,7 @@ h3,
   margin: 0 auto;
   width: 100%;
   max-width: none;
-  padding: 0 clamp(0.85rem, 3.5vw, 2.25rem) 7.75rem;
+  padding: 0 clamp(0.85rem, 3.5vw, 2.25rem) 8.5rem;
   overflow: visible;
 }
 
@@ -397,19 +397,19 @@ button.active {
 
 .flash {
   position: fixed;
-  top: 4.75rem;
-  bottom: auto;
+  top: auto;
+  bottom: 5.25rem;
   left: 50%;
-  z-index: 60;
-  max-width: min(560px, 92vw);
+  z-index: 80;
+  max-width: min(520px, 92vw);
   transform: translateX(-50%);
-  padding: 0.85rem 1.1rem;
-  background: #06202b;
-  border: 1px solid var(--color-signal-hot);
-  border-radius: 999px;
-  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  background: #0e1216;
+  border: 1px solid var(--color-proof);
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
   pointer-events: auto;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
 }
 .flash.err {
   border-color: var(--color-warn);
@@ -495,6 +495,18 @@ table.verify th {
   border: 1px solid rgba(94, 184, 255, 0.28);
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px rgba(200, 255, 61, 0.08);
+  animation: planePulse 7s ease-in-out infinite;
+}
+@keyframes planePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
 }
 
 .near-hero-bg,

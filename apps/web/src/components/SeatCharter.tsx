@@ -14,19 +14,19 @@ export function SeatCharter({ seat }: { seat: Seat }) {
         aria-label={`Seat ${seat.tokenId} charter`}
         style={{
           display: "block",
-          borderRadius: "1rem",
-          background: "#06202b",
-          boxShadow: "0 20px 50px rgba(0,0,0,0.35)",
+          borderRadius: "0.65rem",
+          background: "#0e1216",
+          border: "1px solid rgba(255,255,255,0.1)",
         }}
       >
         <defs>
           <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#0091FD" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#C8FF3D" stopOpacity="0.08" />
+            <stop offset="0%" stopColor="#0091FD" stopOpacity="0.14" />
+            <stop offset="100%" stopColor="#C8FF3D" stopOpacity="0.04" />
           </linearGradient>
         </defs>
-        <rect width="420" height="240" fill="#06202b" />
-        <rect x="12" y="12" width="396" height="216" fill="url(#g)" stroke="#83DCFF" strokeOpacity="0.4" strokeWidth="1.5" />
+        <rect width="420" height="240" fill="#0e1216" />
+        <rect x="12" y="12" width="396" height="216" fill="url(#g)" stroke="#5EB8FF" strokeOpacity="0.35" strokeWidth="1" />
         <text x="28" y="48" fill="#FFFFFF" fontFamily="var(--font-brand), sans-serif" fontSize="28" fontWeight="600">
           Seat #{seat.tokenId}
         </text>
