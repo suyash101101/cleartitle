@@ -382,45 +382,30 @@ table.verify th {
   font-size: 0.78rem;
 }
 
-/* ——— Mouse field (Igloo-like) ——— */
-.mouse-field {
-  position: fixed;
-  z-index: 0;
-  width: 480px;
-  height: 480px;
-  margin: -240px 0 0 -240px;
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(circle, rgba(131, 220, 255, 0.16) 0%, rgba(0, 145, 253, 0.06) 40%, transparent 70%);
-  mix-blend-mode: screen;
-  transition: opacity 0.35s ease;
-}
-
 /* ——— NEAR hero ——— */
 .near-hero {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 1.5rem;
+  gap: 2rem;
   align-items: center;
-  min-height: min(88vh, 860px);
-  padding: 2rem 0 3rem;
-  overflow: hidden;
+  min-height: min(82vh, 760px);
+  padding: 2rem 0 2.5rem;
 }
 
 @media (min-width: 960px) {
   .near-hero {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   }
 }
 
 .near-hero-bg {
   position: absolute;
-  inset: -10% -5%;
+  inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(0, 209, 178, 0.22), transparent 60%),
-    radial-gradient(ellipse 40% 40% at 30% 70%, rgba(200, 255, 61, 0.1), transparent 55%);
+    radial-gradient(ellipse 55% 45% at 75% 35%, rgba(0, 145, 253, 0.28), transparent 60%),
+    radial-gradient(ellipse 35% 35% at 20% 80%, rgba(200, 255, 61, 0.1), transparent 55%);
   pointer-events: none;
 }
 
@@ -428,11 +413,12 @@ table.verify th {
   position: relative;
   z-index: 2;
   max-width: 34rem;
+  min-width: 0;
 }
 
 .near-hero h1 {
   margin: 0.4rem 0 0.9rem;
-  font-size: clamp(3.2rem, 8vw, 5.6rem);
+  font-size: clamp(3.2rem, 8vw, 5.4rem);
   line-height: 0.92;
   font-weight: 500;
 }
@@ -441,119 +427,99 @@ table.verify th {
   color: var(--color-signal-hot);
 }
 
-.near-hero-visual {
+.hero-visual {
   position: relative;
   z-index: 1;
-  min-height: 320px;
-  height: min(52vh, 440px);
-}
-
-.scene3d {
   width: 100%;
-  height: 100%;
-  min-height: 320px;
-  border-radius: 1.25rem;
-  overflow: hidden;
-}
-.scene3d-fallback {
-  background:
-    radial-gradient(circle at 40% 40%, rgba(0, 145, 253, 0.35), transparent 55%),
-    radial-gradient(circle at 70% 60%, rgba(200, 255, 61, 0.18), transparent 50%),
-    #06202b;
+  min-width: 0;
+  min-height: 300px;
+  display: grid;
+  place-items: center;
 }
 
-/* ——— Pinned Igloo-style journey ——— */
-.pin-track {
-  position: relative;
-  height: 420vh;
-  margin-top: 1rem;
+.hero-visual-card {
+  width: min(100%, 380px);
+  z-index: 1;
 }
 
-.pin-sticky {
-  position: sticky;
-  top: 4.5rem;
-  height: calc(100vh - 5rem);
+.hero-visual-float {
+  position: absolute;
+  width: min(72%, 260px);
+  right: 0;
+  bottom: -0.5rem;
+  z-index: 2;
+  transform: rotate(7deg);
+}
+
+.story-jump {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 0.5rem 0 1rem;
-  overflow: hidden;
-}
-
-.pin-rail {
-  position: relative;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 99px;
-  overflow: visible;
-  margin-bottom: 0.75rem;
-}
-.pin-rail-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--color-signal), var(--color-proof));
-  border-radius: 99px;
-}
-.pin-rail-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.45rem;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  padding: 0.85rem 0;
+  margin-bottom: 0.5rem;
+  border-block: 1px solid var(--color-line);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+.story-jump a {
   color: var(--color-mute);
 }
+.story-jump a:hover {
+  color: var(--color-proof);
+}
 
-.pin-stage {
-  flex: 1;
+.chapter-row {
   display: grid;
-  gap: 1.25rem;
+  gap: 2rem;
   align-items: center;
-  min-height: 0;
+  padding: 3.25rem 0;
+  border-top: 1px solid var(--color-line);
+  min-width: 0;
 }
 
 @media (min-width: 900px) {
-  .pin-stage {
-    grid-template-columns: 1.05fr 0.95fr;
+  .chapter-row {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+  .chapter-row.reverse .chapter-copy {
+    order: 2;
+  }
+  .chapter-row.reverse .chapter-asset {
+    order: 1;
   }
 }
 
-.pin-copy-stack {
-  position: relative;
-  min-height: 280px;
+.chapter-copy {
+  min-width: 0;
+  max-width: 34rem;
 }
 
-.pin-copy {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 32rem;
-}
-
-.pin-copy h2 {
+.chapter-copy h2 {
   margin: 0 0 0.75rem;
-  font-size: clamp(1.85rem, 3.8vw, 2.85rem);
-  line-height: 1.05;
+  font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+  line-height: 1.08;
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
-.pin-copy p {
+.chapter-copy p {
   margin: 0 0 1rem;
   color: var(--color-mute);
   font-size: 1.05rem;
+}
+
+.chapter-asset {
+  width: min(100%, 400px);
+  justify-self: center;
+  min-width: 0;
 }
 
 .pin-link {
   font-weight: 600;
   color: var(--color-proof);
   width: fit-content;
-}
-
-.pin-scene {
-  height: min(48vh, 420px);
-  min-height: 280px;
 }
 
 .chapter-kicker {
@@ -563,26 +529,6 @@ table.verify th {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-signal-hot);
-}
-
-.artifact-strip {
-  position: relative;
-  z-index: 1;
-  padding: 3.5rem 0 2rem;
-  border-top: 1px solid var(--color-line);
-}
-
-.artifact-strip h2 {
-  margin: 0 0 0.5rem;
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
-  font-weight: 500;
-}
-
-.artifact-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  margin-top: 1.5rem;
 }
 
 .finale {
@@ -773,9 +719,6 @@ table.verify th {
   html {
     scroll-behavior: auto;
   }
-  .mouse-field {
-    display: none;
-  }
   *,
   *::before,
   *::after {
@@ -788,17 +731,13 @@ table.verify th {
   .near-hero h1 {
     font-size: 2.8rem;
   }
-  .pin-track {
-    height: 360vh;
-  }
-  .pin-sticky {
-    top: 3.75rem;
-    height: calc(100vh - 4.25rem);
-  }
-  .pin-scene,
-  .near-hero-visual {
-    min-height: 240px;
-    height: 260px;
+  .hero-visual-float {
+    position: relative;
+    width: 100%;
+    transform: none;
+    margin-top: 1rem;
+    right: auto;
+    bottom: auto;
   }
   .split-row {
     grid-template-columns: 1fr;
