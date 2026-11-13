@@ -14,9 +14,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@cleartitle/sdk':
-        specifier: file:../../packages/sdk
-        version: link:../../packages/sdk
       next:
         specifier: ^15.2.4
         version: 15.5.29(@playwright/test@1.65.0)(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)

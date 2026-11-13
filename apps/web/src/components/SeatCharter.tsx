@@ -1,6 +1,6 @@
 "use client";
 
-import type { Seat } from "@cleartitle/sdk";
+import type { Seat } from "@/sdk";
 
 export function SeatCharter({ seat }: { seat: Seat }) {
   const pending = seat.pending.filter(

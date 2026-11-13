@@ -18,7 +18,7 @@ import {
   type DiligenceReport,
   type LabResult,
   type WorldState,
-} from "@cleartitle/sdk";
+} from "@/sdk";
 
 type Flash = { kind: "ok" | "err" | "lab"; text: string } | null;
 

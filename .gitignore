@@ -17,3 +17,4 @@ test-results/
 scripts/.tmp-*
 .tools/
 apps/web/e2e/.auth/
+.vercel

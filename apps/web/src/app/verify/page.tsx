@@ -1,4 +1,4 @@
-import { VERIFY_CLAIMS } from "@cleartitle/sdk";
+import { VERIFY_CLAIMS } from "@/sdk";
 
 export default function VerifyPage() {
   return (

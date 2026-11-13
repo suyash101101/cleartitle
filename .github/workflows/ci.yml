@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm test:unit
+      - run: pnpm evidence
+      - run: pnpm --filter @cleartitle/web build
+      - uses: dtolnay/rust-toolchain@stable
+      - name: cargo test
+        working-directory: contracts/cleartitle
+        run: cargo test
