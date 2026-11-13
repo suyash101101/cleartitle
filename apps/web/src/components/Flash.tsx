@@ -12,10 +12,11 @@ export function Flash() {
           key={flash.text}
           className={`flash ${flash.kind === "err" ? "err" : flash.kind === "lab" ? "lab" : ""}`}
           role="status"
-          initial={{ opacity: 0, y: 16, x: "-50%" }}
-          animate={{ opacity: 1, y: 0, x: "-50%" }}
-          exit={{ opacity: 0, y: 8, x: "-50%" }}
-          transition={{ duration: 0.28 }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.22 }}
+          style={{ left: "50%", x: "-50%" }}
         >
           {flash.text}
         </motion.div>

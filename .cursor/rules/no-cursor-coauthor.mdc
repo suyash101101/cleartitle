@@ -1,0 +1,9 @@
+---
+description: Never add Cursor as git co-author
+alwaysApply: true
+---
+
+# No Cursor co-author
+
+Never append `Co-authored-by: Cursor` or `Made-with: Cursor` to commits or PRs.
+Commit messages must be author-only. Attribution is disabled in CLI config and stripped by `.githooks/commit-msg`.

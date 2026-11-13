@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
 
 const links = [
   { href: "/", label: "Home" },
@@ -16,13 +15,7 @@ const links = [
 export function Nav() {
   const path = usePathname();
   return (
-    <motion.nav
-      className="nav"
-      aria-label="Primary"
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <nav className="nav" aria-label="Primary">
       <Link href="/" className="nav-brand">
         Clear<span>Title</span>
       </Link>
@@ -33,6 +26,6 @@ export function Nav() {
           </Link>
         ))}
       </div>
-    </motion.nav>
+    </nav>
   );
 }

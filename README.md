@@ -49,11 +49,12 @@ pnpm verify:all
 | --- | --- |
 | Domain engine (`packages/sdk`) | Real state machine — powers UI + Vitest |
 | Rust contract (`contracts/cleartitle`) | Real near-sdk unit tests (ticket split, mid-payout, epoch freeze) |
-| Web UI | Demo engine for interactive story + **live RPC panel** reading testnet |
-| Testnet contract | Deployed · club minted · ticket bought · diligence CLEAN on-chain |
-| Wallet connect (near-connect) | Not wired yet — scripted txs signed with local faucet key |
-| Chain Signatures MPC spend | Not yet — continuity hash proven in contract/engine |
+| Web UI | Demo engine for the filmed story + live RPC panel + explorer-linked Lab |
+| Testnet contract | Deployed · club minted · ticket bought · mid-payout · diligence CLEAN |
+| Wallet connect (near-connect) | Wired for signed `buy_ticket` / `list_seat` / `buy_seat` on testnet |
+| Chain Signatures | BTC/SOL derive in UI via `v1.signer-prod.testnet`; MPC spend not filmed |
 | USDC NEP-141 | Numeric / yocto stand-in (ticket_price = 10 yocto on testnet) |
+| Intents any-token ticket | Not shipped — labeled out of scope for submit |
 
 ## Architecture
 
