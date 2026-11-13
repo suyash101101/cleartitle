@@ -557,8 +557,155 @@ table.verify th {
   color: var(--color-mute);
 }
 
+.badge.rpc {
+  background: color-mix(in oklab, var(--color-proof) 22%, transparent);
+  color: var(--color-proof);
+  border: 1px solid color-mix(in oklab, var(--color-proof) 45%, transparent);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-right: 0.45rem;
+  vertical-align: middle;
+}
+.badge.scenario {
+  background: color-mix(in oklab, var(--color-signal-hot) 18%, transparent);
+  color: var(--color-signal-hot);
+  border: 1px solid color-mix(in oklab, var(--color-signal-hot) 40%, transparent);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-right: 0.45rem;
+  vertical-align: middle;
+}
+
 .live-strip {
   margin: 0.5rem 0 1.25rem;
+}
+
+.ticket-river {
+  margin-top: 0.85rem;
+  padding: 1rem 0 0.35rem;
+  border-top: 1px solid var(--color-line);
+}
+.ticket-river.compact .ticket-river-film {
+  display: none;
+}
+.ticket-river-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+  margin-bottom: 0.75rem;
+}
+.ticket-river-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ticket-river-title h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.ticket-river-proof {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.75rem;
+}
+.ticket-river-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.ticket-river-list li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(5rem, 7rem) 1fr auto auto;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 0.82rem;
+}
+.ticket-river-time {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-mute);
+}
+.ticket-river-buyer {
+  color: var(--color-ink);
+}
+.ticket-river-split {
+  color: var(--color-mute);
+}
+.ticket-river-tx {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-proof);
+  white-space: nowrap;
+}
+.ticket-river-film {
+  font-size: 0.68rem;
+  color: var(--color-mute);
+}
+
+.judge-run-btn {
+  background: linear-gradient(120deg, var(--color-proof), #2a8f68) !important;
+  color: #041018 !important;
+  font-weight: 700 !important;
+}
+.judge-stamp-panel {
+  margin: 0 0 1.5rem;
+  padding: 1rem 1.05rem;
+  border: 1px solid color-mix(in oklab, var(--color-proof) 40%, var(--color-line));
+  border-radius: 0.85rem;
+  background: rgba(6, 32, 43, 0.35);
+}
+.judge-stamp-list {
+  list-style: none;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.judge-stamp-list li {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto;
+  gap: 0.5rem;
+  align-items: baseline;
+  font-size: 0.86rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.45rem;
+  background: rgba(7, 9, 11, 0.55);
+}
+.judge-stamp-list li.ok .judge-mark {
+  color: var(--color-proof);
+  font-weight: 700;
+}
+.judge-stamp-list li.warn .judge-mark {
+  color: var(--color-warn);
+}
+.judge-step {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--color-signal-hot);
+}
+.judge-detail {
+  color: var(--color-mute);
+}
+.judge-hint {
+  margin: 0.85rem 0 0;
+}
+
+@media (max-width: 720px) {
+  .ticket-river-list li {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
 }
 
 .live-rail {

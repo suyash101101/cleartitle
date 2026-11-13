@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { HomeActions } from "@/components/HomeActions";
 import { TestnetPanel } from "@/components/TestnetPanel";
+import { TicketRiver } from "@/components/TicketRiver";
 import {
   DiligenceStampCard,
   FailSlipCard,
@@ -120,6 +121,7 @@ export function StoryJourney() {
 
       <section className="live-strip" aria-label="Live testnet">
         <TestnetPanel />
+        <TicketRiver limit={5} compact />
       </section>
 
       <section className="mishap-rail" aria-label="Why ClearTitle">

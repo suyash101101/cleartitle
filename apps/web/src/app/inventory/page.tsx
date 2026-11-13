@@ -42,18 +42,18 @@ export default function InventoryPage() {
       setLoading(true);
       try {
         const ids = ["1", "2", "3", "4", "5"];
-        const settled = await Promise.allSettled(
-          ids.map((token_id) => viewMethod<SeatView | null>("nft_token", { token_id })),
-        );
-        const loaded = settled
-          .map((r) => (r.status === "fulfilled" ? r.value : null))
-          .filter((s): s is SeatView => Boolean(s));
+        const loaded: SeatView[] = [];
+        for (const token_id of ids) {
+          try {
+            const s = await viewMethod<SeatView | null>("get_seat", { token_id });
+            if (s) loaded.push({ ...s, token_id: s.token_id ?? token_id });
+          } catch {
+            /* skip missing */
+          }
+        }
         if (!cancelled) {
           setLive(loaded);
-          const firstErr = settled.find((r) => r.status === "rejected");
-          if (loaded.length === 0 && firstErr && firstErr.status === "rejected") {
-            setErr(firstErr.reason instanceof Error ? firstErr.reason.message : String(firstErr.reason));
-          }
+          if (loaded.length === 0) setErr("No seats returned from RPC");
         }
       } catch (e) {
         if (!cancelled) setErr(e instanceof Error ? e.message : String(e));
@@ -72,11 +72,13 @@ export default function InventoryPage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="Seat inventory"
-        lede="Live NEP-171 deeds from testnet RPC, plus the film cast for mid-payout storytelling."
+        lede="Testnet NEP-171 deeds from RPC, plus scenario seats for mid-payout storytelling."
       />
       <SessionBar />
 
-      <h3 className="inv-heading">On-chain NFTs · {CONTRACT_ID}</h3>
+      <h3 className="inv-heading">
+        <span className="badge rpc">Testnet RPC</span> On-chain NFTs · {CONTRACT_ID}
+      </h3>
       {loading && <p className="meta">Reading nft_token…</p>}
       {err && <p className="meta" style={{ color: "var(--color-warn)" }}>{err}</p>}
       <div className="inv-grid">
@@ -107,14 +109,14 @@ export default function InventoryPage() {
       </div>
 
       <h3 className="inv-heading" style={{ marginTop: "2rem" }}>
-        Film cast seats
+        <span className="badge scenario">Scenario engine</span> Cast seats
       </h3>
       <div className="inv-grid">
         {filmSeats.map((s) => {
           const kind = SEAT_KINDS[Number(s.tokenId) - 1] ?? SEAT_KINDS[0]!;
           return (
             <Link key={s.tokenId} href={`/seat/${s.tokenId}`} className="inv-tile film">
-              <p className="chapter-kicker">{kind.label} · film</p>
+              <p className="chapter-kicker">{kind.label} · scenario</p>
               <h3>Seat #{s.tokenId}</h3>
               <p className="meta mono">{s.owner}</p>
               <p className="meta">

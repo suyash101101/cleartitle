@@ -8,8 +8,9 @@ export function ActorBar() {
   const actor = useApp((s) => s.actor);
   const setActor = useApp((s) => s.setActor);
   return (
-    <div className="actor-bar" role="group" aria-label="Film cast">
-      <span className="meta">Film cast</span>
+    <div className="actor-bar" role="group" aria-label="Scenario cast">
+      <span className="badge scenario">Scenario</span>
+      <span className="meta">Act as</span>
       {ACTORS.map((a) => (
         <button
           key={a}

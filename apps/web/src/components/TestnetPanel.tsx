@@ -63,7 +63,7 @@ export function TestnetPanel() {
   return (
     <div className="live-rail">
       <div className="live-rail-head">
-        <span className="badge ok">LIVE RPC</span>
+        <span className="badge rpc">Testnet RPC</span>
         <a className="mono meta" href={`${EXPLORER}/accounts/${CONTRACT_ID}`} target="_blank" rel="noreferrer">
           {CONTRACT_ID}
         </a>

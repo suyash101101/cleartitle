@@ -13,8 +13,15 @@ export default function BoxOfficePage() {
 
   return (
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
-      <PageHeader title="Box Office" lede="Buy a ticket. Watch the split hit treasury and every seat vault." />
+      <PageHeader
+        title="Box Office"
+        lede="Buy a ticket. Scenario engine splits match live buy_ticket on testnet."
+      />
       <SessionBar />
+      <p className="meta" style={{ margin: "-0.5rem 0 1rem" }}>
+        <span className="badge scenario">Scenario engine</span> splits stream on{" "}
+        <a href="/night">ticket river</a>
+      </p>
       <OnchainActions />
       {!club ? (
         <p className="meta">Create a club first in Console.</p>

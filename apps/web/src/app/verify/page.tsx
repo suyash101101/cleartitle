@@ -1,5 +1,6 @@
 import { VERIFY_CLAIMS } from "@/sdk";
 import { LAB_ATTACKS, ONCHAIN, txUrl } from "@/lib/evidence";
+import { JudgeStampPanel } from "@/components/JudgeStampPanel";
 import { PageHeader } from "@/components/ui/page-header";
 import { CompareStrip } from "./CompareStrip";
 
@@ -15,6 +16,8 @@ export default function VerifyPage() {
           </>
         }
       />
+
+      <JudgeStampPanel />
 
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
         <CompareStrip />

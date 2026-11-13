@@ -1,5 +1,6 @@
 "use client";
 
+import { JudgeStampPanel } from "@/components/JudgeStampPanel";
 import { SessionBar } from "@/components/SessionBar";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
@@ -16,12 +17,15 @@ export default function LabPage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="Transfer Lab"
-        lede="Live explorer receipts for seller-recall, listed drain, and held-sig. Film path arms the same threats in one click."
+        lede="Live explorer receipts for seller-recall, listed drain, and held-sig. Scenario engine arms the same threats in one click."
       />
       <SessionBar />
+      <JudgeStampPanel />
 
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
-        <h3>On-chain attack receipts</h3>
+        <h3>
+          <span className="badge rpc">Testnet RPC</span> On-chain attack receipts
+        </h3>
         <ul className="checklist">
           {LAB_ATTACKS.map((a) => (
             <li key={a.id}>
@@ -41,17 +45,19 @@ export default function LabPage() {
       </div>
 
       {!seat ? (
-        <p className="meta">Seed Nearnight from Club Console to unlock film attacks.</p>
+        <p className="meta">Load live night from Club Console to unlock scenario attacks.</p>
       ) : (
         <div className="grid-2">
           <div className="panel">
-            <h3>Film path attacks</h3>
+            <h3>
+              <span className="badge scenario">Scenario engine</span> Transfer attacks
+            </h3>
             <p className="meta" style={{ marginBottom: "1rem" }}>
               owner {seat.owner} · {seat.encumbrance} · {seat.kind}
             </p>
             <div className="cta-row">
               <button type="button" onClick={runMidPayoutScenario}>
-                Arm mid-payout
+                Run mid-payout scenario
               </button>
               <button type="button" className="danger" onClick={() => runLab("old", "3")}>
                 Seller recall withdraw
@@ -68,7 +74,7 @@ export default function LabPage() {
             </div>
           </div>
           <div className="panel">
-            <h3>Last film result</h3>
+            <h3>Last scenario result</h3>
             {lastLab ? (
               <>
                 <p>

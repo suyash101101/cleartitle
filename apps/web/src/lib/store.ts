@@ -22,12 +22,15 @@ import {
 
 type Flash = { kind: "ok" | "err" | "lab"; text: string } | null;
 
+export type JudgeStamp = { step: string; detail: string; ok: boolean };
+
 interface AppState {
   world: WorldState;
   diligence: DiligenceReport | null;
   lastLab: LabResult | null;
   lastSplit: ReturnType<typeof buyTicket> | null;
   flash: Flash;
+  judgeStamps: JudgeStamp[];
   actor: string;
   setActor: (a: string) => void;
   resetDemo: () => void;
@@ -39,6 +42,7 @@ interface AppState {
   doDiligence: (tokenId: string) => void;
   runLab: (kind: "old" | "listed" | "held" | "wash" | "mid", tokenId: string) => void;
   runMidPayoutScenario: () => void;
+  runJudgePath: () => void;
 }
 
 function flashOk(text: string): Flash {
@@ -54,6 +58,7 @@ export const useApp = create<AppState>((set, get) => ({
   lastLab: null,
   lastSplit: null,
   flash: null,
+  judgeStamps: [],
   actor: "ada.near",
   setActor: (actor) => set({ actor }),
   resetDemo: () =>
@@ -63,6 +68,7 @@ export const useApp = create<AppState>((set, get) => ({
       diligence: null,
       lastLab: null,
       lastSplit: null,
+      judgeStamps: [],
       flash: flashOk("Nearnight seeded. Seat #3 suite pending. Ready for mid-payout."),
     }),
   bootstrapClub: () => {
@@ -205,6 +211,74 @@ export const useApp = create<AppState>((set, get) => ({
       });
     } catch (e) {
       set({ flash: flashErr(e instanceof Error ? e.message : String(e)) });
+    }
+  },
+  runJudgePath: () => {
+  try {
+      const stamps: JudgeStamp[] = [];
+      const world = seedDemoNight();
+      stamps.push({
+        step: "01 load",
+        detail: "Nearnight Live · seat #3 pending cut · ada",
+        ok: true,
+      });
+
+      const nonce = listSeat(world, "ada.near", "3", 100);
+      stamps.push({
+        step: "02 list",
+        detail: `Ada lists @ 100 · nonce ${nonce} · LISTED · FREEZE`,
+        ok: true,
+      });
+
+      const preDiligence = runDiligence(world, "3");
+      stamps.push({
+        step: "02b diligence",
+        detail: preDiligence.verdict,
+        ok: preDiligence.verdict === "PROVABLY CLEAN",
+      });
+
+      const { rebounded, txHash } = buySeat(world, "priya.near", "3", 100, nonce);
+      const diligence = runDiligence(world, "3");
+      stamps.push({
+        step: "03 buy",
+        detail: `Priya buys mid-payout · rebound ${rebounded} · ${txHash}`,
+        ok: true,
+      });
+
+      const old = labOldOwnerWithdraw(world, "ada.near", "3");
+      stamps.push({
+        step: "04 attack",
+        detail: `${old.attack}: ${old.reason}`,
+        ok: !old.success,
+      });
+
+      stamps.push({
+        step: "05 prove",
+        detail: "Diligence + /verify claim matrix",
+        ok: diligence.verdict === "PROVABLY CLEAN",
+      });
+
+      set({
+        world,
+        actor: "priya.near",
+        diligence,
+        lastLab: old,
+        judgeStamps: stamps,
+        flash: {
+          kind: "lab",
+          text: `Judge path ✓ · old withdraw refused · ${old.reason}`,
+        },
+      });
+
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("cleartitle-judge", "1");
+        window.location.assign("/seat/3");
+      }
+    } catch (e) {
+      set({
+        judgeStamps: [],
+        flash: flashErr(e instanceof Error ? e.message : String(e)),
+      });
     }
   },
 }));

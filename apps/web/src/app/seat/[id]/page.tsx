@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { ChainSigPanel } from "@/components/ChainSigPanel";
 import { LiveDiligence } from "@/components/LiveDiligence";
 import { SeatCharter } from "@/components/SeatCharter";
+import { JudgeStampPanel } from "@/components/JudgeStampPanel";
 import { SessionBar } from "@/components/SessionBar";
 import { useApp } from "@/lib/store";
 
@@ -46,6 +47,7 @@ export default function SeatPage() {
         {seat.vaultAccountId} · owner {seat.owner} · epoch {seat.keyEpoch}
       </p>
       <SessionBar />
+      <JudgeStampPanel />
 
       <div style={{ marginBottom: "1.25rem" }}>
         <SeatCharter seat={seat} />

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ActorBar } from "@/components/ActorBar";
+import { JudgeStampPanel } from "@/components/JudgeStampPanel";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
 
@@ -9,6 +10,7 @@ export default function ConsolePage() {
   const world = useApp((s) => s.world);
   const bootstrapClub = useApp((s) => s.bootstrapClub);
   const resetDemo = useApp((s) => s.resetDemo);
+  const runJudgePath = useApp((s) => s.runJudgePath);
   const club = world.club;
   const seats = Object.values(world.seats);
 
@@ -22,6 +24,13 @@ export default function ConsolePage() {
         <ActorBar />
       </div>
       <div className="cta-row console-actions">
+        <button
+          type="button"
+          className="judge-run-btn"
+          onClick={runJudgePath}
+        >
+          Judge Run
+        </button>
         <button type="button" onClick={bootstrapClub}>
           Create club + mint 5 seats
         </button>
@@ -33,14 +42,19 @@ export default function ConsolePage() {
             window.location.assign("/seat/3");
           }}
         >
-          Seed Nearnight
+          Load live night
         </button>
+        <Link className="btn ghost" href="/night">
+          Ticket river
+        </Link>
       </div>
 
+      <JudgeStampPanel />
+
       <div className="panel" style={{ marginBottom: "1.5rem" }}>
-        <h3>Judge path</h3>
+        <h3>Judge path · manual</h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          90 seconds. Live testnet proofs plus the film path for mid-payout.
+          90 seconds. Live testnet proofs plus scenario engine for mid-payout.
         </p>
         <ol className="seat-timeline">
           <li className="hot">
@@ -55,7 +69,7 @@ export default function ConsolePage() {
                   window.location.assign("/seat/3");
                 }}
               >
-                Seed → Seat #3
+                Load live night → Seat #3
               </button>{" "}
               · ada · pending cut
             </span>
