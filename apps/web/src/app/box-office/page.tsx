@@ -1,6 +1,8 @@
 "use client";
 
 import { ActorBar } from "@/components/ActorBar";
+import { OnchainActions } from "@/components/OnchainActions";
+import { WalletBar } from "@/components/WalletBar";
 import { useApp } from "@/lib/store";
 
 export default function BoxOfficePage() {
@@ -13,7 +15,9 @@ export default function BoxOfficePage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <h2>Box Office</h2>
       <p className="lede">Buy a ticket. Watch the split hit treasury and every seat vault.</p>
+      <WalletBar />
       <ActorBar />
+      <OnchainActions />
       {!club ? (
         <p className="meta">Create a club first in Console.</p>
       ) : (

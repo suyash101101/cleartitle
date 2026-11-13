@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ActorBar } from "@/components/ActorBar";
+import { ChainSigPanel } from "@/components/ChainSigPanel";
 import { SeatCharter } from "@/components/SeatCharter";
+import { WalletBar } from "@/components/WalletBar";
 import { useApp } from "@/lib/store";
 
 export default function SeatPage() {
@@ -40,11 +42,13 @@ export default function SeatPage() {
       <p className="lede">
         {seat.vaultAccountId} · owner {seat.owner} · epoch {seat.keyEpoch}
       </p>
+      <WalletBar />
       <ActorBar />
 
       <div style={{ marginBottom: "1.25rem" }}>
         <SeatCharter seat={seat} />
       </div>
+      <ChainSigPanel vaultAccountId={`seat-${id}.cleartitle562464.testnet`} />
 
       <div className="grid-2">
         <div className="panel">

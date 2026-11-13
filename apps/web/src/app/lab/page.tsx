@@ -1,7 +1,9 @@
 "use client";
 
 import { ActorBar } from "@/components/ActorBar";
+import { WalletBar } from "@/components/WalletBar";
 import { useApp } from "@/lib/store";
+import { LAB_ATTACKS, txUrl } from "@/lib/evidence";
 
 export default function LabPage() {
   const world = useApp((s) => s.world);
@@ -14,19 +16,39 @@ export default function LabPage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <h2>Transfer Lab</h2>
       <p className="lede">
-        Fire real failing paths. Every button expects failure — that is the product.
+        Real testnet failures with explorer receipts — plus local scenario runner for the filmed mid-payout.
       </p>
+      <WalletBar />
       <ActorBar />
 
+      <div className="panel" style={{ marginBottom: "1.25rem" }}>
+        <h3>On-chain attack receipts</h3>
+        <ul className="checklist">
+          {LAB_ATTACKS.map((a) => (
+            <li key={a.id}>
+              <span className={a.success ? "pass" : "fail"}>{a.success ? "✓" : "✕"}</span>
+              <span>
+                <strong>{a.title}</strong>
+                <br />
+                <span className="meta">{a.reason}</span>
+                <br />
+                <a className="mono" href={txUrl(a.tx)} target="_blank" rel="noreferrer">
+                  {a.tx}
+                </a>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {!seat ? (
-        <p className="meta">Load demo night first.</p>
+        <p className="meta">Load demo night for local scenario buttons.</p>
       ) : (
         <div className="grid-2">
           <div className="panel">
-            <h3>Attacks on Seat #3</h3>
+            <h3>Local scenario (demo engine)</h3>
             <p className="meta" style={{ marginBottom: "1rem" }}>
-              owner {seat.owner} · {seat.encumbrance} · pending{" "}
-              {seat.pending.filter((p) => p.status === "PENDING" || p.status === "REBOUND_TO_BUYER").length}
+              owner {seat.owner} · {seat.encumbrance}
             </p>
             <div className="cta-row">
               <button type="button" onClick={runMidPayoutScenario}>
@@ -47,7 +69,7 @@ export default function LabPage() {
             </div>
           </div>
           <div className="panel">
-            <h3>Last result</h3>
+            <h3>Last local result</h3>
             {lastLab ? (
               <>
                 <p>
@@ -57,12 +79,9 @@ export default function LabPage() {
                   <strong>{lastLab.attack}</strong>
                 </p>
                 <p className="meta">{lastLab.reason}</p>
-                <p className="mono" style={{ marginTop: "0.75rem", color: "var(--amber)" }}>
-                  {lastLab.explorerHint}
-                </p>
               </>
             ) : (
-              <p className="meta">No attack run yet.</p>
+              <p className="meta">No local attack run yet.</p>
             )}
           </div>
         </div>

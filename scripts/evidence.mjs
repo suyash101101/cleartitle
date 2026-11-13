@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 /**
- * Re-runs SDK proof tests and prints /verify matrix status.
+ * Re-runs SDK tests + re-reads live testnet RPC for /verify claims.
  */
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pnpm = join(root, ".tools/bin/pnpm");
+const CONTRACT = process.env.CONTRACT_ID || "cleartitle562464.testnet";
+const RPC = "https://rpc.testnet.near.org";
 
 const claims = [
   "ticket_splits_treasury_and_seats",
@@ -20,18 +22,54 @@ const claims = [
   "bps_sum_10000_and_immutable",
 ];
 
-console.log("ClearTitle evidence — running SDK tests…\n");
+console.log("ClearTitle evidence — SDK tests…\n");
 const r = spawnSync(pnpm, ["--filter", "@cleartitle/sdk", "test"], {
   cwd: root,
   stdio: "inherit",
   env: process.env,
-  shell: false,
 });
-
 if (r.status !== 0) {
   console.error("\nEVIDENCE FAIL — SDK tests red");
   process.exit(r.status ?? 1);
 }
+
+async function view(method, args = {}) {
+  const res = await fetch(RPC, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: "ev",
+      method: "query",
+      params: {
+        request_type: "call_function",
+        finality: "final",
+        account_id: CONTRACT,
+        method_name: method,
+        args_base64: Buffer.from(JSON.stringify(args)).toString("base64"),
+      },
+    }),
+  });
+  const json = await res.json();
+  if (json.error) throw new Error(JSON.stringify(json.error));
+  return JSON.parse(Buffer.from(json.result.result).toString());
+}
+
+console.log(`\nRPC re-read ${CONTRACT}…`);
+const club = await view("get_club");
+const seat3 = await view("get_seat", { token_id: "3" });
+const dil = await view("diligence", { token_id: "3" });
+
+if (!club?.name) throw new Error("club missing on-chain");
+if (seat3.access_key_count !== 0) throw new Error("keys not empty");
+if (dil.verdict !== "PROVABLY CLEAN") throw new Error(`diligence ${dil.verdict}`);
+if (seat3.owner_id !== "ctbuyer563070.testnet") {
+  console.warn("WARN: seat 3 owner is", seat3.owner_id, "(expected buyer after mid-payout demo)");
+}
+
+console.log("  club:", club.name, "tickets_sold:", club.tickets_sold);
+console.log("  seat3 owner:", seat3.owner_id, "epoch:", seat3.key_epoch, "keys:", seat3.access_key_count);
+console.log("  diligence:", dil.verdict);
 
 console.log("\n/verify claims covered:");
 for (const c of claims) console.log(`  ✓ ${c}`);
