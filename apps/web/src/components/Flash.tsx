@@ -1,10 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useApp } from "@/lib/store";
 
 export function Flash() {
   const flash = useApp((s) => s.flash);
+
+  useEffect(() => {
+    if (!flash) return;
+    const t = window.setTimeout(() => {
+      useApp.setState({ flash: null });
+    }, 3200);
+    return () => window.clearTimeout(t);
+  }, [flash]);
+
   return (
     <AnimatePresence>
       {flash && (
@@ -16,7 +26,8 @@ export function Flash() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 8 }}
           transition={{ duration: 0.22 }}
-          style={{ left: "50%", x: "-50%" }}
+          onClick={() => useApp.setState({ flash: null })}
+          style={{ left: "50%", x: "-50%", cursor: "pointer" }}
         >
           {flash.text}
         </motion.div>
