@@ -8,6 +8,7 @@ import {
   FlaskConical,
   Home,
   LayoutGrid,
+  Map,
   ShieldCheck,
   Ticket,
   Waves,
@@ -26,6 +27,7 @@ const links = [
   { href: "/lab", label: "Lab", Icon: FlaskConical },
   { href: "/verify", label: "Verify", Icon: ShieldCheck },
   { href: "/console", label: "Club", Icon: Club },
+  { href: "/scale", label: "Scale", Icon: Map },
 ];
 
 /** MagicUI dock — whole icon is the hit target (padding used to miss the inner <a>). */

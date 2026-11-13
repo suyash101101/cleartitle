@@ -1,28 +1,28 @@
 import Link from "next/link";
 
-/** Multi-chain payment rails ≠ NEAR-native seat title. */
+/** Payment rails vs NEAR-native seat title. Unshipped rails stay labeled roadmap. */
 export function IntentEscrowStrip() {
   return (
     <aside className="warranty-strip" aria-label="Payment rails versus NEAR title">
       <p className="chapter-kicker">Payment vs seat title</p>
       <div className="warranty-strip-grid">
         <div>
-          <p className="meta">Cross-chain escrow path</p>
-          <strong>Swap → hold → release</strong>
+          <p className="meta">Roadmap · any-token door fee</p>
+          <strong>NEP-141 / intent-routed tickets</strong>
           <p className="meta">
-            Funds a door-fee hold. Operator key still decides claims; seat vault never clears.
+            Not shipped. When it lands, funds still only unlock seat title after NEAR diligence. No fake escrow UI.
           </p>
         </div>
         <div className="ours">
-          <p className="meta">QuitClaim</p>
+          <p className="meta">Shipped · QuitClaim</p>
           <strong>NEAR-native clear title</strong>
           <p className="meta">
-            One chain for vault, refuse, and rebound. Pending cuts rebind on buy_seat — no escrow timer.
+            One chain for vault, refuse, and rebound. Pending cuts rebind on buy_seat. Testnet ticket is yocto stand-in.
           </p>
         </div>
       </div>
-      <Link className="pin-link" href="/verify">
-        See claim clock ∞ →
+      <Link className="pin-link" href="/scale">
+        See scale roadmap →
       </Link>
     </aside>
   );
