@@ -113,36 +113,51 @@ export default function SeatPage() {
         </div>
       </div>
 
-      <div className="panel" style={{ marginTop: "1.25rem" }}>
-        <h3>Pending & ledger</h3>
-        {seat.pending.length === 0 ? (
-          <p className="meta">No pending payouts.</p>
-        ) : (
-          <ul className="checklist">
-            {seat.pending.map((p) => (
-              <li key={p.id}>
-                <span className="pass">·</span>
-                <span>
-                  {p.id} · {p.amount} · <strong>{p.status}</strong>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-        <ul className="checklist">
-          {seat.ledger
-            .slice()
-            .reverse()
-            .slice(0, 8)
-            .map((e, i) => (
-              <li key={i}>
-                <span className="pass">·</span>
-                <span className="meta">
-                  {e.kind} · {e.amount} · {e.note}
-                </span>
-              </li>
-            ))}
-        </ul>
+      <div className="grid-2" style={{ marginTop: "1.25rem" }}>
+        <div className="panel">
+          <h3>Pending payouts</h3>
+          {seat.pending.length === 0 ? (
+            <p className="meta">No pending payouts.</p>
+          ) : (
+            <ul className="checklist">
+              {seat.pending.map((p) => (
+                <li key={p.id}>
+                  <span className={p.status.includes("REBOUND") ? "pass" : "fail"}>
+                    {p.status.includes("REBOUND") ? "✓" : "·"}
+                  </span>
+                  <span>
+                    {p.id} · {p.amount} · <strong>{p.status}</strong>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="panel">
+          <h3>Seat history</h3>
+          <p className="meta" style={{ marginBottom: "0.75rem" }}>
+            Earned · paid · who held it — transfer path judges ask for.
+          </p>
+          <ol className="seat-timeline">
+            {seat.ledger
+              .slice()
+              .reverse()
+              .slice(0, 12)
+              .map((e, i) => {
+                const hot = e.kind === "sale" || e.kind === "claim_pending" || e.kind === "ticket_cut";
+                return (
+                  <li key={`${e.at}-${i}`} className={hot ? "hot" : undefined}>
+                    <span className="seat-timeline-kind">{e.kind}</span>
+                    <span className="seat-timeline-body">
+                      {e.amount > 0 ? `${e.amount} · ` : ""}
+                      {e.note}
+                    </span>
+                  </li>
+                );
+              })}
+          </ol>
+        </div>
       </div>
     </section>
   );

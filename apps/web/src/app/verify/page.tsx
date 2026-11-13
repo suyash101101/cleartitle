@@ -16,6 +16,47 @@ export default function VerifyPage() {
       />
 
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
+        <h3>Transfer threat model</h3>
+        <p className="meta" style={{ marginBottom: "0.85rem" }}>
+          Every way a seller tries to keep the money — and how ClearTitle refuses it.
+        </p>
+        <ul className="checklist">
+          <li>
+            <span className="fail">✕</span>
+            <span>
+              Old owner withdraws after sale
+              <br />
+              <span className="meta">Access keys = 0 · owner check on withdraw · epoch bump</span>
+            </span>
+          </li>
+          <li>
+            <span className="fail">✕</span>
+            <span>
+              Drain vault while listed
+              <br />
+              <span className="meta">Encumbrance freeze · listing nonce · withdraw refused</span>
+            </span>
+          </li>
+          <li>
+            <span className="fail">✕</span>
+            <span>
+              Held raw Chain Signature while listed
+              <br />
+              <span className="meta">Epoch freeze · raw sign refused while encumbered</span>
+            </span>
+          </li>
+          <li>
+            <span className="pass">✓</span>
+            <span>
+              Mid-payout sale keeps pending cut
+              <br />
+              <span className="meta">Pending rebinds to buyer · seller claim path dies</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div className="panel" style={{ marginBottom: "1.25rem" }}>
         <h3>On-chain receipts</h3>
         <table className="verify">
           <thead>
