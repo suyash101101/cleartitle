@@ -7,6 +7,7 @@ export default function LabPage() {
   const world = useApp((s) => s.world);
   const lastLab = useApp((s) => s.lastLab);
   const runLab = useApp((s) => s.runLab);
+  const runMidPayoutScenario = useApp((s) => s.runMidPayoutScenario);
   const seat = world.seats["3"];
 
   return (
@@ -28,6 +29,9 @@ export default function LabPage() {
               {seat.pending.filter((p) => p.status === "PENDING" || p.status === "REBOUND_TO_BUYER").length}
             </p>
             <div className="cta-row">
+              <button type="button" onClick={runMidPayoutScenario}>
+                Run mid-payout scenario
+              </button>
               <button type="button" className="danger" onClick={() => runLab("old", "3")}>
                 Old owner withdraw
               </button>

@@ -37,7 +37,8 @@ interface AppState {
   doList: (tokenId: string, ask: number) => void;
   doBuySeat: (tokenId: string) => void;
   doDiligence: (tokenId: string) => void;
-  runLab: (kind: "old" | "listed" | "held" | "wash", tokenId: string) => void;
+  runLab: (kind: "old" | "listed" | "held" | "wash" | "mid", tokenId: string) => void;
+  runMidPayoutScenario: () => void;
 }
 
 function flashOk(text: string): Flash {
@@ -157,12 +158,37 @@ export const useApp = create<AppState>((set, get) => ({
     if (kind === "old") lastLab = labOldOwnerWithdraw(world, "ada.near", tokenId);
     else if (kind === "listed") lastLab = labListedWithdraw(world, world.seats[tokenId]!.owner, tokenId);
     else if (kind === "held") lastLab = labHeldSig(world, world.seats[tokenId]!.owner, tokenId);
-    else lastLab = labWashPath(world, tokenId);
+    else if (kind === "mid") {
+      get().runMidPayoutScenario();
+      return;
+    } else lastLab = labWashPath(world, tokenId);
     set({
       world,
       lastLab,
       flash: { kind: "lab", text: `Lab · ${lastLab.attack}: ${lastLab.reason}` },
       diligence: kind === "wash" ? runDiligence(world, tokenId) : get().diligence,
     });
+  },
+  runMidPayoutScenario: () => {
+    try {
+      const world = seedDemoNight();
+      const nonce = listSeat(world, "ada.near", "3", 100);
+      const held = labHeldSig(world, "ada.near", "3");
+      const { rebounded, txHash } = buySeat(world, "priya.near", "3", 100, nonce);
+      const old = labOldOwnerWithdraw(world, "ada.near", "3");
+      const diligence = runDiligence(world, "3");
+      set({
+        world,
+        actor: "priya.near",
+        diligence,
+        lastLab: old,
+        flash: {
+          kind: "lab",
+          text: `Mid-payout OK · rebound ${rebounded} · held-sig: ${held.reason.slice(0, 40)}… · old withdraw: ${old.reason} · ${txHash}`,
+        },
+      });
+    } catch (e) {
+      set({ flash: flashErr(e instanceof Error ? e.message : String(e)) });
+    }
   },
 }));
