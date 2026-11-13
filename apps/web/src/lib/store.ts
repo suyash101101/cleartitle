@@ -54,7 +54,7 @@ export const useApp = create<AppState>((set, get) => ({
   lastLab: null,
   lastSplit: null,
   flash: null,
-  actor: "fan.near",
+  actor: "ada.near",
   setActor: (actor) => set({ actor }),
   resetDemo: () =>
     set({

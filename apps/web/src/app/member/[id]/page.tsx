@@ -35,15 +35,21 @@ export default function MemberRoomPage() {
       {locked ? (
         <div className="panel">
           <span className="badge warn">LOCKED</span>
-          <p style={{ marginTop: "1rem" }}>
-            You are {actor}. Owner is {seat.owner}. Claim and list stay hidden.
+          <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
+            You are <strong>{actor}</strong>. Owner is <strong>{seat.owner}</strong>.
+          </p>
+          <p className="meta" style={{ marginTop: "0.5rem" }}>
+            Claim, list, and vault control stay hidden until clear title lands with you.
           </p>
         </div>
       ) : (
         <div className="panel">
           <span className="badge ok">UNLOCKED</span>
-          <p className="meta" style={{ marginTop: "0.75rem" }}>
-            Continuity {seat.continuityHash} · epoch {seat.keyEpoch}
+          <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
+            You hold Seat #{id}. Ticket cuts and vault control follow this deed.
+          </p>
+          <p className="meta" style={{ marginTop: "0.5rem" }}>
+            Continuity {seat.continuityHash} · epoch {seat.keyEpoch} · {seat.encumbrance}
           </p>
           <div className="cta-row" style={{ marginTop: "1rem" }}>
             <button type="button" onClick={() => doClaim(id)} disabled={seat.encumbrance !== "FREE"}>
