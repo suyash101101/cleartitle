@@ -19,3 +19,6 @@ scripts/.tmp-*
 apps/web/e2e/.auth/
 .vercel
 .env.local
+docs/diagrams/keyframes/
+cleartitle-loop-status.md
+apps/web/tsconfig.tsbuildinfo
