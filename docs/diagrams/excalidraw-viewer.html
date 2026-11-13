@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>QuitClaim claims · Excalidraw</title>
+    <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw.min.css" />
+    <style>
+      html,
+      body,
+      #root {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: #f3ede3;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript" src="https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw.production.min.js"></script>
+    <script type="text/javascript">
+      (async function () {
+        const scene = await fetch("./quitclaim-claims.excalidraw").then((r) => r.json());
+        const App = () =>
+          React.createElement(
+            "div",
+            { style: { width: "100%", height: "100%" } },
+            React.createElement(ExcalidrawLib.Excalidraw, {
+              initialData: {
+                elements: scene.elements,
+                appState: Object.assign({}, scene.appState || {}, {
+                  viewBackgroundColor: "#f3ede3",
+                  zenModeEnabled: true,
+                  gridSize: 20,
+                }),
+                scrollToContent: true,
+              },
+              UIOptions: { canvasActions: { changeViewBackgroundColor: false } },
+            }),
+          );
+        ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+        window.__CLAIMS_READY__ = true;
+      })();
+    </script>
+  </body>
+</html>

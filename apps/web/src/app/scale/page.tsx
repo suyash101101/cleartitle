@@ -93,6 +93,39 @@ export default function ScalePage() {
       </div>
 
       <div className="panel" style={{ marginBottom: "1.75rem" }}>
+        <h3>Where the NFT field sits</h3>
+        <p className="meta" style={{ marginBottom: "1rem" }}>
+          Category map only. No project names. QuitClaim owns the mid-payout title-insurance wedge.
+        </p>
+        <div className="grid-2" style={{ gap: "1.25rem" }}>
+          <div>
+            <strong>Keyless vault + governance</strong>
+            <p className="meta" style={{ marginTop: "0.35rem" }}>
+              NFT is a vault and sometimes a vote. Strong on factory and settle. Weak on ticket-cut rebound while pending.
+            </p>
+          </div>
+          <div>
+            <strong>Account / membership SDK</strong>
+            <p className="meta" style={{ marginTop: "0.35rem" }}>
+              Membership is an account with transfer lock-out and agent budgets. Strong SDK story. Weak on earning-seat diligence UI.
+            </p>
+          </div>
+          <div>
+            <strong>Merchant / inventory vault</strong>
+            <p className="meta" style={{ marginTop: "0.35rem" }}>
+              Business-in-a-box NFT with inventory. Broad multi-track surface. Dilutes the transfer-threat demo.
+            </p>
+          </div>
+          <div>
+            <strong>QuitClaim wedge</strong>
+            <p className="meta" style={{ marginTop: "0.35rem" }}>
+              Clear title mid-payout: FREEZE, diligence CLEAN, REBOUND_TO_BUYER, explorer refuse, shippable SDK, Live organizer path.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="panel" style={{ marginBottom: "1.75rem" }}>
         <h3>Market need</h3>
         <p className="meta" style={{ marginBottom: "1rem" }}>
           One job: make earning membership NFTs transferable while payouts are pending.

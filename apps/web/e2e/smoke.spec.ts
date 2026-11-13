@@ -230,5 +230,17 @@ test("scale page @smoke", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /QuitClaim beyond the night/i })).toBeVisible();
   await expect(page.getByText(/Shipped vs roadmap/i)).toBeVisible();
   await expect(page.getByText(/Market need/i)).toBeVisible();
+  await expect(page.getByText(/Where the NFT field sits/i)).toBeVisible();
   await expect(page.getByRole("link", { name: /Scale/i })).toBeVisible();
+});
+
+test("proof packet @smoke", async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.goto("/proof", { waitUntil: "domcontentloaded" });
+  await hideDevChrome(page);
+  await expect(page.getByRole("heading", { name: /Proof packet/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Download JSON/i })).toBeVisible();
+  await expect(page.getByText(/Live RPC|PROVABLY CLEAN|Reading RPC/i).first()).toBeVisible({
+    timeout: 30_000,
+  });
 });

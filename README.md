@@ -32,24 +32,20 @@ On-chain title insurance for memberships that earn. Demo world: **Nearnight Live
 | Lab → Old owner withdraw | Expected fail · explorer panic `not current owner` |
 | Preview → Film ready → List @ 100 | Filmable click path without auto-sale |
 | `/verify` | Claim ↔ method ↔ test matrix |
-| `/scale` | Market need · GTM · shipped vs roadmap |
+| `/proof` | Live RPC + explorer evidence JSON download |
+| `/scale` | Market need · field categories · GTM · shipped vs roadmap |
 
 ## Architecture
 
-Diagram PNGs are built in FossFLOW (architecture + userflow) and Excalidraw (claims). Sources live in [`docs/diagrams/`](docs/diagrams/). Export screenshots into that folder as `architecture.png`, `userflow.png`, and `quitclaim-claims.png` after the editors look right.
+![QuitClaim system architecture](docs/diagrams/architecture.png)
 
-<!-- PNGs: architecture.png · userflow.png · quitclaim-claims.png (tool exports only, not generative fills) -->
+![QuitClaim user flow](docs/diagrams/userflow.png)
 
-```
-Wallet (near-connect)
-  → Next.js Live UI (/console /box-office /seat /lab /verify /scale)
-  → @cleartitle/sdk (engine + nearView + encode*)
-  → Rust contract cleartitle562464.testnet
-  → Chain Signatures derive (BTC/SOL tip continuity)
-  → Explorer receipts (evidence.ts)
-```
+![QuitClaim claims](docs/diagrams/quitclaim-claims.png)
 
-Editable sources: [`docs/diagrams/fossflow-architecture.json`](docs/diagrams/fossflow-architecture.json), [`docs/diagrams/fossflow-userflow.json`](docs/diagrams/fossflow-userflow.json), [`docs/diagrams/quitclaim-claims.excalidraw`](docs/diagrams/quitclaim-claims.excalidraw).
+Built in FossFLOW (architecture + userflow) and Excalidraw (claims). Re-export with `node apps/web/scripts/capture-diagrams.mjs` while FossFLOW runs on `:3000` and `docs/diagrams` is served on `:8765`.
+
+Sources: [`fossflow-architecture.json`](docs/diagrams/fossflow-architecture.json) · [`fossflow-userflow.json`](docs/diagrams/fossflow-userflow.json) · [`quitclaim-claims.excalidraw`](docs/diagrams/quitclaim-claims.excalidraw)
 
 ## Why QuitClaim
 

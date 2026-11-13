@@ -26,6 +26,7 @@ const links = [
   { href: "/title/3", label: "Cert", Icon: ShieldCheck },
   { href: "/lab", label: "Lab", Icon: FlaskConical },
   { href: "/verify", label: "Verify", Icon: ShieldCheck },
+  { href: "/proof", label: "Proof", Icon: ShieldCheck },
   { href: "/console", label: "Club", Icon: Club },
   { href: "/scale", label: "Scale", Icon: Map },
 ];

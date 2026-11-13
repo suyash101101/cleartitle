@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ChainSigPanel } from "@/components/ChainSigPanel";
+import { LiveChainBanner } from "@/components/LiveChainBanner";
 import { LiveDiligence } from "@/components/LiveDiligence";
 import { LiveSeatActions } from "@/components/LiveSeatActions";
 import { SeatCharter } from "@/components/SeatCharter";
@@ -66,6 +67,7 @@ export default function SeatPage() {
         {seat.vaultAccountId} · owner {seat.owner} · epoch {seat.keyEpoch}
       </p>
       <SessionBar />
+      {isLive && <LiveChainBanner tokenId={id} />}
 
       <div className="desk-grid">
         <div className="desk-cell">
