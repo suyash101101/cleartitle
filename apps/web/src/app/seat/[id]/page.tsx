@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ChainSigPanel } from "@/components/ChainSigPanel";
+import { LiveDiligence } from "@/components/LiveDiligence";
 import { SeatCharter } from "@/components/SeatCharter";
 import { SessionBar } from "@/components/SessionBar";
 import { useApp } from "@/lib/store";
@@ -50,6 +51,7 @@ export default function SeatPage() {
         <SeatCharter seat={seat} />
       </div>
       <ChainSigPanel vaultAccountId={`seat-${id}.cleartitle562464.testnet`} />
+      <LiveDiligence tokenId={id} />
 
       <div className="grid-2">
         <div className="panel">

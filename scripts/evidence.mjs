@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pnpm = join(root, ".tools/bin/pnpm");
 const CONTRACT = process.env.CONTRACT_ID || "cleartitle562464.testnet";
-const RPC = "https://rpc.testnet.near.org";
+const RPC = "https://test.rpc.fastnear.com";
 
 const claims = [
   "ticket_splits_treasury_and_seats",

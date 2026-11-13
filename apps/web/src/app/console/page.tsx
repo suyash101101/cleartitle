@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ActorBar } from "@/components/ActorBar";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
@@ -10,7 +9,6 @@ export default function ConsolePage() {
   const world = useApp((s) => s.world);
   const bootstrapClub = useApp((s) => s.bootstrapClub);
   const resetDemo = useApp((s) => s.resetDemo);
-  const router = useRouter();
   const club = world.club;
   const seats = Object.values(world.seats);
 
@@ -32,7 +30,7 @@ export default function ConsolePage() {
           className="ghost"
           onClick={() => {
             resetDemo();
-            router.push("/seat/3");
+            window.location.assign("/seat/3");
           }}
         >
           Seed Nearnight
@@ -54,7 +52,7 @@ export default function ConsolePage() {
                 style={{ padding: "0.2rem 0.65rem", fontSize: "0.8rem" }}
                 onClick={() => {
                   resetDemo();
-                  router.push("/seat/3");
+                  window.location.assign("/seat/3");
                 }}
               >
                 Seed → Seat #3

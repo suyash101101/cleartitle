@@ -4,9 +4,10 @@ export const CONTRACT_ID =
   process.env.NEXT_PUBLIC_CONTRACT_ID ?? "cleartitle562464.testnet";
 export const NETWORK = process.env.NEXT_PUBLIC_NEAR_NETWORK ?? "testnet";
 export const RPC =
-  NETWORK === "mainnet"
-    ? "https://rpc.mainnet.near.org"
-    : "https://rpc.testnet.near.org";
+  process.env.NEXT_PUBLIC_NEAR_RPC ??
+  (NETWORK === "mainnet"
+    ? "https://free.rpc.fastnear.com"
+    : "https://test.rpc.fastnear.com");
 export const EXPLORER =
   NETWORK === "mainnet"
     ? "https://explorer.near.org"
