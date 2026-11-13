@@ -28,3 +28,17 @@ pnpm test:e2e:smoke
 ## Track
 
 Declare **`nfts` only** (optional `social` only if named-club story is used).
+
+## Why we win this field
+
+Crowd is full of “NFT owns a wallet” demos (agent spend guards, DAO seats, AI business treasuries). ClearTitle one-ups the **transfer threat** the track prompt asks for:
+
+| Differentiator | What judges see |
+| --- | --- |
+| Mid-payout rebound | Pending cut rebinds to buyer — seller keeps nothing |
+| Transfer Lab | Live expected-fail receipts (old withdraw, listed drain, held-sig) |
+| Diligence stamp | PROVABLY CLEAN before buy |
+| Chain Signatures continuity | BTC/SOL tips stable across sale |
+| Seat history | Earned · paid · who held it |
+
+Film: Console **Film cue card** → Seat #3 → Lab → `/verify` threat model.
