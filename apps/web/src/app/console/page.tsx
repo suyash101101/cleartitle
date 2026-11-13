@@ -20,8 +20,10 @@ export default function ConsolePage() {
         title="Club Console"
         lede="Organizer controls for Nearnight Live: BPS, mint, pause, treasury."
       />
-      <ActorBar />
-      <div className="cta-row" style={{ marginBottom: "1.5rem" }}>
+      <div className="console-cast">
+        <ActorBar />
+      </div>
+      <div className="cta-row console-actions">
         <button type="button" onClick={bootstrapClub}>
           Create club + mint 5 seats
         </button>

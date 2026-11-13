@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Schibsted_Grotesk } from "next/font/google";
+import { DM_Sans, IBM_Plex_Mono, Syne } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Flash } from "@/components/Flash";
 import { Providers } from "@/components/Providers";
 
-const sans = Schibsted_Grotesk({
+const sans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const brand = Schibsted_Grotesk({
+const brand = Syne({
   subsets: ["latin"],
   variable: "--font-brand",
   display: "swap",

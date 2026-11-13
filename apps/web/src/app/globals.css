@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
-/* NEAR-inspired tokens — near.org teal stage + brand blues */
+/* Precision dark: near-black canvas, one accent, grey ladder */
 @theme {
-  --color-ink: #ffffff;
-  --color-ink-soft: #d7e7ef;
-  --color-fog: #041018;
-  --color-fog-deep: #06202b;
+  --color-ink: #f7f8f8;
+  --color-ink-soft: #d0d6e0;
+  --color-fog: #07090b;
+  --color-fog-deep: #0e1216;
   --color-signal: #0091fd;
-  --color-signal-hot: #83dcff;
+  --color-signal-hot: #5eb8ff;
   --color-proof: #c8ff3d;
   --color-warn: #ff6b5a;
-  --color-mute: #8fb0bf;
-  --color-line: rgb(255 255 255 / 0.12);
-  --font-display: var(--font-brand), "Mona Sans", "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-sans), "Mona Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-mute: #8a9199;
+  --color-line: rgb(255 255 255 / 0.1);
+  --font-display: var(--font-brand), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
@@ -29,21 +29,20 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  background: #041018;
+  background: #07090b;
   color: var(--color-ink);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
 body {
-  background:
-    radial-gradient(ellipse 90% 60% at 50% -20%, rgba(0, 145, 253, 0.28), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 100% 30%, rgba(200, 255, 61, 0.08), transparent 45%),
-    radial-gradient(ellipse 40% 35% at 0% 70%, rgba(131, 220, 255, 0.1), transparent 40%),
-    linear-gradient(180deg, #03141c 0%, #041018 45%, #020b10 100%);
+  background-color: #07090b;
+  background-image:
+    linear-gradient(180deg, #0a0e12 0%, #07090b 28%, #07090b 100%),
+    radial-gradient(ellipse 70% 40% at 80% 0%, rgba(0, 145, 253, 0.12), transparent 55%);
   background-attachment: fixed;
 }
 
@@ -80,8 +79,18 @@ h3,
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 0.65rem 0 0.25rem;
+  padding: 0.85rem 0 0.5rem;
   margin: 0;
+  border-bottom: 1px solid var(--color-line);
+}
+.top-brand-home {
+  border-bottom-color: transparent;
+}
+
+.top-spacer {
+  display: block;
+  width: 1px;
+  height: 1px;
 }
 
 .top-brand-live {
@@ -93,13 +102,35 @@ h3,
 
 .nav-brand {
   font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #fff;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.04em;
 }
 .nav-brand span {
   color: var(--color-signal-hot);
+}
+
+.console-cast {
+  display: block;
+  width: 100%;
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+  background: rgba(14, 18, 22, 0.8);
+  position: relative;
+  z-index: 2;
+  clear: both;
+}
+.console-cast .actor-bar {
+  margin: 0;
+}
+.console-actions {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 1.75rem;
+  clear: both;
 }
 
 .dock {
@@ -110,27 +141,26 @@ h3,
   z-index: 70;
   display: flex;
   align-items: center;
-  gap: 0.15rem;
-  padding: 0.4rem;
+  gap: 0.1rem;
+  padding: 0.35rem;
   border: 1px solid var(--color-line);
   border-radius: 999px;
-  background: rgba(4, 16, 24, 0.88);
-  backdrop-filter: blur(18px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  background: rgba(7, 9, 11, 0.92);
+  backdrop-filter: blur(16px);
   max-width: calc(100vw - 1.5rem);
   overflow-x: auto;
 }
 .dock a {
   color: var(--color-mute);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  padding: 0.55rem 0.85rem;
+  padding: 0.5rem 0.8rem;
   border-radius: 999px;
   white-space: nowrap;
 }
 .dock a:hover,
 .dock a.active {
-  color: #041018;
+  color: #07090b;
   background: var(--color-proof);
 }
 
@@ -169,20 +199,19 @@ button,
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.875rem;
-  border: 1px solid #fff;
-  background: #fff;
-  color: #041018;
-  padding: 0.72rem 1.15rem;
+  border: 1px solid #f7f8f8;
+  background: #f7f8f8;
+  color: #07090b;
+  padding: 0.7rem 1.1rem;
   cursor: pointer;
-  border-radius: 999px;
-  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  border-radius: 0.35rem;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 button:hover,
 .btn:hover {
   background: var(--color-proof);
   border-color: var(--color-proof);
-  color: #041018;
-  transform: translateY(-1px);
+  color: #07090b;
 }
 button.ghost,
 .btn.ghost {
@@ -242,11 +271,10 @@ button.active {
 
 .panel {
   position: relative;
-  background: rgba(6, 32, 43, 0.72);
+  background: #0e1216;
   border: 1px solid var(--color-line);
-  border-radius: 1rem;
-  padding: 1.2rem;
-  backdrop-filter: blur(8px);
+  border-radius: 0.65rem;
+  padding: 1.15rem 1.2rem;
 }
 .panel h3 {
   margin: 0 0 0.7rem;
@@ -395,13 +423,17 @@ button.active {
   gap: 0.45rem;
   flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 0;
+  margin: 0;
   font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
 }
 .actor-bar button {
   padding: 0.4rem 0.75rem;
   font-size: 0.75rem;
   border-radius: 999px;
+  position: relative;
+  z-index: 1;
 }
 
 table.verify {
@@ -428,53 +460,63 @@ table.verify th {
   font-size: 0.78rem;
 }
 
-/* ——— NEAR hero ——— */
+/* Hero: brand once, full-bleed plane, no floating card */
 .near-hero {
   position: relative;
   z-index: 1;
-  padding: 1.25rem 0 1.5rem;
+  padding: 3.5rem 0 2.5rem;
+  min-height: min(68vh, 560px);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
 }
 
-.near-hero-bg {
+.near-hero-plane {
   position: absolute;
-  inset: -6% -8% 20%;
+  inset: 0;
   z-index: 0;
-  background:
-    radial-gradient(ellipse 55% 50% at 70% 40%, rgba(0, 145, 253, 0.3), transparent 62%),
-    radial-gradient(ellipse 28% 30% at 10% 80%, rgba(200, 255, 61, 0.08), transparent 55%);
   pointer-events: none;
 }
-
-.near-hero-grid {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  gap: 2rem;
-  align-items: center;
+.near-hero-plane-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 70% 65% at 70% 40%, #000 20%, transparent 75%);
+}
+.near-hero-plane-line {
+  position: absolute;
+  right: 8%;
+  top: 18%;
+  width: min(42vw, 420px);
+  height: min(42vw, 420px);
+  border: 1px solid rgba(94, 184, 255, 0.28);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(200, 255, 61, 0.08);
 }
 
-@media (min-width: 720px) {
-  .near-hero-grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.9fr);
-    gap: 2rem;
-    align-items: start;
-  }
-  .hero-stage {
-    margin: 0;
-    justify-self: end;
-  }
+.near-hero-bg,
+.near-hero-grid,
+.hero-stage,
+.hero-stage-glow {
+  display: none;
 }
 
 .near-hero-inner {
-  max-width: 38rem;
+  position: relative;
+  z-index: 2;
+  max-width: 44rem;
   min-width: 0;
 }
 
 .near-hero h1 {
-  margin: 0.35rem 0 0.85rem;
-  font-size: clamp(3.2rem, 7vw, 5.2rem);
-  line-height: 0.9;
-  font-weight: 500;
+  margin: 0.15rem 0 0.85rem;
+  font-size: clamp(4rem, 11vw, 7rem);
+  line-height: 0.86;
+  font-weight: 600;
+  letter-spacing: -0.055em;
 }
 .near-hero h1 em {
   font-style: normal;
@@ -482,38 +524,25 @@ table.verify th {
 }
 
 .near-hero .story-lede {
-  font-size: 1.08rem;
+  font-size: 1.2rem;
   max-width: 32rem;
+  color: var(--color-mute);
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+}
+.lede-strong {
+  color: var(--color-ink);
+  font-weight: 500;
+  font-size: 1.35rem;
 }
 
 .hero-hint {
-  margin: 1rem 0 0;
+  margin: 1.15rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-mute);
-}
-
-.hero-stage {
-  position: relative;
-  z-index: 5;
-  width: 100%;
-  max-width: 380px;
-  margin: 0 auto;
-}
-
-.hero-stage.single {
-  min-height: 0;
-}
-
-.hero-stage-glow {
-  position: absolute;
-  inset: -8% -4%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 145, 253, 0.28), transparent 70%);
-  z-index: 0;
-  pointer-events: none;
 }
 
 .live-strip {
@@ -523,8 +552,8 @@ table.verify th {
 .live-rail {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  padding: 0.85rem 0;
+  gap: 0.65rem;
+  padding: 1rem 0;
   border-top: 1px solid var(--color-line);
   border-bottom: 1px solid var(--color-line);
 }
@@ -532,7 +561,19 @@ table.verify th {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.55rem 0.85rem;
+}
+.live-rail-refresh {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.7rem !important;
+  font-size: 0.75rem !important;
+}
+.live-rail-link {
+  flex: 0 0 auto;
+  font-weight: 600;
+  color: var(--color-proof);
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 .live-rail-stats {
   margin: 0;
@@ -595,6 +636,11 @@ table.verify th {
 }
 .mishap-what {
   color: var(--color-mute);
+}
+
+.compare-strip h3 {
+  margin: 0 0 0.85rem;
+  font-size: 1.15rem;
 }
 
 .inv-heading {
@@ -725,10 +771,9 @@ table.verify th {
 /* ——— Assets ——— */
 .asset-card {
   position: relative;
-  border-radius: 1rem;
+  border-radius: 0.65rem;
   min-height: 210px;
-  transform-style: preserve-3d;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  box-shadow: none;
 }
 
 .asset-card-inner {
@@ -782,7 +827,8 @@ table.verify th {
 }
 
 .seat-deed {
-  background: linear-gradient(145deg, #0a3d4a 0%, #06202b 55%, #041018 100%);
+  background: #0e1216;
+  border: 1px solid rgba(94, 184, 255, 0.35);
 }
 .seat-deed .asset-edge {
   position: absolute;
@@ -842,7 +888,8 @@ table.verify th {
 }
 
 .stamp-card {
-  background: #06202b;
+  background: #0e1216;
+  border: 1px solid var(--color-line);
   padding: 1rem;
 }
 .stamp-face {
@@ -866,12 +913,14 @@ table.verify th {
 }
 
 .fail-slip {
-  background: linear-gradient(145deg, #3a1a18 0%, #1a1010 100%);
-  border-left: 4px solid var(--color-warn);
+  background: #141010;
+  border: 1px solid color-mix(in oklab, var(--color-warn) 45%, transparent);
+  border-left: 3px solid var(--color-warn);
 }
 
 .flip-card {
-  background: linear-gradient(145deg, #0a3d4a 0%, #06202b 100%);
+  background: #0e1216;
+  border: 1px solid var(--color-line);
   padding: 1.25rem 1.3rem;
 }
 .flip-row {

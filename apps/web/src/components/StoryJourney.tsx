@@ -27,9 +27,9 @@ function Reveal({
     <motion.div
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y: 18 }}
+      initial={{ opacity: 0, y: 14 }}
       animate={inView ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -65,6 +65,16 @@ const BEATS = [
     cta: "Run mid-payout",
     asset: <OwnershipFlipCard />,
   },
+  {
+    id: "vs",
+    kicker: "04 · Beyond escrow",
+    title: "Escrow holds the money. We clear the title.",
+    body: "Ticket escrows (Lummy-style) protect the door fee until show night. ClearTitle protects the earning seat itself: zero keys, held-sig freeze, mid-payout rebound, and a diligence stamp you can verify before you buy.",
+    href: "/verify",
+    cta: "See threat model",
+    asset: <DiligenceStampCard />,
+    reverse: true,
+  },
 ];
 
 const MISHAPS = [
@@ -89,23 +99,22 @@ export function StoryJourney() {
   return (
     <div className="story near-theme">
       <section className="near-hero" aria-label="ClearTitle">
-        <div className="near-hero-bg" aria-hidden />
-        <div className="near-hero-grid">
-          <div className="near-hero-inner">
-            <p className="chapter-kicker">NEAR · NFTs that do something</p>
-            <h1>
-              Clear<em>Title</em>
-            </h1>
-            <p className="story-lede">
-              Title insurance for ticket-earning seat NFTs. Sell the seat. Keep nothing. Pending cuts follow the buyer.
-            </p>
-            <HomeActions />
-            <p className="hero-hint">Live testnet · signed wallet · explorer Lab</p>
-          </div>
-          <div className="hero-stage single">
-            <div className="hero-stage-glow" aria-hidden />
-            <SeatDeedCard owner="ada.near" epoch={1} />
-          </div>
+        <div className="near-hero-plane" aria-hidden>
+          <div className="near-hero-plane-grid" />
+          <div className="near-hero-plane-line" />
+        </div>
+        <div className="near-hero-inner">
+          <p className="chapter-kicker">NEAR · NFTs that earn</p>
+          <h1>
+            Clear<em>Title</em>
+          </h1>
+          <p className="story-lede">
+            <span className="lede-strong">Sell the seat. Keep nothing.</span>
+            <br />
+            Title insurance for ticket-earning seat NFTs. Pending cuts follow the buyer.
+          </p>
+          <HomeActions />
+          <p className="hero-hint">Live testnet · signed wallet · explorer Lab</p>
         </div>
       </section>
 
@@ -159,9 +168,6 @@ export function StoryJourney() {
               Seat NFTs
             </Link>
           </div>
-        </Reveal>
-        <Reveal className="chapter-asset" delay={0.08}>
-          <DiligenceStampCard />
         </Reveal>
       </section>
     </div>

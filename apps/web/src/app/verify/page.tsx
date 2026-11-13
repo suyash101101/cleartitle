@@ -1,6 +1,7 @@
 import { VERIFY_CLAIMS } from "@/sdk";
 import { LAB_ATTACKS, ONCHAIN, txUrl } from "@/lib/evidence";
 import { PageHeader } from "@/components/ui/page-header";
+import { CompareStrip } from "./CompareStrip";
 
 export default function VerifyPage() {
   return (
@@ -14,6 +15,10 @@ export default function VerifyPage() {
           </>
         }
       />
+
+      <div className="panel" style={{ marginBottom: "1.25rem" }}>
+        <CompareStrip />
+      </div>
 
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
         <h3>Transfer threat model</h3>

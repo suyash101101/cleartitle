@@ -15,12 +15,18 @@ const links = [
 
 export function Nav() {
   const path = usePathname();
+  const isHome = path === "/";
+
   return (
     <>
-      <header className="top-brand">
-        <Link href="/" className="nav-brand">
-          Clear<span>Title</span>
-        </Link>
+      <header className={`top-brand ${isHome ? "top-brand-home" : ""}`}>
+        {isHome ? (
+          <span className="top-spacer" aria-hidden />
+        ) : (
+          <Link href="/" className="nav-brand">
+            Clear<span>Title</span>
+          </Link>
+        )}
         <p className="top-brand-live">
           <span className="badge ok">LIVE TESTNET</span>
           <span className="meta mono">cleartitle562464.testnet</span>

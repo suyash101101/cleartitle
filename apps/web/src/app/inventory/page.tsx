@@ -42,10 +42,19 @@ export default function InventoryPage() {
       setLoading(true);
       try {
         const ids = ["1", "2", "3", "4", "5"];
-        const loaded = await Promise.all(
+        const settled = await Promise.allSettled(
           ids.map((token_id) => viewMethod<SeatView | null>("nft_token", { token_id })),
         );
-        if (!cancelled) setLive(loaded.filter((s): s is SeatView => Boolean(s)));
+        const loaded = settled
+          .map((r) => (r.status === "fulfilled" ? r.value : null))
+          .filter((s): s is SeatView => Boolean(s));
+        if (!cancelled) {
+          setLive(loaded);
+          const firstErr = settled.find((r) => r.status === "rejected");
+          if (loaded.length === 0 && firstErr && firstErr.status === "rejected") {
+            setErr(firstErr.reason instanceof Error ? firstErr.reason.message : String(firstErr.reason));
+          }
+        }
       } catch (e) {
         if (!cancelled) setErr(e instanceof Error ? e.message : String(e));
       } finally {

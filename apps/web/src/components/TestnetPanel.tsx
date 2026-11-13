@@ -40,12 +40,15 @@ export function TestnetPanel() {
       const c = await viewMethod<Club>("get_club", {});
       const d = await viewMethod<Diligence>("diligence", { token_id: "3" });
       const ids = ["1", "2", "3", "4", "5"];
-      const loaded = await Promise.all(
+      const settled = await Promise.allSettled(
         ids.map((token_id) => viewMethod<SeatView | null>("nft_token", { token_id })),
       );
+      const loaded = settled
+        .map((r) => (r.status === "fulfilled" ? r.value : null))
+        .filter((s): s is SeatView => Boolean(s));
       setClub(c);
       setDiligence(d);
-      setSeats(loaded.filter((s): s is SeatView => Boolean(s)));
+      setSeats(loaded);
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     } finally {
@@ -64,11 +67,11 @@ export function TestnetPanel() {
         <a className="mono meta" href={`${EXPLORER}/accounts/${CONTRACT_ID}`} target="_blank" rel="noreferrer">
           {CONTRACT_ID}
         </a>
-        <button type="button" className="ghost" onClick={refresh} disabled={loading}>
+        <button type="button" className="ghost live-rail-refresh" onClick={refresh} disabled={loading}>
           {loading ? "Reading…" : "Refresh"}
         </button>
-        <Link className="pin-link" href="/inventory">
-          All seat NFTs
+        <Link className="live-rail-link" href="/inventory">
+          All seat NFTs →
         </Link>
       </div>
       {err && <p className="meta" style={{ color: "var(--color-warn)" }}>{err}</p>}
