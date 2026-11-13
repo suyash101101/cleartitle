@@ -512,6 +512,7 @@ table.verify th {
   padding: 3.75rem 0;
   border-top: 1px solid var(--color-line);
   min-width: 0;
+  scroll-margin-top: 5rem;
 }
 
 @media (min-width: 900px) {

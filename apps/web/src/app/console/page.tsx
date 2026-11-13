@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ActorBar } from "@/components/ActorBar";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
@@ -8,6 +10,7 @@ export default function ConsolePage() {
   const world = useApp((s) => s.world);
   const bootstrapClub = useApp((s) => s.bootstrapClub);
   const resetDemo = useApp((s) => s.resetDemo);
+  const router = useRouter();
   const club = world.club;
   const seats = Object.values(world.seats);
 
@@ -22,7 +25,14 @@ export default function ConsolePage() {
         <button type="button" onClick={bootstrapClub}>
           Create club + mint 5 seats
         </button>
-        <button type="button" className="ghost" onClick={resetDemo}>
+        <button
+          type="button"
+          className="ghost"
+          onClick={() => {
+            resetDemo();
+            router.push("/seat/3");
+          }}
+        >
           Load demo night
         </button>
       </div>
@@ -35,23 +45,44 @@ export default function ConsolePage() {
         <ol className="seat-timeline">
           <li className="hot">
             <span className="seat-timeline-kind">01 load</span>
-            <span className="seat-timeline-body">Load demo night → Seat #3 · ada · pending cut</span>
+            <span className="seat-timeline-body">
+              <button
+                type="button"
+                className="ghost"
+                style={{ padding: "0.2rem 0.65rem", fontSize: "0.8rem" }}
+                onClick={() => {
+                  resetDemo();
+                  router.push("/seat/3");
+                }}
+              >
+                Load → Seat #3
+              </button>{" "}
+              · ada · pending cut
+            </span>
           </li>
           <li className="hot">
             <span className="seat-timeline-kind">02 list</span>
-            <span className="seat-timeline-body">Ada lists @ 100 · FREEZE · Run diligence → PROVABLY CLEAN</span>
+            <span className="seat-timeline-body">
+              <Link href="/seat/3">Ada lists @ 100</Link> · FREEZE · diligence CLEAN
+            </span>
           </li>
           <li className="hot">
             <span className="seat-timeline-kind">03 buy</span>
-            <span className="seat-timeline-body">Priya buys mid-payout → REBOUND_TO_BUYER · epoch bump</span>
+            <span className="seat-timeline-body">
+              <Link href="/seat/3">Priya buys mid-payout</Link> · REBOUND_TO_BUYER
+            </span>
           </li>
           <li className="hot">
             <span className="seat-timeline-kind">04 attack</span>
-            <span className="seat-timeline-body">Lab → old owner withdraw → EXPECTED FAIL + explorer</span>
+            <span className="seat-timeline-body">
+              <Link href="/lab">Lab old owner withdraw</Link> · EXPECTED FAIL
+            </span>
           </li>
           <li>
             <span className="seat-timeline-kind">05 prove</span>
-            <span className="seat-timeline-body">/verify threat model + claim ↔ tx matrix</span>
+            <span className="seat-timeline-body">
+              <Link href="/verify">/verify threat model</Link> + claim ↔ tx matrix
+            </span>
           </li>
         </ol>
       </div>
