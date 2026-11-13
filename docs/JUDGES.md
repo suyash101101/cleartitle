@@ -3,23 +3,24 @@
 **One-liner:** Sell the seat. Keep nothing. Pending ticket money follows clear title on NEAR.
 
 **Live:** https://web-khaki-iota-17.vercel.app  
-**Repo:** https://github.com/suyash101101/cleartitle
+**Repo:** https://github.com/suyash101101/cleartitle  
+**Scale:** https://web-khaki-iota-17.vercel.app/scale
 
 ## What to click (3 minutes)
 
-1. **Home** — brand + problem.  
-2. **Club → Load live night** — Nearnight Live seeded with Seat #3 pending.  
-3. **Box Office → Buy ticket** — live BPS split animation.  
-4. **Seat #3** — 0 keys · continuity BTC/SOL · Diligence **PROVABLY CLEAN**.  
-5. Act as **ada** → List @ 100 → act as **priya** → **Buy mid-payout**.  
-6. **Transfer Lab** — old owner withdraw / held-sig → expected fails.  
-7. **/verify** — claim ↔ method ↔ test matrix.
+1. **Home** — brand + refuse / rebound / gate.
+2. **Club Console** — defaults to **Live** · RPC club · five-minute organizer path.
+3. **Box Office** — signed `buy_ticket` (or Preview buy for film).
+4. **Seat #3** — Live diligence RPC · List / Buy with fresh nonce (or Preview Film ready → List @ 100).
+5. **Transfer Lab** — old owner withdraw / held-sig → expected fails.
+6. **/verify** — claim ↔ method ↔ test matrix + explorer receipts.
+7. **/scale** — product path beyond the night.
 
 ## Proof commands
 
 ```bash
-pnpm test:unit          # 13 SDK tests
-cd contracts/cleartitle && cargo test   # 7 Rust tests
+pnpm test:unit
+cd contracts/cleartitle && cargo test
 pnpm evidence
 pnpm test:hostile
 pnpm test:e2e:smoke
@@ -27,18 +28,17 @@ pnpm test:e2e:smoke
 
 ## Track
 
-Declare **`nfts` only** (optional `social` only if named-club story is used).
+Primary: **`nfts`**. Optional second: **`business`** (organizer console + `@cleartitle/sdk`).
 
-## Why we win this field
+## Why this wins the transfer threat
 
-Crowd is full of “NFT owns a wallet” demos (agent spend guards, DAO seats, AI business treasuries). QuitClaim one-ups the **transfer threat** the track prompt asks for:
-
-| Differentiator | What judges see |
+| Differentiator | What you see |
 | --- | --- |
-| Mid-payout rebound | Pending cut rebinds to buyer — seller keeps nothing |
-| Transfer Lab | Live expected-fail receipts (old withdraw, listed drain, held-sig) |
+| Mid-payout rebound | Pending cut rebinds to buyer |
+| Transfer Lab | Expected-fail explorer receipts |
 | Diligence stamp | PROVABLY CLEAN before buy |
-| Chain Signatures continuity | BTC/SOL tips stable across sale |
-| Seat history | Earned · paid · who held it |
+| SDK | Same path in Vitest without the UI |
+| Chain Signatures derive | BTC/SOL tips stable across sale |
+| Honest roadmap | USDC / intents labeled, not faked |
 
-Film: Console **Film cue card** → Seat #3 → Lab → `/verify` threat model.
+Do not compare named rival projects. Score the threat model and receipts.
