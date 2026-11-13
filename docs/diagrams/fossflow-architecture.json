@@ -1,0 +1,20 @@
+{
+  "t": "QuitClaim system architecture",
+  "i": [
+    ["Seller wallet", "user", "near-connect testnet signer"],
+    ["Buyer wallet", "user", "Second wallet for mid-payout buy"],
+    ["Live web UI", "web", "Next.js console box-office seat lab verify scale"],
+    ["@cleartitle/sdk", "api", "Engine nearView encode list/buy helpers"],
+    ["QuitClaim contract", "server", "cleartitle562464.testnet Rust near-sdk"],
+    ["Seat vaults", "storage", "Keyless seat-N subaccounts 0 keys"],
+    ["Chain Signatures", "security", "MPC derive BTC SOL tip continuity"],
+    ["Explorer evidence", "monitor", "Nearblocks refuse receipts evidence.ts"]
+  ],
+  "v": [
+    [
+      [[0, -4, 2], [1, 4, 2], [2, 0, 0], [3, 0, -3], [4, 0, -6], [5, -4, -8], [6, 4, -8], [7, 0, -11]],
+      [[0, 2], [1, 2], [2, 3], [3, 4], [4, 5], [4, 6], [4, 7], [3, 7]]
+    ]
+  ],
+  "_": { "f": "compact", "v": "1.0" }
+}

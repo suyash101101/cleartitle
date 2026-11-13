@@ -36,11 +36,13 @@ On-chain title insurance for memberships that earn. Demo world: **Nearnight Live
 
 ## Architecture
 
-![QuitClaim system architecture](docs/diagrams/architecture.png)
+![QuitClaim system architecture](docs/diagrams/fossflow-architecture.png)
 
-![QuitClaim user flow](docs/diagrams/userflow.png)
+![QuitClaim user flow](docs/diagrams/fossflow-userflow.png)
 
 ![QuitClaim claims](docs/diagrams/quitclaim-claims.png)
+
+Editable sources: [`docs/diagrams/fossflow-architecture.json`](docs/diagrams/fossflow-architecture.json) (FossFLOW compact), [`docs/diagrams/fossflow-userflow.json`](docs/diagrams/fossflow-userflow.json), [`docs/diagrams/quitclaim-claims.excalidraw`](docs/diagrams/quitclaim-claims.excalidraw).
 
 ```
 Wallet (near-connect)

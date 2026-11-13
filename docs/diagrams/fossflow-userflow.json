@@ -1,0 +1,18 @@
+{
+  "t": "QuitClaim mid-payout userflow",
+  "i": [
+    ["Buy ticket", "web", "Organizer or fan buy_ticket splits vaults"],
+    ["List seat", "function", "Owner list_seat FREEZE epoch held-sig"],
+    ["Diligence", "security", "RPC diligence PROVABLY CLEAN gate"],
+    ["Buy seat", "api", "Buyer buy_seat fresh nonce rebound"],
+    ["Lab refuse", "firewall", "Old withdraw FAIL explorer receipt"],
+    ["SDK tests", "analytics", "Vitest mid-payout CLEAN path"]
+  ],
+  "v": [
+    [
+      [[0, -6, 0], [1, -2, 0], [2, 2, 0], [3, 6, 0], [4, 2, -4], [5, -2, -4]],
+      [[0, 1], [1, 2], [2, 3], [3, 4], [1, 5], [3, 5]]
+    ]
+  ],
+  "_": { "f": "compact", "v": "1.0" }
+}
