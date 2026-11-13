@@ -52,7 +52,7 @@ export default function MemberRoomPage() {
     return (
       <section className="section" style={{ borderTop: "none" }}>
         <h2>Member Room</h2>
-        <p className="lede">Seat missing — seed Nearnight from Club Console.</p>
+        <p className="lede">Seat missing. Seed Nearnight from Club Console.</p>
       </section>
     );
   }
