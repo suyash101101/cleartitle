@@ -59,11 +59,6 @@ function HeroVisual() {
           <NightTicketCard />
         </TiltCard>
       </div>
-      <div className="hero-stage-stamp" aria-hidden>
-        <span>0 keys</span>
-        <span>mid-payout</span>
-        <span>CLEAN</span>
-      </div>
     </motion.div>
   );
 }
