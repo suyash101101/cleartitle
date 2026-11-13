@@ -10,7 +10,6 @@ export function ActorBar() {
   return (
     <div className="actor-bar" role="group" aria-label="Scenario cast">
       <span className="badge scenario">Scenario</span>
-      <span className="meta">Act as</span>
       {ACTORS.map((a) => (
         <button
           key={a}

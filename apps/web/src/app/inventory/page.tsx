@@ -79,7 +79,7 @@ export default function InventoryPage() {
       <h3 className="inv-heading">
         <span className="badge rpc">Testnet RPC</span> On-chain NFTs · {CONTRACT_ID}
       </h3>
-      {loading && <p className="meta">Reading nft_token…</p>}
+      {loading && <p className="meta">Reading get_seat…</p>}
       {err && <p className="meta" style={{ color: "var(--color-warn)" }}>{err}</p>}
       <div className="inv-grid">
         {live.map((s) => {

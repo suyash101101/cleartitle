@@ -42,7 +42,7 @@ export default function ConsolePage() {
             window.location.assign("/seat/3");
           }}
         >
-          Load live night
+          Seed Nearnight
         </button>
         <Link className="btn ghost" href="/night">
           Ticket river
