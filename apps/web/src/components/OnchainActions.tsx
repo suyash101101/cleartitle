@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useWallet } from "@/lib/wallet";
 import { EXPLORER } from "@/lib/near";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
 export function OnchainActions() {
   const { accountId, buyTicket, listSeat, buySeat } = useWallet();
@@ -28,6 +29,7 @@ export function OnchainActions() {
 
   return (
     <div className="panel" style={{ marginTop: "1.25rem" }}>
+      <BorderBeam duration={14} size={50} colorFrom="#1B6EF3" colorTo="#94A3B8" />
       <h3>Signed testnet actions</h3>
       <p className="meta">Uses your connected wallet against cleartitle562464.testnet</p>
       <div className="cta-row" style={{ marginTop: "0.75rem" }}>
