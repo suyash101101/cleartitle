@@ -18,7 +18,7 @@ export default function VerifyPage() {
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
         <h3>Transfer threat model</h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          Every way a seller tries to keep the money — and how ClearTitle refuses it.
+          Every way a seller tries to keep the money, and how ClearTitle refuses it.
         </p>
         <ul className="checklist">
           <li>
@@ -87,7 +87,7 @@ export default function VerifyPage() {
             <li key={a.id}>
               <span className={a.success ? "pass" : "fail"}>{a.success ? "✓" : "✕"}</span>
               <span>
-                {a.title} — {a.reason}
+                {a.title}: {a.reason}
                 <br />
                 <a className="mono" href={txUrl(a.tx)} target="_blank" rel="noreferrer">
                   {a.tx}

@@ -63,7 +63,7 @@ export const useApp = create<AppState>((set, get) => ({
       diligence: null,
       lastLab: null,
       lastSplit: null,
-      flash: flashOk("Nearnight Live loaded. Seat #3 pending. Ready for mid-payout."),
+      flash: flashOk("Nearnight seeded. Seat #3 suite pending. Ready for mid-payout."),
     }),
   bootstrapClub: () => {
     try {
@@ -157,7 +157,7 @@ export const useApp = create<AppState>((set, get) => ({
     const world = JSON.parse(JSON.stringify(get().world)) as WorldState;
     const seat = world.seats[tokenId];
     if (!seat) {
-      set({ flash: flashErr(`Seat ${tokenId} missing — Load demo night first.`) });
+      set({ flash: flashErr(`Seat ${tokenId} missing. Seed Nearnight from Club first.`) });
       return;
     }
     // Arm the threat so one-click Lab buttons always demonstrate the refusal.

@@ -34,7 +34,7 @@ export function SeatCharter({ seat }: { seat: Seat }) {
           {seat.vaultAccountId}
         </text>
         <text x="28" y="112" fill="#C8FF3D" fontFamily="var(--font-sans), system-ui" fontSize="13" fontWeight="700">
-          0 ACCESS KEYS · EPOCH {seat.keyEpoch}
+          0 ACCESS KEYS · {seat.kind.toUpperCase()} · EPOCH {seat.keyEpoch}
         </text>
         <text x="28" y="140" fill="#FFFFFF" fontFamily="var(--font-sans), system-ui" fontSize="13">
           Owner · {seat.owner}

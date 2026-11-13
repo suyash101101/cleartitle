@@ -23,7 +23,7 @@ export default function SeatPage() {
     return (
       <section className="section" style={{ borderTop: "none" }}>
         <h2>Seat not found</h2>
-        <p className="lede">Load demo night from Console.</p>
+        <p className="lede">Seed Nearnight from Club Console.</p>
       </section>
     );
   }
@@ -38,6 +38,7 @@ export default function SeatPage() {
           Seat #{seat.tokenId}
         </h2>
         <span className="badge ok">0 keys</span>
+        <span className="badge signal">{seat.kind}</span>
         <span className="badge amber">{seat.encumbrance}</span>
       </div>
       <p className="lede">
@@ -135,7 +136,7 @@ export default function SeatPage() {
         <div className="panel">
           <h3>Seat history</h3>
           <p className="meta" style={{ marginBottom: "0.75rem" }}>
-            Earned · paid · who held it — transfer path judges ask for.
+            Earned · paid · who held it. Transfer path judges ask for this.
           </p>
           <ol className="seat-timeline">
             {seat.ledger

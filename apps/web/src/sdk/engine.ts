@@ -1,10 +1,11 @@
-import type {
-  ClubConfig,
-  DiligenceReport,
-  LabResult,
-  Seat,
-  TicketEvent,
-  WorldState,
+import {
+  SEAT_KINDS,
+  type ClubConfig,
+  type DiligenceReport,
+  type LabResult,
+  type Seat,
+  type TicketEvent,
+  type WorldState,
 } from "./types";
 
 function assert(cond: unknown, msg: string): asserts cond {
@@ -94,6 +95,7 @@ export function mintSeats(world: WorldState, owner: string): Seat[] {
       tokenId,
       vaultAccountId,
       owner,
+      kind: SEAT_KINDS[i]?.id ?? "floor",
       encumbrance: "FREE",
       balance: 0,
       pending: [],

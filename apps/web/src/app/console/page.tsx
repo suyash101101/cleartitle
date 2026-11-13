@@ -18,7 +18,7 @@ export default function ConsolePage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="Club Console"
-        lede="Organizer controls for Nearnight Live — BPS, mint, pause, treasury."
+        lede="Organizer controls for Nearnight Live: BPS, mint, pause, treasury."
       />
       <ActorBar />
       <div className="cta-row" style={{ marginBottom: "1.5rem" }}>
@@ -33,14 +33,14 @@ export default function ConsolePage() {
             router.push("/seat/3");
           }}
         >
-          Load live night
+          Seed Nearnight
         </button>
       </div>
 
       <div className="panel" style={{ marginBottom: "1.5rem" }}>
         <h3>Judge path</h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          90 seconds. Live testnet proofs plus the film engine for mid-payout.
+          90 seconds. Live testnet proofs plus the film path for mid-payout.
         </p>
         <ol className="seat-timeline">
           <li className="hot">
@@ -55,7 +55,7 @@ export default function ConsolePage() {
                   router.push("/seat/3");
                 }}
               >
-                Load → Seat #3
+                Seed → Seat #3
               </button>{" "}
               · ada · pending cut
             </span>

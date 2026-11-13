@@ -29,7 +29,7 @@ export default function MemberRoomPage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title={`Member Room · Seat #${id}`}
-        lede="Gated by RPC ownership — switch actor to unlock."
+        lede="Gated by ownership. Switch film cast or connect wallet to unlock."
       />
       <SessionBar />
       {locked ? (

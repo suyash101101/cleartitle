@@ -32,7 +32,7 @@ export function ChainSigPanel({ vaultAccountId }: { vaultAccountId: string }) {
       <h3>Chain Signatures continuity</h3>
       <p className="meta">
         Derived from vault <span className="mono">{vaultAccountId}</span> via{" "}
-        <span className="mono">v1.signer-prod.testnet</span> — unchanged across seat sales.
+        <span className="mono">v1.signer-prod.testnet</span>. Unchanged across seat sales.
       </p>
       {loading && <p className="meta">Deriving…</p>}
       {err && <p className="meta" style={{ color: "var(--color-warn)" }}>{err}</p>}

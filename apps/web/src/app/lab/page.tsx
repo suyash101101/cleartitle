@@ -16,7 +16,7 @@ export default function LabPage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="Transfer Lab"
-        lede="Live explorer receipts for seller-recall, listed drain, and held-sig. Local film engine arms the same threats in one click."
+        lede="Live explorer receipts for seller-recall, listed drain, and held-sig. Film path arms the same threats in one click."
       />
       <SessionBar />
 
@@ -41,17 +41,17 @@ export default function LabPage() {
       </div>
 
       {!seat ? (
-        <p className="meta">Load demo night for local scenario buttons.</p>
+        <p className="meta">Seed Nearnight from Club Console to unlock film attacks.</p>
       ) : (
         <div className="grid-2">
           <div className="panel">
-            <h3>Local scenario (demo engine)</h3>
+            <h3>Film path attacks</h3>
             <p className="meta" style={{ marginBottom: "1rem" }}>
-              owner {seat.owner} · {seat.encumbrance}
+              owner {seat.owner} · {seat.encumbrance} · {seat.kind}
             </p>
             <div className="cta-row">
               <button type="button" onClick={runMidPayoutScenario}>
-                Run mid-payout scenario
+                Arm mid-payout
               </button>
               <button type="button" className="danger" onClick={() => runLab("old", "3")}>
                 Seller recall withdraw
@@ -68,7 +68,7 @@ export default function LabPage() {
             </div>
           </div>
           <div className="panel">
-            <h3>Last local result</h3>
+            <h3>Last film result</h3>
             {lastLab ? (
               <>
                 <p>
@@ -82,7 +82,7 @@ export default function LabPage() {
                 <p className="meta">{lastLab.reason}</p>
               </>
             ) : (
-              <p className="meta">No local attack run yet. One-click buttons arm the threat first.</p>
+              <p className="meta">No attack run yet. Buttons arm the threat first, then refuse it.</p>
             )}
           </div>
         </div>

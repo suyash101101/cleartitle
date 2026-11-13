@@ -1,8 +1,17 @@
-/** ClearTitle domain types — title insurance for ticket-earning seat NFTs. */
+/** ClearTitle domain types: title insurance for ticket-earning seat NFTs. */
 
 export type Encumbrance = "FREE" | "LISTED" | "SETTLING";
 export type PayoutStatus = "NONE" | "PENDING" | "SETTLED" | "REBOUND_TO_BUYER";
 export type DiligenceVerdict = "PROVABLY CLEAN" | "FIX BEFORE BUY";
+export type SeatKind = "floor" | "lounge" | "suite" | "vip" | "press";
+
+export const SEAT_KINDS: { id: SeatKind; label: string; blurb: string }[] = [
+  { id: "floor", label: "Floor", blurb: "General admission earning cut" },
+  { id: "lounge", label: "Lounge", blurb: "Hospitality rail with tip continuity" },
+  { id: "suite", label: "Suite", blurb: "Founding suite deed · mid-payout story" },
+  { id: "vip", label: "VIP", blurb: "Priority gate · same clear-title rules" },
+  { id: "press", label: "Press", blurb: "Media booth vault · 0 access keys" },
+];
 
 export interface ClubConfig {
   clubId: string;
@@ -32,6 +41,7 @@ export interface Seat {
   tokenId: string;
   vaultAccountId: string;
   owner: string;
+  kind: SeatKind;
   encumbrance: Encumbrance;
   balance: number;
   pending: PendingPayout[];
@@ -40,7 +50,7 @@ export interface Seat {
   keyEpoch: number;
   listingAsk: number | null;
   listingNonce: number;
-  /** Deterministic derived tip paths — continuity across sales */
+  /** Deterministic derived tip paths: continuity across sales */
   continuityHash: string;
   btcAddress: string;
   solAddress: string;

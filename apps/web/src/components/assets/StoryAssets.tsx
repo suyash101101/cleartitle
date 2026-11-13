@@ -6,7 +6,7 @@ export function SeatDeedCard({ owner = "ada.near", epoch = 1 }: { owner?: string
   return (
     <div className="asset-card seat-deed">
       <div className="asset-card-inner">
-        <p className="asset-kicker">NEP-171 · seat deed</p>
+        <p className="asset-kicker">NEP-171 · suite deed</p>
         <h3>Seat #3</h3>
         <p className="asset-line">vault · seat-3.cleartitle…</p>
         <p className="asset-line highlight">0 access keys · epoch {epoch}</p>

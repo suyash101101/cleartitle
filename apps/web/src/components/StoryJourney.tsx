@@ -39,20 +39,20 @@ function Reveal({
 const BEATS = [
   {
     id: "mishap",
-    kicker: "01 · Why this exists",
-    title: "Resale still lets the seller keep the door.",
-    body: "Ticketek share-links can be recalled by the original holder. SecureMyPass-style clones double-sell the same barcode. NFT seats often keep keys or pending cuts after transfer. ClearTitle closes those holes on NEAR.",
+    kicker: "01 · Real mishaps",
+    title: "Coldplay share-links got recalled after the money moved.",
+    body: "Oct 2024: a Tixel buyer watched Ticketek recall accepted Coldplay tickets after the seller double-sold elsewhere. SecureMyPass clones and barcode flips do the same. ClearTitle makes recall and double-spend impossible on-chain.",
     href: "/lab",
-    cta: "Open Transfer Lab",
+    cta: "Run seller-recall attack",
     asset: <FailSlipCard title="Seller recall" reason="old holder still controls access" />,
   },
   {
     id: "vault",
-    kicker: "02 · NEP-171 seat",
-    title: "The seat is the wallet. Zero access keys.",
-    body: "Each founding seat is a NEP-171 deed over a keyless sub-account that earns ticket cuts. BTC and SOL tip addresses stay continuous across sales. Control flips. Continuity does not.",
-    href: "/seat/3",
-    cta: "Inspect Seat #3",
+    kicker: "02 · NEP-171 seat NFTs",
+    title: "Floor, lounge, suite, VIP, press. Same clear title.",
+    body: "Five founding deeds. Each is a NEP-171 NFT over a keyless vault that earns ticket cuts. BTC and SOL tip addresses stay continuous across sales. Control flips. Continuity does not.",
+    href: "/inventory",
+    cta: "Open live inventory",
     asset: <SeatDeedCard />,
     reverse: true,
   },
@@ -64,6 +64,24 @@ const BEATS = [
     href: "/seat/3",
     cta: "Run mid-payout",
     asset: <OwnershipFlipCard />,
+  },
+];
+
+const MISHAPS = [
+  {
+    when: "Oct 2024",
+    where: "Ticketek · Coldplay",
+    what: "Seller recalled accepted share-links after Tixel payout. Buyer refunded, night lost.",
+  },
+  {
+    when: "2024–25",
+    where: "FB / clones",
+    what: "Barcode screenshots and SecureMyPass-style apps double-sold the same door.",
+  },
+  {
+    when: "NFT seats",
+    where: "Most markets",
+    what: "Keys, pending cuts, and held signatures stay with the seller after transfer.",
   },
 ];
 
@@ -82,7 +100,7 @@ export function StoryJourney() {
               Title insurance for ticket-earning seat NFTs. Sell the seat. Keep nothing. Pending cuts follow the buyer.
             </p>
             <HomeActions />
-            <p className="hero-hint">Live testnet contract · local film engine · explorer-backed Lab</p>
+            <p className="hero-hint">Live testnet · signed wallet · explorer Lab</p>
           </div>
           <div className="hero-stage single">
             <div className="hero-stage-glow" aria-hidden />
@@ -93,6 +111,19 @@ export function StoryJourney() {
 
       <section className="live-strip" aria-label="Live testnet">
         <TestnetPanel />
+      </section>
+
+      <section className="mishap-rail" aria-label="Why ClearTitle">
+        <p className="chapter-kicker">Why this exists</p>
+        <ol className="mishap-list">
+          {MISHAPS.map((m) => (
+            <li key={m.where}>
+              <span className="mishap-when">{m.when}</span>
+              <span className="mishap-where">{m.where}</span>
+              <span className="mishap-what">{m.what}</span>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {BEATS.map((c) => (
@@ -115,7 +146,7 @@ export function StoryJourney() {
         <Reveal>
           <h2>Prove it clean.</h2>
           <p className="story-lede">
-            Diligence packet, claim matrix, and Member Room gating. Same story on testnet RPC and in the film path.
+            Diligence packet, claim matrix, and Member Room gating. Same rules on testnet RPC and in the film path.
           </p>
           <div className="cta-row">
             <Link className="btn" href="/verify">
@@ -124,8 +155,8 @@ export function StoryJourney() {
             <Link className="btn ghost" href="/box-office">
               Buy a ticket
             </Link>
-            <Link className="btn ghost" href="/member/3">
-              Member Room
+            <Link className="btn ghost" href="/inventory">
+              Seat NFTs
             </Link>
           </div>
         </Reveal>
