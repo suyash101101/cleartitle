@@ -15,7 +15,7 @@ importers:
   apps/web:
     dependencies:
       '@cleartitle/sdk':
-        specifier: workspace:*
+        specifier: file:../../packages/sdk
         version: link:../../packages/sdk
       next:
         specifier: ^15.2.4

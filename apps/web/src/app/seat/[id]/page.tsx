@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ActorBar } from "@/components/ActorBar";
+import { SeatCharter } from "@/components/SeatCharter";
 import { useApp } from "@/lib/store";
 
 export default function SeatPage() {
@@ -41,9 +42,13 @@ export default function SeatPage() {
       </p>
       <ActorBar />
 
+      <div style={{ marginBottom: "1.25rem" }}>
+        <SeatCharter seat={seat} />
+      </div>
+
       <div className="grid-2">
         <div className="panel">
-          <h3>Charter</h3>
+          <h3>Charter details</h3>
           <p className="meta">tickets accrued · {seat.ticketsAccrued}</p>
           <p className="meta">vault balance · {seat.balance}</p>
           <p className="meta">seat bps · {seat.seatBps}</p>
