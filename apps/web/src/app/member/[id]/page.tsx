@@ -1,69 +1,161 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { SessionBar } from "@/components/SessionBar";
 import { PageHeader } from "@/components/ui/page-header";
+import { viewMethod } from "@/lib/near";
+import { useWallet } from "@/lib/wallet";
 import { useApp } from "@/lib/store";
+
+type SeatView = {
+  token_id: string;
+  owner_id: string;
+  encumbrance: string;
+};
 
 export default function MemberRoomPage() {
   const params = useParams();
   const id = String(params.id ?? "3");
   const world = useApp((s) => s.world);
   const actor = useApp((s) => s.actor);
+  const setActor = useApp((s) => s.setActor);
   const doClaim = useApp((s) => s.doClaim);
   const doList = useApp((s) => s.doList);
   const seat = world.seats[id];
+  const { accountId } = useWallet();
+
+  const [rpcOwner, setRpcOwner] = useState<string | null>(null);
+  const [rpcErr, setRpcErr] = useState<string | null>(null);
+  const [rpcLoading, setRpcLoading] = useState(true);
+
+  const refreshOwner = useCallback(async () => {
+    setRpcLoading(true);
+    setRpcErr(null);
+    try {
+      const s = await viewMethod<SeatView | null>("get_seat", { token_id: id });
+      setRpcOwner(s?.owner_id ?? null);
+      if (!s?.owner_id) setRpcErr("RPC returned no owner for this seat");
+    } catch (e) {
+      setRpcOwner(null);
+      setRpcErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setRpcLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    void refreshOwner();
+  }, [refreshOwner]);
 
   if (!seat) {
     return (
       <section className="section" style={{ borderTop: "none" }}>
         <h2>Member Room</h2>
-        <p className="lede">Seat missing.</p>
+        <p className="lede">Seat missing — seed Nearnight from Club Console.</p>
       </section>
     );
   }
 
-  const locked = actor !== seat.owner;
+  const scenarioMatchesRpc = Boolean(rpcOwner && actor === rpcOwner);
+  const walletMatchesRpc = Boolean(rpcOwner && accountId && accountId === rpcOwner);
+  const unlocked = scenarioMatchesRpc || walletMatchesRpc;
+  const engineReady = actor === seat.owner;
 
   return (
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title={`Member Room · Seat #${id}`}
-        lede="Gated by ownership. Switch film cast or connect wallet to unlock."
+        lede="Gated by on-chain owner_id from FastNear RPC. Scenario cast must match to unlock."
       />
       <SessionBar />
-      {locked ? (
-        <div className="panel">
-          <span className="badge warn">LOCKED</span>
-          <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
-            You are <strong>{actor}</strong>. Owner is <strong>{seat.owner}</strong>.
-          </p>
-          <p className="meta" style={{ marginTop: "0.5rem" }}>
-            Claim, list, and vault control stay hidden until clear title lands with you.
-          </p>
+
+      <div className="panel owner-gate" style={{ marginBottom: "1.25rem" }}>
+        <div className="owner-gate-head">
+          <span className="badge rpc">Live owner check</span>
+          <button type="button" className="ghost live-rail-refresh" onClick={() => void refreshOwner()} disabled={rpcLoading}>
+            {rpcLoading ? "Reading…" : "Refresh RPC"}
+          </button>
         </div>
-      ) : (
+        {rpcErr && (
+          <p className="meta" style={{ color: "var(--color-warn)", marginTop: "0.65rem" }}>
+            {rpcErr}
+          </p>
+        )}
+        <dl className="owner-gate-grid">
+          <div className={scenarioMatchesRpc ? "match" : "mismatch"}>
+            <dt>Scenario actor</dt>
+            <dd className="mono">{actor}</dd>
+          </div>
+          <div className={rpcOwner ? (scenarioMatchesRpc ? "match" : "mismatch") : undefined}>
+            <dt>RPC owner · get_seat</dt>
+            <dd className="mono">{rpcLoading ? "…" : (rpcOwner ?? "—")}</dd>
+          </div>
+          <div className={walletMatchesRpc ? "match" : undefined}>
+            <dt>Connected wallet</dt>
+            <dd className="mono">{accountId ?? "not connected"}</dd>
+          </div>
+        </dl>
+        <p className="meta" style={{ marginTop: "0.75rem" }}>
+          Scenario engine owner for seat #{id}: <strong className="mono">{seat.owner}</strong>
+          {engineReady ? " · in sync with cast" : " · actions need matching cast"}
+        </p>
+        {!unlocked && rpcOwner && actor !== rpcOwner && (
+          <div className="cta-row" style={{ marginTop: "0.85rem" }}>
+            <button type="button" onClick={() => setActor(rpcOwner)}>
+              Set scenario to RPC owner
+            </button>
+          </div>
+        )}
+      </div>
+
+      {unlocked ? (
         <div className="panel">
           <span className="badge ok">UNLOCKED</span>
           <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
-            You hold Seat #{id}. Ticket cuts and vault control follow this deed.
+            {walletMatchesRpc && !scenarioMatchesRpc
+              ? "Wallet matches on-chain owner. Connect scenario cast for engine actions."
+              : `Scenario ${actor} matches RPC owner for seat #${id}.`}
           </p>
           <p className="meta" style={{ marginTop: "0.5rem" }}>
             Continuity {seat.continuityHash} · epoch {seat.keyEpoch} · {seat.encumbrance}
           </p>
           <div className="cta-row" style={{ marginTop: "1rem" }}>
-            <button type="button" onClick={() => doClaim(id)} disabled={seat.encumbrance !== "FREE"}>
+            <button type="button" onClick={() => doClaim(id)} disabled={!engineReady || seat.encumbrance !== "FREE"}>
               Claim payout
             </button>
             <button
               type="button"
               className="ghost"
               onClick={() => doList(id, 100)}
-              disabled={seat.encumbrance !== "FREE"}
+              disabled={!engineReady || seat.encumbrance !== "FREE"}
             >
               List seat @ 100
             </button>
           </div>
+          {!engineReady && (
+            <p className="meta" style={{ marginTop: "0.65rem", color: "var(--color-warn)" }}>
+              Engine still lists owner {seat.owner}. Run Club Console judge path or align scenario.
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="panel">
+          <span className="badge warn">LOCKED</span>
+          <p style={{ marginTop: "1rem", fontSize: "1.15rem" }}>
+            Member controls stay hidden until scenario actor matches the RPC owner
+            {rpcOwner ? (
+              <>
+                {" "}
+                (<strong className="mono">{rpcOwner}</strong>).
+              </>
+            ) : (
+              "."
+            )}
+          </p>
+          <p className="meta" style={{ marginTop: "0.5rem" }}>
+            Or connect a testnet wallet that holds this seat NFT.
+          </p>
         </div>
       )}
     </section>

@@ -157,7 +157,7 @@ export function StoryJourney() {
         <Reveal>
           <h2>Prove it clean.</h2>
           <p className="story-lede">
-            Diligence packet, claim matrix, and Member Room gating. Same rules on testnet RPC and in the film path.
+            Diligence packet, claim matrix, and Member Room gating. Same rules on testnet RPC and in the scenario engine.
           </p>
           <div className="cta-row">
             <Link className="btn" href="/verify">
