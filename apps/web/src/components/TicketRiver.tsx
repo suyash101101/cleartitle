@@ -56,7 +56,7 @@ export function TicketRiver({ limit = DEFAULT_N, compact = false }: { limit?: nu
           {rows.map((ev) => (
             <li key={ev.txHash}>
               <span className="ticket-river-time">{relTime(ev.at)}</span>
-              <span className="ticket-river-buyer mono">{ev.buyer}</span>
+              <span className="ticket-river-buyer">{ev.buyer}</span>
               <span className="ticket-river-split">
                 {ev.price} USDC · treasury +{ev.treasuryCut}
                 {ev.seatCuts.length > 0 ? ` · ${ev.seatCuts.length} seats` : ""}
