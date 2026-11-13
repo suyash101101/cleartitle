@@ -1,7 +1,7 @@
 /** Live proof artifacts from testnet QuitClaim deployment. */
 
 export const CONTRACT_ID = "cleartitle562464.testnet";
-export const EXPLORER = "https://explorer.testnet.near.org";
+export const EXPLORER = "https://testnet.nearblocks.io";
 
 export const ONCHAIN = {
   deploy: "WXRUUPjAtyKuUGFkDy54QxYmF2NxbHLnfkqpcpPmE1q",
@@ -9,15 +9,15 @@ export const ONCHAIN = {
   mintSeats: "BWYsnQvo3tNikB88uJHQN4LVBPbPhWKmjHKtjvQdN8J5",
   buyTicket: "G93TQ94JjFC99wkXh4uXhvkkGkXbRXztRL6YjTxwVAd6",
   claimPayout: "6SYRQS8mpSmHUftiGamXou8VT38oSnYUZB3x1PDBjFym",
-  listSeat: "6e4wRXkkuJtgMvp33tHzMjgvuitA9nL51fiuxRgaLtb8",
-  heldSigRefuse: "995tLJWsSejrYGHDt8tffdC6hVFpoY2EYJpbfJwj5ZBA",
-  buySeatMidPayout: "FVjgDg8kdjkxVMkqAtAA8MRiC8YChK2tb34ppKbZYMYi",
-  oldOwnerWithdrawRefuse: "HCaWPtkvF8HTgADXL6MjbSESBwcBvfwSwHtC4qXYzNea",
-  listedWithdrawRefuse: "5ZPnETPWQK2TYgeuQQeWteQpGJ2VPKFV7BqP6sszqckz",
+  listSeat: "FyYM94ENeJRecuTBzjEBcFhnSKzh8Zm43dkphcUqFpSH",
+  heldSigRefuse: "4MdAisiCZv37kQCqKoTguB2jFqYoNdsfDapV1JQ6rzL5",
+  buySeatMidPayout: "25mJXYgXMw2k7jD4ThYpdrn7YVtk4PeMW6D4xif6TSyR",
+  oldOwnerWithdrawRefuse: "Fxo1au6zR3Uy2QXbiPZkCon7VckxbixhYVdFjVi9onK4",
+  listedWithdrawRefuse: "24hdybwyxZ7NL3zHEXb1w9U13iPqgsCsbePzXjERJ2Xo",
 } as const;
 
 export function txUrl(id: string) {
-  return `${EXPLORER}/transactions/${id}`;
+  return `${EXPLORER}/txns/${id}`;
 }
 
 export const LAB_ATTACKS = [

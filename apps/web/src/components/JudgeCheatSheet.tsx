@@ -7,8 +7,8 @@ export function JudgeCheatSheet() {
       <p className="chapter-kicker">Judge cheat sheet · 30s</p>
       <ol className="judge-cheat-list">
         <li>
-          <strong>Club → Judge Run</strong>
-          <span className="meta"> auto seat → lab → verify · 6/6 stamps</span>
+          <strong>Club → Film ready · Seat #3</strong>
+          <span className="meta"> ada · pending · FREE — then List @ 100 live</span>
         </li>
         <li>
           <strong>Lab · Seller recall</strong>
@@ -25,7 +25,7 @@ export function JudgeCheatSheet() {
       </ol>
       <div className="judge-cheat-ctas">
         <Link className="pin-link" href="/console">
-          Start Judge Run →
+          Film ready · Seat #3 →
         </Link>
         <Link className="pin-link" href="/verify">
           /verify matrix →

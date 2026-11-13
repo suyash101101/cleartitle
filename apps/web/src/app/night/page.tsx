@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { SessionBar } from "@/components/SessionBar";
 import { CutTicker } from "@/components/CutTicker";
-import { SettlementPulse } from "@/components/SettlementPulse";
 import { TicketRiver } from "@/components/TicketRiver";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
@@ -19,8 +18,7 @@ export default function NightPage() {
         title="Nearnight Live"
         lede="Every ticket sale splits treasury and seat vaults in real time. Same buy_ticket rules as live testnet."
       />
-      <div className="grid-2" style={{ marginBottom: "1.25rem" }}>
-        <SettlementPulse />
+      <div style={{ marginBottom: "1.25rem" }}>
         <CutTicker />
       </div>
       <SessionBar />

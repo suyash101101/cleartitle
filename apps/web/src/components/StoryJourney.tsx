@@ -127,8 +127,6 @@ export function StoryJourney() {
         <TestnetPanel compact />
       </section>
 
-      <StoryHorizScroll beats={BEATS} />
-
       <section className="seat-class-section dense" aria-label="Seat mint roll">
         <Reveal>
           <p className="chapter-kicker">Mint · drag & tear</p>
@@ -136,6 +134,8 @@ export function StoryJourney() {
           <TicketRoll3D mode="mint" />
         </Reveal>
       </section>
+
+      <StoryHorizScroll beats={BEATS} />
 
       <section className="bento-section dense" aria-label="Product paths">
         <p className="chapter-kicker">Paths</p>
@@ -192,6 +192,7 @@ export function StoryJourney() {
           </div>
         </Reveal>
       </section>
+      <div className="console-end-spacer" aria-hidden />
     </div>
   );
 }

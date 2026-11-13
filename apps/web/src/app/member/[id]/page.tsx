@@ -7,7 +7,6 @@ import { SessionBar } from "@/components/SessionBar";
 import { TitleScore } from "@/components/TitleScore";
 import { OffChainRoyalty } from "@/components/OffChainRoyalty";
 import { WarrantyStrip } from "@/components/WarrantyStrip";
-import { WedgeBadge } from "@/components/WedgeBadge";
 import { PageHeader } from "@/components/ui/page-header";
 import { viewMethod } from "@/lib/near";
 import { useWallet } from "@/lib/wallet";
@@ -78,7 +77,6 @@ export default function MemberRoomPage() {
         title={`Member Room · Seat #${id}`}
         lede="Gated by on-chain owner_id from FastNear RPC. Scenario cast must match to unlock."
       />
-      <WedgeBadge />
       <WarrantyStrip />
       <OffChainRoyalty />
       <SessionBar />

@@ -2,9 +2,7 @@
 
 import { OnchainActions } from "@/components/OnchainActions";
 import { SessionBar } from "@/components/SessionBar";
-import { SettlementPulse } from "@/components/SettlementPulse";
 import { IntentEscrowStrip } from "@/components/IntentEscrowStrip";
-import { WedgeBadge } from "@/components/WedgeBadge";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
 
@@ -20,8 +18,6 @@ export default function BoxOfficePage() {
         title="Box Office"
         lede="Buy a ticket. Splits match live buy_ticket rules on testnet."
       />
-      <WedgeBadge />
-      <SettlementPulse />
       <SessionBar />
       <p className="meta" style={{ margin: "0 0 1.15rem" }}>
         <span className="badge rpc">Live path</span> splits stream on{" "}
@@ -31,7 +27,7 @@ export default function BoxOfficePage() {
       {!club ? (
         <p className="meta">Create a club first in Console.</p>
       ) : (
-        <div className="grid-2" style={{ marginBottom: "1.35rem" }}>
+        <div className="grid-2" style={{ marginTop: "1.75rem", marginBottom: "1.75rem", gap: "1.75rem" }}>
           <div className="panel">
             <h3>{club.name}</h3>
             <p className="font-display my-2 text-5xl tracking-tight">

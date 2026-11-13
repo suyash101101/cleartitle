@@ -18,7 +18,7 @@ export function OrbitalCTA() {
       </div>
       <div className="orbital-copy">
         <Link className="btn" href="/console">
-          Start Judge Run
+          Open Club Console
         </Link>
       </div>
       <p className="meta orbital-meta">

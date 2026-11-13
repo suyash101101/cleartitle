@@ -21,7 +21,9 @@ test("home brand @smoke", async ({ page }) => {
   await expect(page.getByLabel(/Pull paper to mint seat NFT/i)).toBeVisible();
   await expect(page.getByRole("navigation", { name: /Primary/i })).toBeVisible();
   await expect(page.getByRole("link", { name: /^Home$/i })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Switch to (light|dark)/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Switch to (light|dark)/i })).toHaveCount(0);
+  await expect(page.getByLabel(/^Network$/i)).toHaveCount(0);
+  await expect(page.getByText(/^LIVE$/i)).toHaveCount(0);
   await expect(page.getByText(/63 NFT-track rivals/i)).toHaveCount(0);
   await expect(page.getByText(/Against the field/i)).toHaveCount(0);
 });
@@ -144,7 +146,7 @@ test("night river + inventory @smoke", async ({ page }) => {
   await page.goto("/night", { waitUntil: "domcontentloaded" });
   await hideDevChrome(page);
   await expect(page.getByText(/ticket river|Nearnight/i).first()).toBeVisible();
-  await expect(page.getByLabel(/Settlement pulse/i)).toBeVisible();
+  await expect(page.getByLabel(/Settlement pulse/i)).toHaveCount(0);
   await expect(page.getByLabel(/Ticket cut ticker/i)).toBeVisible();
   await page.goto("/inventory", { waitUntil: "domcontentloaded" });
   await hideDevChrome(page);

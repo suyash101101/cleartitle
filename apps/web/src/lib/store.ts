@@ -257,72 +257,43 @@ export const useApp = create<AppState>((set, get) => ({
     }
   },
   runJudgePath: () => {
-  try {
-      const stamps: JudgeStamp[] = [];
+    try {
+      // Film-ready seed — do NOT auto list/buy. Demo must click List @ 100.
       const world = seedDemoNight();
-      stamps.push({
-        step: "01 load",
-        detail: "Nearnight Live · seat #3 pending cut · ada",
-        ok: true,
-      });
-
-      const nonce = listSeat(world, "ada.near", "3", 100);
-      stamps.push({
-        step: "02 list",
-        detail: `Ada lists @ 100 · nonce ${nonce} · LISTED · FREEZE`,
-        ok: true,
-      });
-
-      const preDiligence = runDiligence(world, "3");
-      stamps.push({
-        step: "02b diligence",
-        detail: preDiligence.verdict,
-        ok: preDiligence.verdict === "PROVABLY CLEAN",
-      });
-
-      const { rebounded, txHash } = buySeat(world, "priya.near", "3", 100, nonce);
-      const diligence = runDiligence(world, "3");
-      stamps.push({
-        step: "03 buy",
-        detail: `Priya buys mid-payout · rebound ${rebounded} · ${txHash}`,
-        ok: true,
-      });
-
-      const old = labOldOwnerWithdraw(world, "ada.near", "3");
-      stamps.push({
-        step: "04 attack",
-        detail: `${old.attack}: ${old.reason}`,
-        ok: !old.success,
-      });
-
-      stamps.push({
-        step: "05 prove",
-        detail: "Diligence + /verify claim matrix",
-        ok: diligence.verdict === "PROVABLY CLEAN",
-      });
-
+      const stamps: JudgeStamp[] = [
+        {
+          step: "01 ready",
+          detail: "Seat #3 · ada · pending cut · FREE — List @ 100 is clickable",
+          ok: true,
+        },
+        {
+          step: "02 film",
+          detail: "Diligence → List @ 100 → priya Buy mid-payout → Lab → Verify",
+          ok: true,
+        },
+      ];
       const next = {
         world,
-        actor: "priya.near",
-        diligence,
-        lastLab: old,
+        actor: "ada.near" as const,
+        diligence: null,
+        lastLab: null,
         judgeStamps: stamps,
-        flash: {
-          kind: "lab" as const,
-          text: `Judge path ✓ · old withdraw refused · ${old.reason}`,
-        },
+        flash: flashOk(
+          "Film ready · Seat #3 · ada · pending · FREE. Click List @ 100 on the seat desk.",
+        ),
       };
       set(next);
       writeJudgeState({
         world,
-        diligence,
-        lastLab: old,
+        diligence: null,
+        lastLab: null,
         judgeStamps: stamps,
-        actor: "priya.near",
+        actor: "ada.near",
       });
 
       if (typeof window !== "undefined") {
-        window.sessionStorage.setItem("cleartitle-judge", "1");
+        // "film" = no auto-advance tour; user clicks List @ 100 live
+        window.sessionStorage.setItem("cleartitle-judge", "film");
       }
     } catch (e) {
       set({

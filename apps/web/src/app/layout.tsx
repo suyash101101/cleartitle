@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, Manrope } from "next/font/google";
 import "./globals.css";
+import "./parchment-lock.css";
 import { Nav } from "@/components/Nav";
 import { Flash } from "@/components/Flash";
 import { Providers } from "@/components/Providers";
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+    <html lang="en" data-theme="light" className={`${sans.variable} ${mono.variable}`}>
       <body>
         <Providers>
           <div className="shell x-ads-shell">

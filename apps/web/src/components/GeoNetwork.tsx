@@ -10,15 +10,15 @@ export function GeoNetwork() {
   return (
     <div className="geo-network geo-network-lg" aria-hidden>
       <svg viewBox="0 0 960 420" className="geo-network-svg" preserveAspectRatio="xMidYMid meet">
-        <g className="geo-lines" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.35">
+        <g className="geo-lines" stroke="currentColor" strokeWidth="1" fill="none" opacity="0.28">
           <line x1="32" y1="36" x2="928" y2="36" strokeDasharray="5 7" />
           <line x1="32" y1="384" x2="928" y2="384" strokeDasharray="5 7" />
           <line x1="48" y1="36" x2="48" y2="384" strokeDasharray="4 8" />
           <line x1="912" y1="36" x2="912" y2="384" strokeDasharray="4 8" />
-          <line x1="32" y1="210" x2="120" y2="210" strokeDasharray="4 6" />
-          <line x1="840" y1="210" x2="928" y2="210" strokeDasharray="4 6" />
-          <line x1="320" y1="210" x2="380" y2="210" strokeDasharray="4 6" />
-          <line x1="580" y1="210" x2="640" y2="210" strokeDasharray="4 6" />
+          <line x1="32" y1="210" x2="128" y2="210" strokeDasharray="4 6" />
+          <line x1="832" y1="210" x2="928" y2="210" strokeDasharray="4 6" />
+          <line x1="348" y1="210" x2="370" y2="210" strokeDasharray="4 6" />
+          <line x1="590" y1="210" x2="612" y2="210" strokeDasharray="4 6" />
         </g>
 
         <g className="geo-nodes-layer">
@@ -49,78 +49,80 @@ export function GeoNetwork() {
         </g>
 
         {/* 01 REFUSE */}
-        <g className="geo-card" transform="translate(120,95)">
-          <rect width="200" height="210" rx="2" />
-          <line x1="0" y1="36" x2="200" y2="36" />
-          <text x="16" y="24" className="geo-label">
+        <g className="geo-card" transform="translate(128,88)">
+          <rect width="220" height="224" rx="3" />
+          <line x1="18" y1="40" x2="202" y2="40" />
+          <text x="20" y="26" className="geo-label">
             01 · Refuse
           </text>
-          <text x="18" y="78" className="geo-body">
-            Old owner tries
+          <text x="20" y="72" className="geo-body">
+            Old owner tries to
           </text>
-          <text x="18" y="102" className="geo-body">
-            to withdraw after
+          <text x="20" y="94" className="geo-body">
+            withdraw after the
           </text>
-          <text x="18" y="126" className="geo-body">
-            the seat is sold.
+          <text x="20" y="116" className="geo-body">
+            seat is sold.
           </text>
-          <text x="18" y="168" className="geo-big">
+          <text x="20" y="176" className="geo-big">
             FAIL
           </text>
-          <text x="18" y="196" className="geo-body geo-em">
+          <text x="20" y="204" className="geo-em">
             explorer receipt
           </text>
         </g>
 
-        {/* 02 REBOUND — clear flow, no chart clutter */}
-        <g className="geo-card" transform="translate(380,70)">
-          <rect width="200" height="260" rx="2" />
-          <line x1="0" y1="36" x2="200" y2="36" />
-          <text x="16" y="24" className="geo-label">
+        {/* 02 REBOUND — taller center beat */}
+        <g className="geo-card" transform="translate(370,54)">
+          <rect width="220" height="292" rx="3" />
+          <line x1="18" y1="40" x2="202" y2="40" />
+          <text x="20" y="26" className="geo-label">
             02 · Rebound
           </text>
-          <text x="18" y="72" className="geo-body">
+          <text x="20" y="72" className="geo-body">
             Buy mid-payout
           </text>
-          <text x="18" y="110" className="geo-flow">
-            seller
+          <text x="20" y="112" className="geo-flow">
+            Seller
           </text>
           <path
-            d="M100 118 L100 150"
+            className="geo-arrow-line"
+            d="M32 124 L32 168"
             stroke="currentColor"
-            strokeWidth="1.5"
+            strokeWidth="1.75"
             fill="none"
-            strokeDasharray="3 4"
+            strokeDasharray="3.5 4.5"
+            strokeLinecap="round"
           />
-          <polygon points="100,158 94,146 106,146" fill="currentColor" />
-          <text x="18" y="186" className="geo-flow">
-            buyer
+          <polygon className="geo-arrow-head" points="32,180 25.5,166 38.5,166" fill="currentColor" />
+          <text x="20" y="208" className="geo-flow geo-flow-buyer">
+            Buyer
           </text>
-          <text x="18" y="222" className="geo-big">
+          <text x="20" y="248" className="geo-big">
             CUT
           </text>
-          <text x="18" y="248" className="geo-body geo-em">
+          <text x="20" y="276" className="geo-em">
             pending follows you
           </text>
         </g>
 
         {/* 03 GATE */}
-        <g className="geo-card" transform="translate(640,95)">
-          <rect width="200" height="210" rx="2" />
-          <line x1="0" y1="36" x2="200" y2="36" />
-          <text x="16" y="24" className="geo-label">
+        <g className="geo-card" transform="translate(612,88)">
+          <rect width="220" height="224" rx="3" />
+          <line x1="18" y1="40" x2="202" y2="40" />
+          <text x="20" y="26" className="geo-label">
             03 · Gate
           </text>
-          <text x="18" y="78" className="geo-body">
+          <text x="20" y="72" className="geo-body">
             Six named checks
           </text>
-          <text x="18" y="102" className="geo-body">
+          <text x="20" y="94" className="geo-body">
             before buy unlocks.
           </text>
-          <text x="18" y="160" className="geo-big">
+          <text x="20" y="176" className="geo-big">
             CLEAN
           </text>
-          <text x="18" y="188" className="geo-body geo-em">
+          <text x="20" y="204" className="geo-em">
             or no sale
           </text>
         </g>

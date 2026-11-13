@@ -12,8 +12,8 @@ export function Surface({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[0.5rem] border border-line bg-white/80 backdrop-blur-sm",
-        interactive && "transition-colors hover:border-signal/40",
+        "relative overflow-hidden rounded-[0.65rem] border border-[rgb(60_42_24_/_0.22)] bg-transparent",
+        interactive && "transition-colors hover:border-[rgb(60_42_24_/_0.4)]",
         className,
       )}
     >

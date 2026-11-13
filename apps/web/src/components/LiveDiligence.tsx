@@ -32,28 +32,28 @@ export function LiveDiligence({ tokenId }: { tokenId: string }) {
   }, [tokenId]);
 
   return (
-    <div className="panel" style={{ marginTop: "1.25rem" }}>
-      <h3>Live diligence · Seat #{tokenId}</h3>
+    <div className="live-diligence">
+      <div className="live-diligence-head">
+        <p className="meta">Seat #{tokenId}</p>
+        {data && (
+          <span className={`badge ${data.verdict.includes("CLEAN") ? "ok" : "warn"}`}>{data.verdict}</span>
+        )}
+      </div>
       {loading && <p className="meta">Reading RPC…</p>}
       {err && <p className="meta" style={{ color: "var(--color-warn)" }}>{err}</p>}
       {data && (
-        <>
-          <p style={{ margin: "0.5rem 0 0.75rem" }}>
-            <span className={`badge ${data.verdict.includes("CLEAN") ? "ok" : "warn"}`}>{data.verdict}</span>
-          </p>
-          <ul className="checklist">
-            {data.checks.map((c) => (
-              <li key={c.id}>
-                <span className={c.pass ? "pass" : "fail"}>{c.pass ? "✓" : "✕"}</span>
-                <span>
-                  <strong>{c.label ?? c.id}</strong>
-                  <br />
-                  <span className="meta">{c.detail}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </>
+        <ul className="checklist">
+          {data.checks.map((c) => (
+            <li key={c.id}>
+              <span className={c.pass ? "pass" : "fail"}>{c.pass ? "✓" : "✕"}</span>
+              <span>
+                <strong>{c.label ?? c.id}</strong>
+                <br />
+                <span className="meta">{c.detail}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

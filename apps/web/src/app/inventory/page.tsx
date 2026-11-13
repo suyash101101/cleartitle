@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { SessionBar } from "@/components/SessionBar";
 import { TicketRoll3D } from "@/components/TicketRoll3D";
-import { WedgeBadge } from "@/components/WedgeBadge";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { PageHeader } from "@/components/ui/page-header";
 import { FlaskConical, ShieldCheck, Ticket } from "lucide-react";
@@ -97,7 +96,6 @@ export default function InventoryPage() {
         title="Seat inventory"
         lede="Tear NEP-171 seat deeds from the roll. Cast seats load instantly. Live deeds stream from FastNear."
       />
-      <WedgeBadge />
       <SessionBar />
 
       <BentoGrid className="page-bento">

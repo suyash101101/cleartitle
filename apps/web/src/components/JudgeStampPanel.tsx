@@ -14,10 +14,23 @@ export function JudgeStampPanel() {
   const allOk = stamps.length > 0 && stamps.every((s) => s.ok);
   const [open, setOpen] = useState(false);
 
+  const [mode, setMode] = useState<"off" | "film" | "tour">("off");
+
   useEffect(() => {
-    if (stamps.length === 0) return;
+    if (stamps.length === 0) {
+      setMode("off");
+      return;
+    }
     const flag = window.sessionStorage.getItem("cleartitle-judge");
-    if (flag !== "1") return;
+    if (flag === "film") {
+      setMode("film");
+      return;
+    }
+    if (flag !== "1") {
+      setMode("off");
+      return;
+    }
+    setMode("tour");
     const idx = ROUTE_ORDER.findIndex((p) => pathname === p || pathname.startsWith(`${p}/`));
     if (idx < 0 || idx >= ROUTE_ORDER.length - 1) {
       if (pathname.startsWith("/verify")) {
@@ -31,16 +44,19 @@ export function JudgeStampPanel() {
   }, [stamps.length, pathname, router]);
 
   useEffect(() => {
-    // Expand while a run is incomplete; collapse when every stamp is green
-    setOpen(!allOk);
-  }, [allOk]);
+    // Film mode: keep compact. Tour: expand while incomplete.
+    setOpen(mode === "tour" && !allOk);
+  }, [allOk, mode]);
 
   if (stamps.length === 0) return null;
 
   return (
     <div className={`judge-stamp-panel ${open ? "open" : "compact"}`} role="status">
       <div className="judge-stamp-head">
-        <p className="chapter-kicker">Judge run · {stamps.filter((s) => s.ok).length}/{stamps.length}</p>
+        <p className="chapter-kicker">
+          {mode === "film" ? "Film ready" : "Judge run"} ·{" "}
+          {stamps.filter((s) => s.ok).length}/{stamps.length}
+        </p>
         <button type="button" className="ghost judge-toggle" onClick={() => setOpen((v) => !v)}>
           {open ? "Collapse" : "Expand stamps"}
         </button>
@@ -57,14 +73,32 @@ export function JudgeStampPanel() {
             ))}
           </ol>
           <p className="meta judge-hint">
-            Auto-advancing seat → lab → verify.{" "}
-            <Link href="/lab">Skip to Lab</Link>
+            {mode === "film" ? (
+              <>
+                No auto-advance — click <strong>List @ 100</strong> on the seat.{" "}
+                <Link href="/seat/3">Open Seat #3</Link>
+              </>
+            ) : (
+              <>
+                Auto-advancing seat → lab → verify.{" "}
+                <Link href="/lab">Skip to Lab</Link>
+              </>
+            )}
           </p>
         </>
       ) : (
         <p className="meta judge-compact-line">
-          Mid-payout ✓ · CLEAN ✓ · old withdraw refused ✓ ·{" "}
-          <Link href="/verify">/verify</Link>
+          {mode === "film" ? (
+            <>
+              ada · pending · FREE ·{" "}
+              <Link href="/seat/3">Seat #3 → List @ 100</Link>
+            </>
+          ) : (
+            <>
+              Mid-payout ✓ · CLEAN ✓ · old withdraw refused ✓ ·{" "}
+              <Link href="/verify">/verify</Link>
+            </>
+          )}
         </p>
       )}
     </div>

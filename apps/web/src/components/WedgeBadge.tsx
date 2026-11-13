@@ -1,9 +1,4 @@
-/** Compact wedge line for judges skimming any route. */
+/** Removed from UI — wedge messaging lives in copy, not a repeated badge. */
 export function WedgeBadge() {
-  return (
-    <p className="wedge-badge" aria-label="QuitClaim wedge">
-      <span className="badge ok">WEDGE</span>
-      earning seat · mid-payout rebound · TitleScore · claim clock ∞
-    </p>
-  );
+  return null;
 }

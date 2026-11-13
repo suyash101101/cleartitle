@@ -7,7 +7,6 @@ import { JudgeCheatSheet } from "@/components/JudgeCheatSheet";
 import { JudgeStampPanel } from "@/components/JudgeStampPanel";
 import { NinetySecondPath } from "@/components/NinetySecondPath";
 import { TicketRoll3D } from "@/components/TicketRoll3D";
-import { WedgeBadge } from "@/components/WedgeBadge";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
 
@@ -30,7 +29,6 @@ export default function ConsolePage() {
         title="Club Console"
         lede="Organizer controls for Nearnight Live: BPS, mint, pause, treasury."
       />
-      <WedgeBadge />
       <div className="console-cast">
         <ActorBar />
       </div>
@@ -43,7 +41,7 @@ export default function ConsolePage() {
             router.push("/seat/3");
           }}
         >
-          Judge Run
+          Film ready · Seat #3
         </button>
         <button type="button" onClick={bootstrapClub}>
           Create club + mint 5 seats
@@ -65,7 +63,7 @@ export default function ConsolePage() {
       <div className="panel" style={{ marginBottom: "1.5rem" }}>
         <h3>Judge path · manual</h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          90 seconds. Live testnet proofs plus scenario engine for mid-payout.
+          Film path: seed leaves Seat #3 FREE for Ada — you click List @ 100 and Buy live.
         </p>
         <ol className="seat-timeline">
           <li className="hot">
