@@ -27,6 +27,35 @@ export default function ConsolePage() {
         </button>
       </div>
 
+      <div className="panel" style={{ marginBottom: "1.5rem" }}>
+        <h3>Film cue card</h3>
+        <p className="meta" style={{ marginBottom: "0.85rem" }}>
+          90-second judge path — say the line, click the action.
+        </p>
+        <ol className="seat-timeline">
+          <li className="hot">
+            <span className="seat-timeline-kind">01 load</span>
+            <span className="seat-timeline-body">Load demo night → Seat #3 · ada · pending cut</span>
+          </li>
+          <li className="hot">
+            <span className="seat-timeline-kind">02 list</span>
+            <span className="seat-timeline-body">Ada lists @ 100 · FREEZE · Run diligence → PROVABLY CLEAN</span>
+          </li>
+          <li className="hot">
+            <span className="seat-timeline-kind">03 buy</span>
+            <span className="seat-timeline-body">Priya buys mid-payout → REBOUND_TO_BUYER · epoch bump</span>
+          </li>
+          <li className="hot">
+            <span className="seat-timeline-kind">04 attack</span>
+            <span className="seat-timeline-body">Lab → old owner withdraw → EXPECTED FAIL + explorer</span>
+          </li>
+          <li>
+            <span className="seat-timeline-kind">05 prove</span>
+            <span className="seat-timeline-body">/verify threat model + claim ↔ tx matrix</span>
+          </li>
+        </ol>
+      </div>
+
       {club && (
         <div className="grid-2">
           <div className="panel">

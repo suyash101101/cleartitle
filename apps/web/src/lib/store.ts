@@ -59,6 +59,7 @@ export const useApp = create<AppState>((set, get) => ({
   resetDemo: () =>
     set({
       world: seedDemoNight(),
+      actor: "ada.near",
       diligence: null,
       lastLab: null,
       lastSplit: null,
