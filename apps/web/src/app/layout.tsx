@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, IBM_Plex_Mono, Karla } from "next/font/google";
+import { IBM_Plex_Mono, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Flash } from "@/components/Flash";
 import { Providers } from "@/components/Providers";
 
-const sans = Karla({
+const sans = Schibsted_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const brand = Bricolage_Grotesque({
+const brand = Schibsted_Grotesk({
   subsets: ["latin"],
   variable: "--font-brand",
   display: "swap",
