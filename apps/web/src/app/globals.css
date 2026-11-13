@@ -69,8 +69,8 @@ h3,
   z-index: 1;
   margin: 0 auto;
   width: 100%;
-  max-width: 1480px;
-  padding: 0 clamp(0.5rem, 1.8vw, 1.1rem) 6.5rem;
+  max-width: none;
+  padding: 0 clamp(0.85rem, 3.5vw, 2.25rem) 7.75rem;
   overflow: visible;
 }
 
@@ -453,10 +453,15 @@ table.verify th {
   align-items: center;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 720px) {
   .near-hero-grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
-    gap: 2.5rem;
+    grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.9fr);
+    gap: 2rem;
+    align-items: start;
+  }
+  .hero-stage {
+    margin: 0;
+    justify-self: end;
   }
 }
 
@@ -558,7 +563,8 @@ table.verify th {
 }
 
 .mishap-rail {
-  padding: 1.25rem 0 0.5rem;
+  padding: 1.25rem 0 1.75rem;
+  margin-bottom: 0.5rem;
 }
 .mishap-list {
   list-style: none;
