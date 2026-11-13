@@ -74,7 +74,9 @@ export default function LabPage() {
             {lastLab ? (
               <>
                 <p>
-                  <span className="badge ok">EXPECTED FAIL</span>
+                  <span className={`badge ${lastLab.reason.startsWith("UNEXPECTED") ? "warn" : "ok"}`}>
+                    {lastLab.reason.startsWith("UNEXPECTED") ? "UNEXPECTED SUCCESS" : "EXPECTED FAIL"}
+                  </span>
                 </p>
                 <p style={{ marginTop: "0.75rem" }}>
                   <strong>{lastLab.attack}</strong>
@@ -82,7 +84,7 @@ export default function LabPage() {
                 <p className="meta">{lastLab.reason}</p>
               </>
             ) : (
-              <p className="meta">No local attack run yet.</p>
+              <p className="meta">No local attack run yet. One-click buttons arm the threat first.</p>
             )}
           </div>
         </div>
