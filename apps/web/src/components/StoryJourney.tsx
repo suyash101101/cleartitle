@@ -5,7 +5,6 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { HomeActions } from "@/components/HomeActions";
 import { TestnetPanel } from "@/components/TestnetPanel";
-import { TiltCard } from "@/components/TiltCard";
 import {
   DiligenceStampCard,
   FailSlipCard,
@@ -140,7 +139,7 @@ export function StoryJourney() {
             </Link>
           </Reveal>
           <Reveal className="chapter-asset" delay={0.1}>
-            <TiltCard maxTilt={9}>{c.asset}</TiltCard>
+            {c.asset}
           </Reveal>
         </section>
       ))}
