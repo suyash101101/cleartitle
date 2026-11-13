@@ -37,32 +37,34 @@ export default function InventoryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
-      try {
-        const ids = ["1", "2", "3", "4", "5"];
-        const loaded: SeatView[] = [];
-        for (const token_id of ids) {
-          try {
-            const s = await viewMethod<SeatView | null>("get_seat", { token_id });
-            if (s) loaded.push({ ...s, token_id: s.token_id ?? token_id });
-          } catch {
-            /* skip missing */
-          }
+    let alive = true;
+    setLoading(true);
+    setErr(null);
+    const ids = ["1", "2", "3", "4", "5"];
+    void Promise.all(
+      ids.map(async (token_id) => {
+        try {
+          const s = await viewMethod<SeatView | null>("get_seat", { token_id });
+          return s ? { ...s, token_id: s.token_id ?? token_id } : null;
+        } catch {
+          return null;
         }
-        if (!cancelled) {
-          setLive(loaded);
-          if (loaded.length === 0) setErr("No seats returned from RPC");
-        }
-      } catch (e) {
-        if (!cancelled) setErr(e instanceof Error ? e.message : String(e));
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
+      }),
+    )
+      .then((rows) => {
+        const loaded = rows.filter((s): s is SeatView => Boolean(s));
+        if (!alive) return;
+        setLive(loaded);
+        if (loaded.length === 0) setErr("No seats returned from RPC");
+        setLoading(false);
+      })
+      .catch((e) => {
+        if (!alive) return;
+        setErr(e instanceof Error ? e.message : String(e));
+        setLoading(false);
+      });
     return () => {
-      cancelled = true;
+      alive = false;
     };
   }, []);
 
