@@ -36,13 +36,9 @@ On-chain title insurance for memberships that earn. Demo world: **Nearnight Live
 
 ## Architecture
 
-![QuitClaim system architecture](docs/diagrams/fossflow-architecture.png)
+Diagram PNGs are built in FossFLOW (architecture + userflow) and Excalidraw (claims). Sources live in [`docs/diagrams/`](docs/diagrams/). Export screenshots into that folder as `architecture.png`, `userflow.png`, and `quitclaim-claims.png` after the editors look right.
 
-![QuitClaim user flow](docs/diagrams/fossflow-userflow.png)
-
-![QuitClaim claims](docs/diagrams/quitclaim-claims.png)
-
-Editable sources: [`docs/diagrams/fossflow-architecture.json`](docs/diagrams/fossflow-architecture.json) (FossFLOW compact), [`docs/diagrams/fossflow-userflow.json`](docs/diagrams/fossflow-userflow.json), [`docs/diagrams/quitclaim-claims.excalidraw`](docs/diagrams/quitclaim-claims.excalidraw).
+<!-- PNGs: architecture.png · userflow.png · quitclaim-claims.png (tool exports only, not generative fills) -->
 
 ```
 Wallet (near-connect)
@@ -52,6 +48,8 @@ Wallet (near-connect)
   → Chain Signatures derive (BTC/SOL tip continuity)
   → Explorer receipts (evidence.ts)
 ```
+
+Editable sources: [`docs/diagrams/fossflow-architecture.json`](docs/diagrams/fossflow-architecture.json), [`docs/diagrams/fossflow-userflow.json`](docs/diagrams/fossflow-userflow.json), [`docs/diagrams/quitclaim-claims.excalidraw`](docs/diagrams/quitclaim-claims.excalidraw).
 
 ## Why QuitClaim
 
