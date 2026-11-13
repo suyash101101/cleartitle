@@ -28,6 +28,13 @@ test("transfer lab expected fail @smoke", async ({ page }) => {
   await expect(page.getByText(/EXPECTED FAIL|not current owner|Lab/i).first()).toBeVisible();
 });
 
+test("lab mid-payout scenario @smoke", async ({ page }) => {
+  await page.goto("/lab");
+  await page.getByRole("button", { name: /Run mid-payout scenario/i }).click();
+  await expect(page.getByText(/Mid-payout OK|rebound/i).first()).toBeVisible();
+  await expect(page.getByText(/priya\.near/).first()).toBeVisible();
+});
+
 test("member room locked @smoke", async ({ page }) => {
   await page.goto("/console");
   await page.getByRole("button", { name: /Load demo night/i }).click();

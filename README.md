@@ -9,7 +9,7 @@ On-chain **title insurance** for memberships that earn. Demo world: **Nearnight 
 | Track | `nfts` |
 | Stack | NEAR · Rust contract · TypeScript SDK · Next.js |
 | Repo | https://github.com/suyash101101/cleartitle |
-| Live | https://web-khaki-iota-17.vercel.app (also `web-suyash-nahars-projects.vercel.app`) |
+| Live | https://web-khaki-iota-17.vercel.app |
 
 ## Quick start
 
