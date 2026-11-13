@@ -24,7 +24,7 @@ test("transfer lab expected fail @smoke", async ({ page }) => {
   await page.goto("/console");
   await page.getByRole("button", { name: /Load live night/i }).click();
   await page.goto("/lab");
-  await page.getByRole("button", { name: /Old owner withdraw/i }).click();
+  await page.getByRole("button", { name: /Seller recall withdraw|Old owner withdraw/i }).click();
   await expect(page.getByText(/EXPECTED FAIL|not current owner|Lab/i).first()).toBeVisible();
 });
 

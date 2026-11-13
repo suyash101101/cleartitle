@@ -54,7 +54,7 @@ export default function LabPage() {
                 Run mid-payout scenario
               </button>
               <button type="button" className="danger" onClick={() => runLab("old", "3")}>
-                Old owner withdraw
+                Seller recall withdraw
               </button>
               <button type="button" className="danger" onClick={() => runLab("listed", "3")}>
                 Listed withdraw
