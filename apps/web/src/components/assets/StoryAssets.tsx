@@ -40,7 +40,6 @@ export function NightTicketCard() {
         </ul>
         <p className="asset-line mute">ft_transfer_call → ticket_cut events</p>
       </div>
-      <div className="ticket-notch" aria-hidden />
     </div>
   );
 }

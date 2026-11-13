@@ -15,7 +15,7 @@ export function HomeActions() {
           window.location.assign("/seat/3");
         }}
       >
-        Start demo night
+        Open Seat #3 live
       </button>
       <button
         type="button"
@@ -25,10 +25,10 @@ export function HomeActions() {
           window.location.assign("/lab");
         }}
       >
-        Play mid-payout attack
+        Mid-payout attack
       </button>
       <Link className="btn ghost" href="/verify">
-        /verify
+        Proof matrix
       </Link>
     </div>
   );

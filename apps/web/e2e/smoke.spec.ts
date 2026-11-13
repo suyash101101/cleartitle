@@ -8,7 +8,7 @@ test("home brand @smoke", async ({ page }) => {
 
 test("demo night mid-payout journey @smoke", async ({ page }) => {
   await page.goto("/console");
-  await page.getByRole("button", { name: /Load demo night/i }).click();
+  await page.getByRole("button", { name: /Load live night/i }).click();
   await page.goto("/seat/3");
   await expect(page.getByText(/0 keys/i).first()).toBeVisible();
   await page.getByRole("button", { name: /^ada\.near$/ }).click();
@@ -22,7 +22,7 @@ test("demo night mid-payout journey @smoke", async ({ page }) => {
 
 test("transfer lab expected fail @smoke", async ({ page }) => {
   await page.goto("/console");
-  await page.getByRole("button", { name: /Load demo night/i }).click();
+  await page.getByRole("button", { name: /Load live night/i }).click();
   await page.goto("/lab");
   await page.getByRole("button", { name: /Old owner withdraw/i }).click();
   await expect(page.getByText(/EXPECTED FAIL|not current owner|Lab/i).first()).toBeVisible();
@@ -37,7 +37,7 @@ test("lab mid-payout scenario @smoke", async ({ page }) => {
 
 test("member room locked @smoke", async ({ page }) => {
   await page.goto("/console");
-  await page.getByRole("button", { name: /Load demo night/i }).click();
+  await page.getByRole("button", { name: /Load live night/i }).click();
   await page.goto("/member/3");
   await page.getByRole("button", { name: /^fan\.near$/ }).click();
   await expect(page.getByText(/LOCKED/i)).toBeVisible();

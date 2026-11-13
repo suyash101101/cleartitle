@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ActorBar } from "@/components/ActorBar";
 import { ChainSigPanel } from "@/components/ChainSigPanel";
 import { SeatCharter } from "@/components/SeatCharter";
-import { WalletBar } from "@/components/WalletBar";
+import { SessionBar } from "@/components/SessionBar";
 import { useApp } from "@/lib/store";
 
 export default function SeatPage() {
@@ -44,8 +43,7 @@ export default function SeatPage() {
       <p className="lede">
         {seat.vaultAccountId} · owner {seat.owner} · epoch {seat.keyEpoch}
       </p>
-      <WalletBar />
-      <ActorBar />
+      <SessionBar />
 
       <div style={{ marginBottom: "1.25rem" }}>
         <SeatCharter seat={seat} />

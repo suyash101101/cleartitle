@@ -1,7 +1,6 @@
 "use client";
 
-import { ActorBar } from "@/components/ActorBar";
-import { WalletBar } from "@/components/WalletBar";
+import { SessionBar } from "@/components/SessionBar";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
 import { LAB_ATTACKS, txUrl } from "@/lib/evidence";
@@ -17,10 +16,9 @@ export default function LabPage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="Transfer Lab"
-        lede="Real testnet failures with explorer receipts — plus local scenario runner for the filmed mid-payout."
+        lede="Live explorer receipts for seller-recall, listed drain, and held-sig. Local film engine arms the same threats in one click."
       />
-      <WalletBar />
-      <ActorBar />
+      <SessionBar />
 
       <div className="panel" style={{ marginBottom: "1.25rem" }}>
         <h3>On-chain attack receipts</h3>

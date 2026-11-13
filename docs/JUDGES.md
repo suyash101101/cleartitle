@@ -1,6 +1,6 @@
 # Judges — ClearTitle
 
-**One-liner:** Sell the seat. Keep nothing. Ticket money follows clear title.
+**One-liner:** Sell the seat. Keep nothing. Pending ticket money follows clear title on NEAR.
 
 **Live:** https://web-khaki-iota-17.vercel.app  
 **Repo:** https://github.com/suyash101101/cleartitle
@@ -8,7 +8,7 @@
 ## What to click (3 minutes)
 
 1. **Home** — brand + problem.  
-2. **Console → Load demo night** — Nearnight Live seeded with Seat #3 pending.  
+2. **Club → Load live night** — Nearnight Live seeded with Seat #3 pending.  
 3. **Box Office → Buy ticket** — live BPS split animation.  
 4. **Seat #3** — 0 keys · continuity BTC/SOL · Diligence **PROVABLY CLEAN**.  
 5. Act as **ada** → List @ 100 → act as **priya** → **Buy mid-payout**.  

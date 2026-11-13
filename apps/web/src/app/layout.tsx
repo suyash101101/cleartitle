@@ -25,9 +25,9 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ClearTitle — Sell the seat. Keep nothing.",
+  title: "ClearTitle | Sell the seat. Keep nothing.",
   description:
-    "Title insurance for ticket-earning membership NFTs on NEAR. Ticket money follows clear title.",
+    "Title insurance for ticket-earning seat NFTs on NEAR. Pending cuts follow the buyer. Live testnet proofs.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

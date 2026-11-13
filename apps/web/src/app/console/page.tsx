@@ -33,14 +33,14 @@ export default function ConsolePage() {
             router.push("/seat/3");
           }}
         >
-          Load demo night
+          Load live night
         </button>
       </div>
 
       <div className="panel" style={{ marginBottom: "1.5rem" }}>
-        <h3>Film cue card</h3>
+        <h3>Judge path</h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          90-second judge path — say the line, click the action.
+          90 seconds. Live testnet proofs plus the film engine for mid-payout.
         </p>
         <ol className="seat-timeline">
           <li className="hot">

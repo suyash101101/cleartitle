@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { ActorBar } from "@/components/ActorBar";
+import { SessionBar } from "@/components/SessionBar";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
 
@@ -31,7 +31,7 @@ export default function MemberRoomPage() {
         title={`Member Room · Seat #${id}`}
         lede="Gated by RPC ownership — switch actor to unlock."
       />
-      <ActorBar />
+      <SessionBar />
       {locked ? (
         <div className="panel">
           <span className="badge warn">LOCKED</span>

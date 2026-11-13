@@ -63,7 +63,7 @@ export const useApp = create<AppState>((set, get) => ({
       diligence: null,
       lastLab: null,
       lastSplit: null,
-      flash: flashOk("Nearnight Live reset — seat #3 pending, ready for mid-payout."),
+      flash: flashOk("Nearnight Live loaded. Seat #3 pending. Ready for mid-payout."),
     }),
   bootstrapClub: () => {
     try {
