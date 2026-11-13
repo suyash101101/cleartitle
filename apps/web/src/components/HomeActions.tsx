@@ -6,6 +6,7 @@ import { useApp } from "@/lib/store";
 
 export function HomeActions() {
   const resetDemo = useApp((s) => s.resetDemo);
+  const runMidPayoutScenario = useApp((s) => s.runMidPayoutScenario);
   const router = useRouter();
   return (
     <div className="cta-row">
@@ -18,8 +19,18 @@ export function HomeActions() {
       >
         Start demo night
       </button>
+      <button
+        type="button"
+        className="ghost"
+        onClick={() => {
+          runMidPayoutScenario();
+          router.push("/lab");
+        }}
+      >
+        Play mid-payout attack
+      </button>
       <Link className="btn ghost" href="/verify">
-        /verify proofs
+        /verify
       </Link>
     </div>
   );

@@ -24,14 +24,14 @@ function Reveal({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-12% 0px" });
+  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   return (
     <motion.div
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -44,18 +44,25 @@ function HeroVisual() {
     target: ref,
     offset: ["start end", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [40, -60]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [-6, 8]);
+  const y = useTransform(scrollYProgress, [0, 1], [16, -24]);
 
   return (
-    <motion.div ref={ref} className="hero-visual" style={{ y, rotate }}>
-      <TiltCard className="hero-visual-card">
-        <SeatDeedCard />
-      </TiltCard>
-      <div className="hero-visual-float">
-        <TiltCard>
+    <motion.div ref={ref} className="hero-stage" style={{ y }}>
+      <div className="hero-stage-glow" aria-hidden />
+      <div className="hero-stage-primary">
+        <TiltCard className="hero-visual-card" maxTilt={8}>
+          <SeatDeedCard />
+        </TiltCard>
+      </div>
+      <div className="hero-stage-ticket">
+        <TiltCard maxTilt={10}>
           <NightTicketCard />
         </TiltCard>
+      </div>
+      <div className="hero-stage-stamp" aria-hidden>
+        <span>0 keys</span>
+        <span>mid-payout</span>
+        <span>CLEAN</span>
       </div>
     </motion.div>
   );
@@ -125,14 +132,7 @@ export function StoryJourney() {
             Sell the seat. Keep nothing. Ticket money follows clear title — scroll the night.
           </p>
           <HomeActions />
-          <div className="cta-row" style={{ marginTop: "0.75rem" }}>
-            <Link className="btn ghost" href="#ticket">
-              Enter the story
-            </Link>
-            <Link className="btn ghost" href="/lab">
-              Transfer Lab
-            </Link>
-          </div>
+          <p className="hero-hint">Scroll · ticket → vault → mid-payout → lab → CLEAN</p>
         </div>
         <HeroVisual />
       </section>
@@ -145,9 +145,9 @@ export function StoryJourney() {
         ))}
       </nav>
 
-      {CHAPTERS.map((c, i) => (
+      {CHAPTERS.map((c) => (
         <section key={c.id} id={c.id} className={`chapter-row ${c.reverse ? "reverse" : ""}`}>
-          <Reveal className="chapter-copy" delay={0.05}>
+          <Reveal className="chapter-copy" delay={0.04}>
             <p className="chapter-kicker">{c.kicker}</p>
             <h2>{c.title}</h2>
             <p>{c.body}</p>
@@ -155,8 +155,8 @@ export function StoryJourney() {
               {c.cta}
             </Link>
           </Reveal>
-          <Reveal className="chapter-asset" delay={0.12}>
-            <TiltCard>{c.asset}</TiltCard>
+          <Reveal className="chapter-asset" delay={0.1}>
+            <TiltCard maxTilt={9}>{c.asset}</TiltCard>
           </Reveal>
         </section>
       ))}
