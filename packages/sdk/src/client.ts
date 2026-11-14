@@ -191,5 +191,3 @@ export function clientFromEnv(
 
 /** @deprecated Use QuitClaimClient */
 export const ClearTitleClient = QuitClaimClient;
-/** @deprecated Use QuitClaimConfig */
-export type ClearTitleConfig = QuitClaimConfig;
