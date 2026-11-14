@@ -19,20 +19,27 @@ import {
   encodeDelistSeat,
   encodeListSeat,
   encodeMintSeats,
+  encodeOfferLease,
   encodeSetPaused,
+  encodeSettleLease,
+  encodeTakeLease,
   seatBuyNonce,
   toNearViewConfig,
   viewClub,
   viewClubIds,
   viewDiligence,
+  viewLease,
   viewSeat,
   viewSeats,
   type ChainClubView,
   type ChainDiligenceView,
+  type ChainLeaseView,
   type ChainSeatView,
   type FunctionCallEncoding,
   type NearViewConfig,
 } from "./near";
+import { assertCleanChainToBuy } from "./policy";
+import { quoteTicketIntentDry, type IntentTicketDryQuote } from "./intents";
 
 export class QuitClaimClient {
   readonly contractId: string;
@@ -159,12 +166,69 @@ export class QuitClaimClient {
     return encodeBuySeat(tokenId, syncNonce, ask, clubId ?? this.clubId);
   }
 
+  /**
+   * Policy gate: view diligence + seat, refuse encode unless PROVABLY CLEAN.
+   * This is the product buy gate for third-party venues.
+   */
+  async encodeBuySeatIfClean(
+    tokenId: string,
+    syncNonce: number,
+    ask: string | number | bigint,
+    clubId?: string,
+  ): Promise<FunctionCallEncoding> {
+    const id = clubId ?? this.clubId;
+    const [seat, diligence] = await Promise.all([
+      this.getSeat(tokenId, id),
+      this.diligence(tokenId, id),
+    ]);
+    assertCleanChainToBuy(seat, diligence);
+    return encodeBuySeat(tokenId, syncNonce, ask, id);
+  }
+
   encodeClaimPayout(
     tokenId: string,
     amount: string | number | bigint,
     clubId?: string,
   ): FunctionCallEncoding {
     return encodeClaimPayout(tokenId, amount, clubId ?? this.clubId);
+  }
+
+  encodeOfferLease(
+    tokenId: string,
+    ask: string | number | bigint,
+    durationMs: number,
+    clubId?: string,
+  ): FunctionCallEncoding {
+    return encodeOfferLease(tokenId, ask, durationMs, clubId ?? this.clubId);
+  }
+
+  encodeTakeLease(
+    tokenId: string,
+    syncNonce: number,
+    ask: string | number | bigint,
+    clubId?: string,
+  ): FunctionCallEncoding {
+    return encodeTakeLease(tokenId, syncNonce, ask, clubId ?? this.clubId);
+  }
+
+  encodeSettleLease(tokenId: string, clubId?: string): FunctionCallEncoding {
+    return encodeSettleLease(tokenId, clubId ?? this.clubId);
+  }
+
+  getLease(tokenId: string, clubId?: string): Promise<ChainLeaseView | null> {
+    return viewLease(tokenId, this.cfg(clubId));
+  }
+
+  /** dry:true Intents ticket quote — no funds move. */
+  async quoteTicketIntentDry(clubId?: string): Promise<IntentTicketDryQuote> {
+    const id = clubId ?? this.clubId;
+    if (!id) throw new Error("clubId required for intent quote");
+    const price = await this.ticketDeposit(id);
+    return quoteTicketIntentDry({
+      clubId: id,
+      ticketPriceYocto: price,
+      contractId: this.contractId,
+    });
   }
 }
 

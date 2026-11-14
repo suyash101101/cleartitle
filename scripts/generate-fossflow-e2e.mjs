@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * QuitClaim E2E FossFLOW:
+ * CleanDeed E2E FossFLOW:
  * clustered islands (gaps between colors), every node ≥1 edge,
  * essential story edges, short labels, FossFLOW PNG export.
  */
@@ -254,7 +254,8 @@ const COLORS = [
  * Gaps between different colors so islands never touch.
  */
 const RECTS = [
-  { id: "r_brand", color: "c_brand", from: { x: -1, y: -12 }, to: { x: 8, y: -7 } },
+  // Full-width brand banner so CleanDeed sits mid-board (not left-rail).
+  { id: "r_brand", color: "c_brand", from: { x: -1, y: -12 }, to: { x: 17, y: -7 } },
   { id: "r_people", color: "c_people", from: { x: -1, y: -5 }, to: { x: 15, y: -3 } },
   { id: "r_ui", color: "c_ui", from: { x: -1, y: -2 }, to: { x: 17, y: 2 } },
   { id: "r_story", color: "c_story", from: { x: -1, y: 3 }, to: { x: 10, y: 7 } },
@@ -263,26 +264,26 @@ const RECTS = [
 ];
 
 /**
- * QuitClaim beside stack (less empty left margin).
+ * CleanDeed title centered on the full-width brand strip.
  * Block labels only in empty corners — never on node coords.
  */
 const TEXT = [
   {
     id: "t_title",
-    tile: { x: -4, y: 10 },
-    content: "QuitClaim",
-    fontSize: 1.7,
-    orientation: "Y",
+    tile: { x: 8.0, y: -10.4 },
+    content: "CleanDeed",
+    fontSize: 1.65,
+    orientation: "X",
   },
   {
     id: "t_sub",
-    tile: { x: -2, y: 10 },
+    tile: { x: 8.0, y: -8.8 },
     content: "mid-payout title insurance on NEAR",
     fontSize: 0.42,
-    orientation: "Y",
+    orientation: "X",
   },
   // empty corners (no node at these tiles)
-  { id: "t_brand", tile: { x: 7.2, y: -11.5 }, content: "NEAR", fontSize: 0.38, orientation: "X" },
+  { id: "t_brand", tile: { x: 8.0, y: -11.5 }, content: "NEAR", fontSize: 0.38, orientation: "X" },
   { id: "t_people", tile: { x: 13.5, y: -4.5 }, content: "People", fontSize: 0.38, orientation: "X" },
   { id: "t_ui", tile: { x: 13.5, y: 1.3 }, content: "Live UI", fontSize: 0.38, orientation: "X" },
   { id: "t_story", tile: { x: 9.2, y: 3.4 }, content: "Story", fontSize: 0.38, orientation: "X" },
@@ -378,10 +379,10 @@ if (POS.length !== NODES.length) {
 }
 
 const model = {
-  title: "QuitClaim E2E mid-payout title insurance",
+  title: "CleanDeed E2E mid-payout title insurance",
   version: "1.0",
   description:
-    "Clustered QuitClaim E2E: every node linked, island gaps, essential edges",
+    "Clustered CleanDeed E2E: every node linked, island gaps, essential edges",
   icons: [...stockIcons, ...importedIcons],
   colors: COLORS,
   items,

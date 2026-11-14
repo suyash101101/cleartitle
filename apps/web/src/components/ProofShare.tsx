@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-/** One-click judge packet — shareable QuitClaim wedge. */
+/** One-click judge packet — shareable CleanDeed wedge. */
 export function ProofShare({
   seatId = "3",
   verdict = "PROVABLY CLEAN",
@@ -13,7 +13,7 @@ export function ProofShare({
 }) {
   const [copied, setCopied] = useState(false);
   const packet = [
-    `QuitClaim · Seat #${seatId}`,
+    `CleanDeed · Seat #${seatId}`,
     `verdict · ${verdict}`,
     `wedge · mid-payout rebound · 0 keys · claim clock ∞`,
     `prove · /title/${seatId} · /lab · /verify`,

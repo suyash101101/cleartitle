@@ -12,7 +12,7 @@ export function SubAccountWedge() {
           <p className="meta">Mint · earn · transfer. Most demos stop at “owner flipped.”</p>
         </div>
         <div className="ours">
-          <p className="meta">QuitClaim</p>
+          <p className="meta">CleanDeed</p>
           <strong>Title insurance on transfer</strong>
           <p className="meta">
             Mid-payout rebound · 0 keys · held-sig freeze · CLEAN gate · Lab EXPECTED FAIL with

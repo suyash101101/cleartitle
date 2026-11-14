@@ -10,7 +10,7 @@ export function ClaimClock() {
           <p>Claim window. Then money releases. Door fee only.</p>
         </div>
         <div className="claim-clock-col ours">
-          <p className="meta">QuitClaim</p>
+          <p className="meta">CleanDeed</p>
           <strong className="claim-clock-time forever">∞</strong>
           <p>Title stays clear on every future cut. Pending rebounds. No expiry.</p>
         </div>

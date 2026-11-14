@@ -13,9 +13,12 @@
     "evidence": "node scripts/evidence.mjs",
     "evidence:refresh": "node scripts/refresh-onchain-evidence.mjs",
     "demo:night": "node scripts/demo-night.mjs",
+    "heist": "node scripts/heist.mjs",
+    "heist:live": "node scripts/heist-live.mjs",
     "test:hostile": "node scripts/hostile-mid-payout.mjs",
+    "verify:hostile": "node scripts/heist.mjs && node scripts/heist-live.mjs",
     "sync:sdk": "bash scripts/sync-sdk.sh",
-    "verify:all": "pnpm test:unit && pnpm evidence && pnpm sync:sdk && pnpm build"
+    "verify:all": "pnpm test:unit && pnpm heist && pnpm heist:live && pnpm evidence && pnpm sync:sdk && pnpm build"
   },
   "devDependencies": {
     "tsx": "^4.19.3"

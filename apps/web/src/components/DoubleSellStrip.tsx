@@ -8,7 +8,7 @@ export function DoubleSellStrip() {
       <h3>Share-links got recalled after the money moved.</h3>
       <p className="meta">
         Oct 2024 Ticketek · Coldplay on Tixel — seller double-sold, buyer refunded, night lost.
-        QuitClaim: old owner withdraw is EXPECTED FAIL with explorer receipts.
+        CleanDeed: old owner withdraw is EXPECTED FAIL with explorer receipts.
       </p>
       <div className="double-sell-ctas">
         <Link className="pin-link" href="/lab">

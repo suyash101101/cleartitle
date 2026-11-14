@@ -12,7 +12,7 @@ export function WarrantyStrip() {
           <p className="meta">Checks dupes and fair price — then mints an entry cert.</p>
         </div>
         <div className="ours">
-          <p className="meta">What QuitClaim warrants</p>
+          <p className="meta">What CleanDeed warrants</p>
           <strong>Earning title is clean</strong>
           <p className="meta">0 keys · pending follows you · tip continuity · Lab refuses seller recall.</p>
         </div>

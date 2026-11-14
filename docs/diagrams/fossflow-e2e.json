@@ -1,7 +1,7 @@
 {
-  "title": "QuitClaim E2E mid-payout title insurance",
+  "title": "CleanDeed E2E mid-payout title insurance",
   "version": "1.0",
-  "description": "Clustered QuitClaim E2E: every node linked, island gaps, essential edges",
+  "description": "Clustered CleanDeed E2E: every node linked, island gaps, essential edges",
   "icons": [
     {
       "id": "user",
@@ -1561,7 +1561,7 @@
             "y": -12
           },
           "to": {
-            "x": 8,
+            "x": 17,
             "y": -7
           }
         },
@@ -1630,27 +1630,27 @@
         {
           "id": "t_title",
           "tile": {
-            "x": -4,
-            "y": 10
+            "x": 8,
+            "y": -10.4
           },
-          "content": "QuitClaim",
-          "fontSize": 1.7,
-          "orientation": "Y"
+          "content": "CleanDeed",
+          "fontSize": 1.65,
+          "orientation": "X"
         },
         {
           "id": "t_sub",
           "tile": {
-            "x": -2,
-            "y": 10
+            "x": 8,
+            "y": -8.8
           },
           "content": "mid-payout title insurance on NEAR",
           "fontSize": 0.42,
-          "orientation": "Y"
+          "orientation": "X"
         },
         {
           "id": "t_brand",
           "tile": {
-            "x": 7.2,
+            "x": 8,
             "y": -11.5
           },
           "content": "NEAR",

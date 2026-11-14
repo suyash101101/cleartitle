@@ -55,9 +55,23 @@ export interface Seat {
   accessKeyCount: number;
   openRawSigs: number;
   washFlagged: boolean;
+  /** Active seat-cut renter, or null when free / offer-only. */
+  lessee: string | null;
+  /** Lease or offer expiry (unix ms). 0 = none. */
+  leaseExpiresMs: number;
+  leaseAsk: number | null;
+  leaseNonce: number;
   holderHistory: { owner: string; from: number; to: number | null }[];
   ledger: { at: number; kind: string; amount: number; note: string }[];
 }
+
+export type LeaseOffer = {
+  tokenId: string;
+  ask: number;
+  expiresMs: number;
+  nonce: number;
+  lessee: string | null;
+};
 
 export interface TicketEvent {
   at: number;

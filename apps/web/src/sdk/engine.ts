@@ -59,6 +59,13 @@ export function hydrateWorld(world: WorldState): WorldState {
   for (const club of Object.values(world.clubs)) {
     if (!world.club) world.club = club;
   }
+  // Backfill lease fields for worlds persisted before seat-cut lease shipped.
+  for (const seat of Object.values(world.seats)) {
+    if (seat.lessee === undefined) seat.lessee = null;
+    if (seat.leaseExpiresMs === undefined) seat.leaseExpiresMs = 0;
+    if (seat.leaseAsk === undefined) seat.leaseAsk = null;
+    if (seat.leaseNonce === undefined) seat.leaseNonce = 0;
+  }
   const active = world.club?.clubId;
   if (!active) return world;
   for (const seat of seatsForClub(world, active)) {
@@ -211,6 +218,10 @@ export function mintSeats(world: WorldState, owner: string, clubId?: string): Se
       accessKeyCount: 0,
       openRawSigs: 0,
       washFlagged: false,
+      lessee: null,
+      leaseExpiresMs: 0,
+      leaseAsk: null,
+      leaseNonce: 0,
       holderHistory: [{ owner, from: Date.now(), to: null }],
       ledger: [{ at: Date.now(), kind: "mint", amount: 0, note: "founding seat minted · 0 access keys" }],
     };
@@ -272,10 +283,18 @@ export function buyTicket(world: WorldState, buyer: string, payment: number, clu
   return event;
 }
 
+function leaseBlocksTitle(seat: Seat): boolean {
+  return seat.leaseExpiresMs > Date.now() && (seat.lessee != null || seat.leaseAsk != null);
+}
+
+function isActiveLessee(seat: Seat, actor: string): boolean {
+  return seat.lessee === actor && seat.leaseExpiresMs > Date.now();
+}
+
 export function claimPayout(world: WorldState, actor: string, tokenId: string, amount?: number): string {
   const seat = world.seats[tokenId];
   assert(seat, "seat not found");
-  assert(actor === seat.owner, "only owner can claim");
+  assert(actor === seat.owner || isActiveLessee(seat, actor), "only owner or active lessee");
   assert(seat.encumbrance === "FREE", `encumbered: ${seat.encumbrance}`);
   const claimAmount = amount ?? seat.balance;
   assert(claimAmount > 0, "nothing to claim");
@@ -312,11 +331,19 @@ export function listSeat(world: WorldState, actor: string, tokenId: string, ask:
   assert(seat.encumbrance === "FREE", "already encumbered");
   assert(ask > 0, "ask must be positive");
   assert(seat.openRawSigs === 0, "open raw signatures block listing");
+  assert(!leaseBlocksTitle(seat), "active lease blocks listing");
 
+  // Foreign-chain seal: bump sign epoch so pre-list held sigs are stale.
+  seat.keyEpoch += 1;
   seat.encumbrance = "LISTED";
   seat.listingAsk = ask;
   seat.listingNonce += 1;
-  seat.ledger.push({ at: Date.now(), kind: "list", amount: ask, note: `nonce ${seat.listingNonce}` });
+  seat.ledger.push({
+    at: Date.now(),
+    kind: "list",
+    amount: ask,
+    note: `nonce ${seat.listingNonce} · sign-epoch ${seat.keyEpoch}`,
+  });
   return seat.listingNonce;
 }
 
@@ -346,6 +373,10 @@ export function buySeat(
   assert(payment === seat.listingAsk, `ask mismatch: need ${seat.listingAsk}`);
   assert(syncNonce === seat.listingNonce, "stale listing nonce — refund path");
   assert(buyer !== seat.owner, "cannot buy own seat");
+  assert(seat.accessKeyCount === 0, "buy refused: vault keys present");
+  assert(seat.openRawSigs === 0, "buy refused: open raw signatures");
+  assert(!seat.washFlagged, "buy refused: wash flagged — FIX BEFORE BUY");
+  assert(!leaseBlocksTitle(seat), "buy refused: active lease");
 
   seat.encumbrance = "SETTLING";
   const seller = seat.owner;
@@ -370,6 +401,9 @@ export function buySeat(
   seat.accessKeyCount = 0;
   seat.encumbrance = "FREE";
   seat.listingAsk = null;
+  seat.lessee = null;
+  seat.leaseExpiresMs = 0;
+  seat.leaseAsk = null;
   seat.ledger.push({
     at: Date.now(),
     kind: "sale",
@@ -378,6 +412,71 @@ export function buySeat(
   });
 
   return { txHash: txHash(world.nextTx++), rebounded };
+}
+
+/** Offer a time-boxed seat-cut lease. Title stays with owner. */
+export function offerLease(
+  world: WorldState,
+  actor: string,
+  tokenId: string,
+  ask: number,
+  durationMs: number,
+): number {
+  const seat = world.seats[tokenId];
+  assert(seat, "seat not found");
+  assert(actor === seat.owner, "only owner");
+  assert(seat.encumbrance === "FREE", "encumbered");
+  assert(ask > 0, "ask must be positive");
+  assert(durationMs >= 60_000, "duration min 60s");
+  assert(!leaseBlocksTitle(seat), "lease already active");
+  seat.leaseNonce += 1;
+  seat.lessee = null;
+  seat.leaseAsk = ask;
+  seat.leaseExpiresMs = Date.now() + durationMs;
+  seat.ledger.push({
+    at: Date.now(),
+    kind: "lease_offer",
+    amount: ask,
+    note: `nonce ${seat.leaseNonce} · ${durationMs}ms`,
+  });
+  return seat.leaseNonce;
+}
+
+export function takeLease(
+  world: WorldState,
+  renter: string,
+  tokenId: string,
+  payment: number,
+  syncNonce: number,
+): void {
+  const seat = world.seats[tokenId];
+  assert(seat, "seat not found");
+  assert(seat.encumbrance === "FREE", "encumbered");
+  assert(seat.leaseAsk !== null, "no lease offer");
+  assert(seat.lessee === null, "lease already taken");
+  assert(syncNonce === seat.leaseNonce, "stale lease nonce");
+  assert(Date.now() < seat.leaseExpiresMs, "lease offer expired");
+  assert(payment === seat.leaseAsk, "lease ask mismatch");
+  assert(renter !== seat.owner, "owner cannot lease own seat");
+  seat.lessee = renter;
+  seat.ledger.push({
+    at: Date.now(),
+    kind: "lease_taken",
+    amount: payment,
+    note: `renter ${renter} until ${seat.leaseExpiresMs}`,
+  });
+}
+
+export function settleLease(world: WorldState, actor: string, tokenId: string): void {
+  const seat = world.seats[tokenId];
+  assert(seat, "seat not found");
+  assert(seat.leaseAsk !== null || seat.lessee !== null, "no lease");
+  const expired = Date.now() >= seat.leaseExpiresMs;
+  assert(expired || actor === seat.owner, "lease still active — only owner can cancel");
+  seat.lessee = null;
+  seat.leaseExpiresMs = 0;
+  seat.leaseAsk = null;
+  seat.ledger.push({ at: Date.now(), kind: "lease_settle", amount: 0, note: expired ? "expired" : "cancelled" });
 }
 
 /** Attempt raw foreign-chain sign — fails when listed / settling (held-sig defense). */
@@ -467,6 +566,16 @@ export function runDiligence(world: WorldState, tokenId: string): DiligenceRepor
       label: "Listing sync_nonce coherent",
       pass: seat.encumbrance !== "LISTED" || seat.listingNonce > 0,
       detail: `nonce ${seat.listingNonce} · ${seat.encumbrance}`,
+    },
+    {
+      id: "lease",
+      label: "No blocking seat-cut lease",
+      pass: !leaseBlocksTitle(seat),
+      detail: seat.lessee
+        ? `renter ${seat.lessee} until ${seat.leaseExpiresMs}`
+        : seat.leaseExpiresMs > Date.now()
+          ? `open offer until ${seat.leaseExpiresMs}`
+          : "none",
     },
   ];
   const verdict = checks.every((c) => c.pass) ? "PROVABLY CLEAN" : "FIX BEFORE BUY";
@@ -637,9 +746,24 @@ export const VERIFY_CLAIMS = [
     test: "diligence_clean_when_healthy",
   },
   {
+    claim: "Buy encodes only when diligence is CLEAN",
+    method: "assertCleanToBuy / encodeBuySeatIfClean",
+    test: "assertCleanToBuy_blocks_wash",
+  },
+  {
+    claim: "List bumps sign epoch (foreign-chain seal)",
+    method: "list_seat",
+    test: "list_bumps_sign_epoch",
+  },
+  {
     claim: "Chain-sig continuity hash unchanged across sale",
     method: "continuity_hash",
     test: "continuity_hash_stable",
+  },
+  {
+    claim: "Seat-cut lease blocks list until settle",
+    method: "offer_lease / take_lease / settle_lease",
+    test: "lease_blocks_list_until_settle",
   },
   {
     claim: "BPS immutable after mint; sum always 10000",

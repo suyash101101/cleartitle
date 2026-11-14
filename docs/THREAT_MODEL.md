@@ -1,4 +1,4 @@
-# Threat model — QuitClaim
+# Threat model — CleanDeed
 
 Written before implementation. Each row maps to a Transfer Lab button and/or automated test.
 

@@ -63,7 +63,7 @@ export default function TitleCertificatePage() {
 
   return (
     <section className="section cert-page" style={{ borderTop: "none", paddingTop: 0 }}>
-      <p className="chapter-kicker">NEP-171 · Quitclaim Deed</p>
+      <p className="chapter-kicker">NEP-171 · CleanDeed</p>
 
       <div className="cert-sheet">
         <div className="cert-sheet-top">

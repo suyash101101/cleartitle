@@ -11,7 +11,7 @@ export function SeatCharter({ seat }: { seat: Seat }) {
   return (
     <article className="seat-charter" aria-label={`Seat ${seat.tokenId} charter`}>
       <div className="seat-charter-frame">
-        <p className="seat-charter-kicker">NEP-171 · Quitclaim Deed</p>
+        <p className="seat-charter-kicker">NEP-171 · CleanDeed</p>
         <h2 className="seat-charter-title">Seat #{seat.tokenId}</h2>
         <p className="seat-charter-vault mono">{seat.vaultAccountId}</p>
         <p className="seat-charter-facts">

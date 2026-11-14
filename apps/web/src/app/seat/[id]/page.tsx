@@ -14,6 +14,8 @@ import { PendingFollow } from "@/components/PendingFollow";
 import { TitleChain } from "@/components/TitleChain";
 import { TitleScore } from "@/components/TitleScore";
 import { EpochBump } from "@/components/EpochBump";
+import { JudgeStampPanel } from "@/components/JudgeStampPanel";
+import { LeaseStrip } from "@/components/LeaseStrip";
 import { TipContinuity } from "@/components/TipContinuity";
 import { TransferTape } from "@/components/TransferTape";
 import { TrustExplain } from "@/components/TrustExplain";
@@ -44,12 +46,16 @@ export default function SeatPage() {
 
   const isOwner = actor === seat.owner;
   const report = diligence?.tokenId === id ? diligence : null;
-  const clean =
-    report?.verdict === "PROVABLY CLEAN" &&
-    !seat.washFlagged &&
-    seat.accessKeyCount === 0;
-  const pendingTotal = seat.pending.reduce((sum, p) => sum + p.amount, 0);
-  const buyLocked = seat.encumbrance === "LISTED" && !isOwner && !clean;
+  const pendingTotal = seat.pending.reduce((sum: number, p: { amount: number }) => sum + p.amount, 0);
+  // Unlock buy when seat fields look clean; assertCleanToBuy still gates the action.
+  const buyLocked =
+    seat.encumbrance === "LISTED" &&
+    !isOwner &&
+    (seat.washFlagged ||
+      seat.accessKeyCount !== 0 ||
+      seat.openRawSigs !== 0 ||
+      report?.verdict === "FIX BEFORE BUY");
+  const clean = !buyLocked && seat.encumbrance === "LISTED" ? true : report?.verdict === "PROVABLY CLEAN";
   const verdict = report?.verdict ?? (seat.washFlagged ? "FIX BEFORE BUY" : "PROVABLY CLEAN");
 
   return (
@@ -67,6 +73,7 @@ export default function SeatPage() {
         {seat.vaultAccountId} · owner {seat.owner} · epoch {seat.keyEpoch}
       </p>
       <SessionBar />
+      {!isLive && <JudgeStampPanel />}
       {isLive && <LiveChainBanner tokenId={id} />}
 
       <div className="desk-grid">
@@ -96,6 +103,9 @@ export default function SeatPage() {
 
         <div className="desk-cell">
           <TipContinuity btc={seat.btcAddress} sol={seat.solAddress} />
+        </div>
+        <div className="desk-cell desk-span-8">
+          <LeaseStrip tokenId={id} />
         </div>
         <div className="desk-cell">
           <PendingFollow amount={pendingTotal} owner={seat.owner} />
@@ -183,7 +193,7 @@ export default function SeatPage() {
             <p className="meta">No pending payouts.</p>
           ) : (
             <ul className="checklist">
-              {seat.pending.map((p) => (
+              {seat.pending.map((p: { id: string; amount: number; status: string }) => (
                 <li key={p.id}>
                   <span className={p.status.includes("REBOUND") ? "pass" : "fail"}>
                     {p.status.includes("REBOUND") ? "✓" : "·"}
@@ -204,7 +214,7 @@ export default function SeatPage() {
               .slice()
               .reverse()
               .slice(0, 12)
-              .map((e, i) => {
+              .map((e: { at: number; kind: string; amount: number; note: string }, i: number) => {
                 const hot = e.kind === "sale" || e.kind === "claim_pending" || e.kind === "ticket_cut";
                 return (
                   <li key={`${e.at}-${i}`} className={hot ? "hot" : undefined}>

@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "at": "2026-11-14T19:47:26.421Z",
+  "walletRequired": false,
+  "story": "mid-payout heist · seller recall refuse · tip continuity · lease reverse",
+  "before": {
+    "owner": "seller.near",
+    "continuity": "cont_1fac8d9e929dff1d",
+    "btc": "bc1q42ds66t28ava8dejkuak3esu32dkkswlmuzmc3",
+    "sol": "HP6paHzdnbdxtJRssRTfohkNtnF73cf6dbP9U1JLUDGB",
+    "keyEpoch": 1,
+    "pending": 1
+  },
+  "after": {
+    "owner": "priya.near",
+    "continuity": "cont_1fac8d9e929dff1d",
+    "btc": "bc1q42ds66t28ava8dejkuak3esu32dkkswlmuzmc3",
+    "sol": "HP6paHzdnbdxtJRssRTfohkNtnF73cf6dbP9U1JLUDGB",
+    "keyEpoch": 3
+  },
+  "rebounded": 0.5,
+  "txHash": "0xct00000003",
+  "refuses": {
+    "heldSig": "epoch freeze: raw sign refused while seat encumbered",
+    "listedWithdraw": "withdraw refused: encumbered LISTED",
+    "oldOwnerWithdraw": "withdraw refused: not current owner"
+  },
+  "continuity": {
+    "hash": "cont_1fac8d9e929dff1d",
+    "expectedHash": "cont_1fac8d9e929dff1d",
+    "btc": "bc1q42ds66t28ava8dejkuak3esu32dkkswlmuzmc3",
+    "sol": "HP6paHzdnbdxtJRssRTfohkNtnF73cf6dbP9U1JLUDGB"
+  },
+  "signEpoch": {
+    "beforeList": 1,
+    "afterList": 2,
+    "afterSale": 3
+  },
+  "diligence": "PROVABLY CLEAN"
+}

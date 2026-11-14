@@ -63,7 +63,7 @@ const BEATS = [
     id: "vault",
     kicker: "02 · Five NEP-171 seat deeds",
     title: "Any seat classes you define. Each earns on every ticket.",
-    body: "QuitClaim venues mint founding seat NFTs. Each is a keyless vault that takes a cut of every door fee. Control flips. Continuity does not.",
+    body: "Any venue on one contract. Founding seat NFTs are keyless vaults that take a cut of every door fee. Control flips. Tip addresses do not.",
     href: "/inventory",
     cta: "Browse seat inventory",
     asset: <SeatDeedCard />,
@@ -109,7 +109,7 @@ export function StoryJourney() {
     <div className="story near-theme x-ads-story">
       <section className="near-hero x-hero" aria-label={`${BRAND}`}>
         <div className="near-hero-inner hero-centered">
-          <p className="chapter-kicker">NEAR · QuitClaim</p>
+          <p className="chapter-kicker">NEAR · nfts · title policy</p>
           <h1>
             {BRAND}
             <span className="h1-sub">{BRAND_TAGLINE}</span>

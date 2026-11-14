@@ -56,6 +56,7 @@ function writeExport(srcName, htmlName) {
 
 writeExport("quitclaim-architecture.excalidraw", "_export-architecture.html");
 writeExport("ada-priya-architecture.excalidraw", "_export-ada-priya.html");
+writeExport("quitclaim-claims.excalidraw", "_export-claims.html");
 
 const MIME = {
   ".html": "text/html",
@@ -98,9 +99,20 @@ function getJSON(url) {
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+function chromeBin() {
+  const candidates = [
+    process.env.CHROME_PATH,
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "google-chrome-stable",
+    "chromium",
+    "chrome",
+  ].filter(Boolean);
+  return candidates[0];
+}
+
 async function capture(pagePath, outName, w, h, port, srvPort) {
   const chrome = spawn(
-    "google-chrome-stable",
+    chromeBin(),
     [
       "--headless=new",
       "--disable-gpu",
@@ -164,8 +176,9 @@ await new Promise((r) => server.listen(0, "127.0.0.1", r));
 const srvPort = server.address().port;
 await capture("_export-architecture.html", "quitclaim-architecture.png", 1500, 1200, 9341, srvPort);
 await capture("_export-ada-priya.html", "ada-priya-architecture.png", 1400, 1200, 9342, srvPort);
+await capture("_export-claims.html", "quitclaim-claims.png", 1500, 1100, 9343, srvPort);
 server.close();
-for (const f of ["_export-architecture.html", "_export-ada-priya.html"]) {
+for (const f of ["_export-architecture.html", "_export-ada-priya.html", "_export-claims.html"]) {
   try {
     fs.unlinkSync(path.join(OUT, f));
   } catch {

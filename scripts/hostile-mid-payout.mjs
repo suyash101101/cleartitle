@@ -14,12 +14,13 @@ import {
 } from "../packages/sdk/src/index.ts";
 
 const world = seedDemoNight();
-const nonce = listSeat(world, "ada.near", "3", 100);
+const seller = world.seats["3"].owner;
+const nonce = listSeat(world, seller, "3", 100);
 let heldFail = false;
-try { requestRawSign(world, "ada.near", "3"); } catch { heldFail = true; }
+try { requestRawSign(world, seller, "3"); } catch { heldFail = true; }
 if (!heldFail) { console.error("HOSTILE FAIL — held sig allowed"); process.exit(1); }
 const { rebounded } = buySeat(world, "priya.near", "3", 100, nonce);
-const lab = labOldOwnerWithdraw(world, "ada.near", "3");
+const lab = labOldOwnerWithdraw(world, seller, "3");
 const seat = world.seats["3"];
 if (seat.owner !== "priya.near" || rebounded <= 0 || !lab.reason.includes("not current owner")) {
   console.error("HOSTILE FAIL", { owner: seat.owner, rebounded, lab });

@@ -61,7 +61,7 @@ export default function ProofPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `quitclaim-proof-${Date.now()}.json`;
+    a.download = `cleandeed-proof-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }

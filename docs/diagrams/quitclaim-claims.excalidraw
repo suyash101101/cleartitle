@@ -6,9 +6,9 @@
     {
       "id": "bg-title",
       "type": "text",
-      "x": 80,
+      "x": 195.0,
       "y": 36,
-      "width": 720,
+      "width": 920,
       "height": 48,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -29,13 +29,13 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "QuitClaim · clear title claims",
+      "text": "CleanDeed \u00b7 title claims",
       "fontSize": 36,
       "fontFamily": 2,
-      "textAlign": "left",
+      "textAlign": "center",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "QuitClaim · clear title claims",
+      "originalText": "CleanDeed \u00b7 title claims",
       "lineHeight": 1.25,
       "baseline": 32
     },
@@ -65,13 +65,13 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "Claim → List/FREEZE → Diligence CLEAN → Buy/Rebound → Old withdraw FAIL",
+      "text": "Claim \u2192 List/FREEZE \u2192 Diligence CLEAN \u2192 Buy/Rebound \u2192 Old withdraw FAIL",
       "fontSize": 18,
       "fontFamily": 2,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Claim → List/FREEZE → Diligence CLEAN → Buy/Rebound → Old withdraw FAIL",
+      "originalText": "Claim \u2192 List/FREEZE \u2192 Diligence CLEAN \u2192 Buy/Rebound \u2192 Old withdraw FAIL",
       "lineHeight": 1.25,
       "baseline": 16
     },
@@ -92,12 +92,23 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 3 },
+      "roundness": {
+        "type": 3
+      },
       "seed": 201,
       "version": 1,
       "versionNonce": 201,
       "isDeleted": false,
-      "boundElements": [{ "id": "a1", "type": "arrow" }, { "id": "t1", "type": "text" }],
+      "boundElements": [
+        {
+          "id": "a1",
+          "type": "arrow"
+        },
+        {
+          "id": "t1",
+          "type": "text"
+        }
+      ],
       "updated": 1,
       "link": null,
       "locked": false
@@ -155,12 +166,27 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 3 },
+      "roundness": {
+        "type": 3
+      },
       "seed": 203,
       "version": 1,
       "versionNonce": 203,
       "isDeleted": false,
-      "boundElements": [{ "id": "a1", "type": "arrow" }, { "id": "a2", "type": "arrow" }, { "id": "t2", "type": "text" }],
+      "boundElements": [
+        {
+          "id": "a1",
+          "type": "arrow"
+        },
+        {
+          "id": "a2",
+          "type": "arrow"
+        },
+        {
+          "id": "t2",
+          "type": "text"
+        }
+      ],
       "updated": 1,
       "link": null,
       "locked": false
@@ -218,12 +244,27 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 3 },
+      "roundness": {
+        "type": 3
+      },
       "seed": 205,
       "version": 1,
       "versionNonce": 205,
       "isDeleted": false,
-      "boundElements": [{ "id": "a2", "type": "arrow" }, { "id": "a3", "type": "arrow" }, { "id": "t3", "type": "text" }],
+      "boundElements": [
+        {
+          "id": "a2",
+          "type": "arrow"
+        },
+        {
+          "id": "a3",
+          "type": "arrow"
+        },
+        {
+          "id": "t3",
+          "type": "text"
+        }
+      ],
       "updated": 1,
       "link": null,
       "locked": false
@@ -281,12 +322,27 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 3 },
+      "roundness": {
+        "type": 3
+      },
       "seed": 207,
       "version": 1,
       "versionNonce": 207,
       "isDeleted": false,
-      "boundElements": [{ "id": "a3", "type": "arrow" }, { "id": "a4", "type": "arrow" }, { "id": "t4", "type": "text" }],
+      "boundElements": [
+        {
+          "id": "a3",
+          "type": "arrow"
+        },
+        {
+          "id": "a4",
+          "type": "arrow"
+        },
+        {
+          "id": "t4",
+          "type": "text"
+        }
+      ],
       "updated": 1,
       "link": null,
       "locked": false
@@ -344,12 +400,23 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 3 },
+      "roundness": {
+        "type": 3
+      },
       "seed": 209,
       "version": 1,
       "versionNonce": 209,
       "isDeleted": false,
-      "boundElements": [{ "id": "a4", "type": "arrow" }, { "id": "t5", "type": "text" }],
+      "boundElements": [
+        {
+          "id": "a4",
+          "type": "arrow"
+        },
+        {
+          "id": "t5",
+          "type": "text"
+        }
+      ],
       "updated": 1,
       "link": null,
       "locked": false
@@ -407,7 +474,9 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 2 },
+      "roundness": {
+        "type": 2
+      },
       "seed": 301,
       "version": 1,
       "versionNonce": 301,
@@ -416,10 +485,27 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "points": [[0, 0], [40, 0]],
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          0
+        ]
+      ],
       "lastCommittedPoint": null,
-      "startBinding": { "elementId": "b1", "focus": 0, "gap": 5 },
-      "endBinding": { "elementId": "b2", "focus": 0, "gap": 5 },
+      "startBinding": {
+        "elementId": "b1",
+        "focus": 0,
+        "gap": 5
+      },
+      "endBinding": {
+        "elementId": "b2",
+        "focus": 0,
+        "gap": 5
+      },
       "startArrowhead": null,
       "endArrowhead": "arrow"
     },
@@ -440,7 +526,9 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 2 },
+      "roundness": {
+        "type": 2
+      },
       "seed": 302,
       "version": 1,
       "versionNonce": 302,
@@ -449,10 +537,27 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "points": [[0, 0], [40, 0]],
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          0
+        ]
+      ],
       "lastCommittedPoint": null,
-      "startBinding": { "elementId": "b2", "focus": 0, "gap": 5 },
-      "endBinding": { "elementId": "b3", "focus": 0, "gap": 5 },
+      "startBinding": {
+        "elementId": "b2",
+        "focus": 0,
+        "gap": 5
+      },
+      "endBinding": {
+        "elementId": "b3",
+        "focus": 0,
+        "gap": 5
+      },
       "startArrowhead": null,
       "endArrowhead": "arrow"
     },
@@ -473,7 +578,9 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 2 },
+      "roundness": {
+        "type": 2
+      },
       "seed": 303,
       "version": 1,
       "versionNonce": 303,
@@ -482,10 +589,27 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "points": [[0, 0], [40, 0]],
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          0
+        ]
+      ],
       "lastCommittedPoint": null,
-      "startBinding": { "elementId": "b3", "focus": 0, "gap": 5 },
-      "endBinding": { "elementId": "b4", "focus": 0, "gap": 5 },
+      "startBinding": {
+        "elementId": "b3",
+        "focus": 0,
+        "gap": 5
+      },
+      "endBinding": {
+        "elementId": "b4",
+        "focus": 0,
+        "gap": 5
+      },
       "startArrowhead": null,
       "endArrowhead": "arrow"
     },
@@ -506,7 +630,9 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 2 },
+      "roundness": {
+        "type": 2
+      },
       "seed": 304,
       "version": 1,
       "versionNonce": 304,
@@ -515,10 +641,27 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "points": [[0, 0], [40, 0]],
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          0
+        ]
+      ],
       "lastCommittedPoint": null,
-      "startBinding": { "elementId": "b4", "focus": 0, "gap": 5 },
-      "endBinding": { "elementId": "b5", "focus": 0, "gap": 5 },
+      "startBinding": {
+        "elementId": "b4",
+        "focus": 0,
+        "gap": 5
+      },
+      "endBinding": {
+        "elementId": "b5",
+        "focus": 0,
+        "gap": 5
+      },
       "startArrowhead": null,
       "endArrowhead": "arrow"
     },
@@ -539,12 +682,19 @@
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": { "type": 3 },
+      "roundness": {
+        "type": 3
+      },
       "seed": 401,
       "version": 1,
       "versionNonce": 401,
       "isDeleted": false,
-      "boundElements": [{ "id": "tfoot", "type": "text" }],
+      "boundElements": [
+        {
+          "id": "tfoot",
+          "type": "text"
+        }
+      ],
       "updated": 1,
       "link": null,
       "locked": false
@@ -575,13 +725,13 @@
       "updated": 1,
       "link": null,
       "locked": false,
-      "text": "Continuity · vault id → Chain Signatures derive → BTC/SOL tips unchanged across sale\nSDK · seedDemoNight → listSeat → buySeat → runDiligence CLEAN → labOldOwnerWithdraw fail\nLive · wallet encodeListSeat / encodeBuySeat · nearView diligence · evidence.ts explorer hashes\nField wedge · title insurance mid-payout (not just NFT-is-a-wallet)",
+      "text": "Continuity \u00b7 vault id \u2192 Chain Signatures derive \u2192 BTC/SOL tips unchanged across sale\nSDK \u00b7 seedDemoNight \u2192 listSeat \u2192 buySeat \u2192 runDiligence CLEAN \u2192 labOldOwnerWithdraw fail\nLive \u00b7 wallet encodeListSeat / encodeBuySeat \u00b7 nearView diligence \u00b7 evidence.ts explorer hashes\nField wedge \u00b7 title insurance mid-payout (not just NFT-is-a-wallet)",
       "fontSize": 18,
       "fontFamily": 2,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "foot",
-      "originalText": "Continuity · vault id → Chain Signatures derive → BTC/SOL tips unchanged across sale\nSDK · seedDemoNight → listSeat → buySeat → runDiligence CLEAN → labOldOwnerWithdraw fail\nLive · wallet encodeListSeat / encodeBuySeat · nearView diligence · evidence.ts explorer hashes\nField wedge · title insurance mid-payout (not just NFT-is-a-wallet)",
+      "originalText": "Continuity \u00b7 vault id \u2192 Chain Signatures derive \u2192 BTC/SOL tips unchanged across sale\nSDK \u00b7 seedDemoNight \u2192 listSeat \u2192 buySeat \u2192 runDiligence CLEAN \u2192 labOldOwnerWithdraw fail\nLive \u00b7 wallet encodeListSeat / encodeBuySeat \u00b7 nearView diligence \u00b7 evidence.ts explorer hashes\nField wedge \u00b7 title insurance mid-payout (not just NFT-is-a-wallet)",
       "lineHeight": 1.35,
       "baseline": 100
     }

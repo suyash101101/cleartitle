@@ -7,11 +7,11 @@ import { CONTRACT_ID } from "@/lib/near";
 const NEED = [
   {
     title: "Memberships that earn",
-    body: "Clubs, DAOs, and venues sell seats that take a cut of every ticket. Buyers need QuitClaim when money is still in flight.",
+    body: "Clubs, DAOs, and venues sell seats that take a cut of every ticket. Buyers need CleanDeed when money is still in flight.",
   },
   {
     title: "Mid-payout transfers",
-    body: "Secondary markets today leave held signatures, stale keys, and seller recall. QuitClaim freezes the epoch and rebounds pending cuts to the buyer.",
+    body: "Secondary markets today leave held signatures, stale keys, and seller recall. CleanDeed freezes the epoch and rebounds pending cuts to the buyer.",
   },
   {
     title: "Diligence you can cite",
@@ -66,8 +66,8 @@ export default function ScalePage() {
   return (
     <section className="section scale-page" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
-        title="QuitClaim beyond the night"
-        lede="How QuitClaim for earning seats becomes a product: market need, GTM steps, technical scale, and honest risks."
+        title="CleanDeed beyond the night"
+        lede="How CleanDeed for earning seats becomes a product: market need, GTM steps, technical scale, and honest risks."
       />
 
       <div className="panel" style={{ marginBottom: "1.75rem" }}>
@@ -76,7 +76,7 @@ export default function ScalePage() {
           Sell the seat. Keep nothing.
         </h2>
         <p className="lede" style={{ maxWidth: "38rem" }}>
-          Ticket money follows QuitClaim. The Live path already binds to{" "}
+          Ticket money follows CleanDeed. The Live path already binds to{" "}
           <span className="mono">{CONTRACT_ID}</span>. This page is the post-hackathon plan, not a mockup of fake metrics.
         </p>
         <div className="cta-row" style={{ marginTop: "1rem" }}>
@@ -95,7 +95,7 @@ export default function ScalePage() {
       <div className="panel" style={{ marginBottom: "1.75rem" }}>
         <h3>Where the NFT field sits</h3>
         <p className="meta" style={{ marginBottom: "1rem" }}>
-          Category map only. No project names. QuitClaim owns the mid-payout title-insurance wedge.
+          Category map only. No project names. CleanDeed owns the mid-payout title-insurance wedge.
         </p>
         <div className="grid-2" style={{ gap: "1.25rem" }}>
           <div>
@@ -117,9 +117,9 @@ export default function ScalePage() {
             </p>
           </div>
           <div>
-            <strong>QuitClaim wedge</strong>
+            <strong>CleanDeed wedge</strong>
             <p className="meta" style={{ marginTop: "0.35rem" }}>
-              QuitClaim mid-payout: FREEZE, diligence CLEAN, REBOUND_TO_BUYER, explorer refuse, shippable SDK, Live organizer path.
+              CleanDeed mid-payout: FREEZE, diligence CLEAN, REBOUND_TO_BUYER, explorer refuse, shippable SDK, Live organizer path.
             </p>
           </div>
         </div>

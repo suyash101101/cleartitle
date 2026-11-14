@@ -287,6 +287,61 @@ export function encodeClaimPayout(
   };
 }
 
+export function encodeOfferLease(
+  tokenId: string,
+  ask: string | number | bigint,
+  durationMs: number,
+  clubId?: string,
+): FunctionCallEncoding {
+  return {
+    methodName: "offer_lease",
+    args: withClub(
+      { token_id: tokenId, ask: ask.toString(), duration_ms: durationMs },
+      clubId,
+    ),
+    depositYocto: "0",
+  };
+}
+
+export function encodeTakeLease(
+  tokenId: string,
+  syncNonce: number,
+  ask: string | number | bigint,
+  clubId?: string,
+): FunctionCallEncoding {
+  return {
+    methodName: "take_lease",
+    args: withClub({ token_id: tokenId, sync_nonce: syncNonce }, clubId),
+    depositYocto: asYocto(ask),
+  };
+}
+
+export function encodeSettleLease(tokenId: string, clubId?: string): FunctionCallEncoding {
+  return {
+    methodName: "settle_lease",
+    args: withClub({ token_id: tokenId }, clubId),
+    depositYocto: "0",
+  };
+}
+
+export type ChainLeaseView = {
+  lessee: string | null;
+  expires_ms: number;
+  ask: string | number;
+  nonce: number;
+};
+
+export function viewLease(
+  tokenId: string,
+  cfg: NearViewConfig,
+): Promise<ChainLeaseView | null> {
+  return nearView<ChainLeaseView | null>(
+    "get_lease",
+    withClub({ token_id: tokenId }, cfg.clubId),
+    cfg,
+  ).catch(() => null);
+}
+
 export function toNearViewConfig(cfg: QuitClaimConfig): NearViewConfig {
   return {
     contractId: cfg.contractId,

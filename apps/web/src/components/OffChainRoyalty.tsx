@@ -4,7 +4,7 @@ import Link from "next/link";
 export function OffChainRoyalty() {
   return (
     <aside className="warranty-strip" aria-label="Off-chain royalty bypass versus clear title">
-      <p className="chapter-kicker">Royalty bypass vs QuitClaim</p>
+      <p className="chapter-kicker">Royalty bypass vs CleanDeed</p>
       <div className="warranty-strip-grid">
         <div>
           <p className="meta">Door NFT royalties</p>
@@ -14,7 +14,7 @@ export function OffChainRoyalty() {
           </p>
         </div>
         <div className="ours">
-          <p className="meta">QuitClaim refuses</p>
+          <p className="meta">CleanDeed refuses</p>
           <strong>On-chain EXPECTED FAIL</strong>
           <p className="meta">
             Old owner withdraw · held-sig · listed drain — explorer receipts, not marketplace policy.

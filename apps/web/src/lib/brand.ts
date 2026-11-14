@@ -1,11 +1,12 @@
 /**
- * QuitClaim — from the legal quitclaim deed:
- * the seller abandons every claim to the property.
- * Here: abandon keys, pending cuts, and held signatures — enforced on chain.
+ * CleanDeed — title insurance for earning seat NFTs.
+ * Legal root: a quitclaim deed (seller abandons every claim).
+ * Public brand is CleanDeed to avoid name collision with other hackathon entries.
  */
-export const BRAND = "QuitClaim";
-export const BRAND_TAGLINE = "Own the seat. Own every future cut.";
+export const BRAND = "CleanDeed";
+export const BRAND_TAGLINE = "Title insurance for earning seats.";
 export const BRAND_MEANING =
-  "A quitclaim is when the seller abandons every claim to a property. We force that on-chain for earning seats.";
+  "Clubs run ticket ops. CleanDeed is the title policy any venue attaches — Diligence, Transfer Lab, mid-payout rebound.";
 export const BRAND_BLURB =
-  "QuitClaim makes the seller quit every leftover claim: keys, pending ticket cuts, held signatures. Founding NEP-171 seat NFTs earn on your venue.";
+  "Provably clean title when an earning membership changes hands. Seller keeps nothing: no keys, no pending cuts, no held signatures. Any venue on one contract.";
+export const BRAND_TRACK = "nfts";

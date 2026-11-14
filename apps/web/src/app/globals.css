@@ -12,10 +12,12 @@
   --color-warn: #f4212e;
   --color-mute: #6b5e4e;
   --color-line: rgb(60 42 24 / 0.14);
-  --font-display: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-editorial: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-code: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-sans);
+  --font-editorial: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-mono: var(--font-code);
 }
 
 * {

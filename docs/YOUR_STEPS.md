@@ -2,7 +2,7 @@
 
 ## Required for hackathon submit
 
-1. **Film ≤100s demo** (your voice) — https://web-khaki-iota-17.vercel.app  
+1. **Film ≤100s demo** (your voice) — https://quitclaim.vercel.app  
 2. **Submit** form: repo + video + track `["nfts"]`  
 3. **Optional:** X post `@NEARProtocol` `#NEARHackathon`
 

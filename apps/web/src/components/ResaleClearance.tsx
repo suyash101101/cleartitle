@@ -4,7 +4,7 @@ import Link from "next/link";
 export function ResaleClearance() {
   return (
     <aside className="price-ceiling" aria-label="Resale caps versus clear title">
-      <p className="chapter-kicker">Oveit · WICKET · GET vs QuitClaim</p>
+      <p className="chapter-kicker">Oveit · WICKET · GET vs CleanDeed</p>
       <div className="price-ceiling-grid">
         <div>
           <p className="meta">Oveit / WICKET / GET</p>
@@ -12,7 +12,7 @@ export function ResaleClearance() {
           <p className="meta">Ceilings and flip counts keep door tickets fair. Sticker control, not vault title.</p>
         </div>
         <div className="ours">
-          <p className="meta">QuitClaim</p>
+          <p className="meta">CleanDeed</p>
           <strong>Clear title mid-payout</strong>
           <p className="meta">0 keys · held-sig freeze · CLEAN gate · pending rebound. Cap the sticker or clear the vault.</p>
         </div>

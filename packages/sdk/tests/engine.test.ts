@@ -1,22 +1,28 @@
 import { describe, expect, it } from "vitest";
 import {
+  assertCleanToBuy,
   buySeat,
   buyTicket,
   claimPayout,
   createClub,
   createWorld,
   delistSeat,
+  flagWash,
   labHeldSig,
   labListedWithdraw,
   labOldOwnerWithdraw,
   labWashPath,
   listSeat,
   mintSeats,
+  offerLease,
+  quoteTicketIntentDry,
   requestRawSign,
   runDiligence,
   seedPreviewWorld,
   setPaused,
+  settleLease,
   settlePayout,
+  takeLease,
   withdrawVault,
 } from "../src/index";
 
@@ -240,5 +246,41 @@ describe("multi_venue_clubs", () => {
     expect(Object.keys(world.clubs)).toEqual(["venue-a", "venue-b"]);
     expect(world.club!.clubId).toBe("venue-a");
     expect(world.clubs["venue-b"]!.ticketPrice).toBe(99);
+  });
+});
+
+describe("P0/P1 policy · sign-epoch · lease · intents", () => {
+  it("list_bumps_sign_epoch", () => {
+    const world = seedPreviewWorld();
+    const before = world.seats["3"]!.keyEpoch;
+    listSeat(world, "seller.near", "3", 100);
+    expect(world.seats["3"]!.keyEpoch).toBe(before + 1);
+  });
+
+  it("assertCleanToBuy_blocks_wash", () => {
+    const world = seedPreviewWorld();
+    const nonce = listSeat(world, "seller.near", "3", 100);
+    flagWash(world, "3");
+    expect(() => assertCleanToBuy(world, "3")).toThrow(/wash|FIX/i);
+    expect(() => buySeat(world, "buyer.near", "3", 100, nonce)).toThrow(/wash|FIX/i);
+  });
+
+  it("lease_blocks_list_until_settle", () => {
+    const world = seedPreviewWorld();
+    const nonce = offerLease(world, "seller.near", "3", 5, 120_000);
+    takeLease(world, "renter.near", "3", 5, nonce);
+    expect(world.seats["3"]!.lessee).toBe("renter.near");
+    expect(() => listSeat(world, "seller.near", "3", 50)).toThrow(/lease/i);
+    settleLease(world, "seller.near", "3");
+    expect(world.seats["3"]!.lessee).toBeNull();
+    listSeat(world, "seller.near", "3", 50);
+    expect(world.seats["3"]!.encumbrance).toBe("LISTED");
+  });
+
+  it("quoteTicketIntentDry_is_dry", () => {
+    const q = quoteTicketIntentDry({ clubId: "venue", ticketPriceYocto: "1000" });
+    expect(q.dry).toBe(true);
+    expect(q.requestPreview.dry).toBe(true);
+    expect(q.ticketPriceYocto).toBe("1000");
   });
 });

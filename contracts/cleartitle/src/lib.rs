@@ -1,4 +1,4 @@
-//! QuitClaim — on-chain title insurance for ticket-earning seat NFTs.
+//! CleanDeed — on-chain title insurance for ticket-earning seat NFTs.
 //! One contract can host many venues (`club_id`); each venue has its own
 //! ticket price, BPS split, and seat inventory.
 
@@ -88,6 +88,19 @@ enum StorageKey {
     Seats,
     Pendings { key: String },
     Owners,
+    Leases,
+}
+
+/// Time-boxed seat-cut lease. Title stays with owner; lessee may claim cuts until expiry.
+/// `lessee = None` means an open offer; `Some` means an active renter.
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, Clone, Debug)]
+#[borsh(crate = "near_sdk::borsh")]
+#[serde(crate = "near_sdk::serde")]
+pub struct LeaseState {
+    pub lessee: Option<AccountId>,
+    pub expires_ms: u64,
+    pub ask: u128,
+    pub nonce: u64,
 }
 
 #[near_bindgen]
@@ -102,6 +115,8 @@ pub struct Contract {
     token_owner: LookupMap<String, AccountId>,
     /// First-created / demo default for optional club_id args.
     active_club_id: Option<ClubId>,
+    /// Optional seat-cut leases (`club_id#token_id` → LeaseState). Requires redeploy.
+    leases: LookupMap<String, LeaseState>,
 }
 
 fn seat_storage_key(club_id: &str, token_id: &str) -> String {
@@ -140,6 +155,40 @@ impl Contract {
             next_payout_id: 1,
             token_owner: LookupMap::new(StorageKey::Owners),
             active_club_id: None,
+            leases: LookupMap::new(StorageKey::Leases),
+        }
+    }
+
+    /// Wipe + re-init after WASM upgrade that adds `leases` / multi-venue views.
+    /// Call as the contract account (FA key). Testnet specimen only.
+    #[init(ignore_state)]
+    pub fn migrate_reset() -> Self {
+        require!(
+            env::predecessor_account_id() == env::current_account_id(),
+            "only contract account"
+        );
+        Self::new()
+    }
+
+    fn now_ms(&self) -> u64 {
+        env::block_timestamp() / 1_000_000
+    }
+
+    /// Open offer or active renter still inside the expiry window.
+    fn lease_blocks_title(&self, key: &String) -> bool {
+        match self.leases.get(key) {
+            Some(lease) => self.now_ms() < lease.expires_ms,
+            None => false,
+        }
+    }
+
+    /// Active renter (not merely an open offer).
+    fn active_renter(&self, key: &String) -> Option<AccountId> {
+        let lease = self.leases.get(key)?;
+        if self.now_ms() < lease.expires_ms {
+            lease.lessee
+        } else {
+            None
         }
     }
 
@@ -282,10 +331,10 @@ impl Contract {
         let id = self.resolve_club_id(club_id);
         let key = seat_storage_key(&id, &token_id);
         let mut seat = self.seats.get(&key).expect("seat");
-        require!(
-            env::predecessor_account_id() == seat.owner_id,
-            "only owner"
-        );
+        let pred = env::predecessor_account_id();
+        let is_owner = pred == seat.owner_id;
+        let is_lessee = self.active_renter(&key).map(|l| l == pred).unwrap_or(false);
+        require!(is_owner || is_lessee, "only owner or active lessee");
         require!(seat.encumbrance == Encumbrance::Free, "encumbered");
         require!(amount.0 > 0 && amount.0 <= seat.balance, "bad amount");
         seat.balance -= amount.0;
@@ -313,6 +362,9 @@ impl Contract {
         require!(seat.encumbrance == Encumbrance::Free, "encumbered");
         require!(ask.0 > 0, "ask");
         require!(seat.open_raw_sigs == 0, "open raw sigs");
+        require!(!self.lease_blocks_title(&key), "active lease blocks list");
+        // Foreign-chain seal: bump sign epoch on list so held pre-list sigs are stale.
+        seat.key_epoch += 1;
         seat.encumbrance = Encumbrance::Listed;
         seat.listing_ask = Some(ask.0);
         seat.listing_nonce += 1;
@@ -348,6 +400,11 @@ impl Contract {
         require!(sync_nonce == seat.listing_nonce, "stale nonce");
         let buyer = env::predecessor_account_id();
         require!(buyer != seat.owner_id, "self buy");
+        // On-chain title policy gate — same checks diligence uses for CLEAN.
+        require!(seat.access_key_count == 0, "buy refused: vault keys present");
+        require!(seat.open_raw_sigs == 0, "buy refused: open raw signatures");
+        require!(!seat.wash_flagged, "buy refused: wash flagged — FIX BEFORE BUY");
+        require!(!self.lease_blocks_title(&key), "buy refused: active lease");
 
         seat.encumbrance = Encumbrance::Settling;
         let royalty = payment * club.royalty_bps as u128 / 10_000;
@@ -373,10 +430,87 @@ impl Contract {
         seat.encumbrance = Encumbrance::Free;
         seat.listing_ask = None;
         self.token_owner.insert(&key, &buyer);
+        self.leases.remove(&key);
         self.seats.insert(&key, &seat);
         self.clubs.insert(&id, &club);
 
         Promise::new(seller).transfer(NearToken::from_yoctonear(seller_amount));
+    }
+
+    /// Offer a time-boxed seat-cut lease. Title stays with owner.
+    pub fn offer_lease(
+        &mut self,
+        token_id: TokenId,
+        ask: U128,
+        duration_ms: u64,
+        club_id: Option<ClubId>,
+    ) -> u64 {
+        let id = self.resolve_club_id(club_id);
+        let key = seat_storage_key(&id, &token_id);
+        let seat = self.seats.get(&key).expect("seat");
+        require!(
+            env::predecessor_account_id() == seat.owner_id,
+            "only owner"
+        );
+        require!(seat.encumbrance == Encumbrance::Free, "encumbered");
+        require!(ask.0 > 0, "ask");
+        require!(duration_ms >= 60_000, "duration min 60s");
+        require!(!self.lease_blocks_title(&key), "lease already active");
+        let nonce = self.leases.get(&key).map(|l| l.nonce + 1).unwrap_or(1);
+        let offer = LeaseState {
+            lessee: None,
+            expires_ms: self.now_ms() + duration_ms,
+            ask: ask.0,
+            nonce,
+        };
+        self.leases.insert(&key, &offer);
+        nonce
+    }
+
+    #[payable]
+    pub fn take_lease(
+        &mut self,
+        token_id: TokenId,
+        sync_nonce: u64,
+        club_id: Option<ClubId>,
+    ) {
+        let id = self.resolve_club_id(club_id);
+        let key = seat_storage_key(&id, &token_id);
+        let seat = self.seats.get(&key).expect("seat");
+        require!(seat.encumbrance == Encumbrance::Free, "encumbered");
+        let mut lease = self.leases.get(&key).expect("no lease offer");
+        require!(lease.lessee.is_none(), "lease already taken");
+        require!(sync_nonce == lease.nonce, "stale lease nonce");
+        require!(self.now_ms() < lease.expires_ms, "lease offer expired");
+        let payment = env::attached_deposit().as_yoctonear();
+        require!(payment == lease.ask, "lease ask mismatch");
+        let renter = env::predecessor_account_id();
+        require!(renter != seat.owner_id, "owner cannot lease own seat");
+        let seller = seat.owner_id.clone();
+        lease.lessee = Some(renter);
+        self.leases.insert(&key, &lease);
+        Promise::new(seller).transfer(NearToken::from_yoctonear(payment));
+    }
+
+    /// Clear expired lease (owner or anyone after expiry).
+    pub fn settle_lease(&mut self, token_id: TokenId, club_id: Option<ClubId>) {
+        let id = self.resolve_club_id(club_id);
+        let key = seat_storage_key(&id, &token_id);
+        let lease = self.leases.get(&key).expect("no lease");
+        let pred = env::predecessor_account_id();
+        let seat = self.seats.get(&key).expect("seat");
+        let expired = self.now_ms() >= lease.expires_ms;
+        require!(
+            expired || pred == seat.owner_id,
+            "lease still active — only owner can cancel"
+        );
+        self.leases.remove(&key);
+    }
+
+    pub fn get_lease(&self, token_id: TokenId, club_id: Option<ClubId>) -> Option<LeaseState> {
+        let id = club_id.or_else(|| self.active_club_id.clone())?;
+        let key = seat_storage_key(&id, &token_id);
+        self.leases.get(&key)
     }
 
     pub fn request_raw_sign(&mut self, token_id: TokenId, club_id: Option<ClubId>) {
@@ -660,6 +794,31 @@ mod tests {
         testing_env!(context(accounts(0), 0).build());
         let r = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             c.withdraw("2".into(), U128(1), None);
+        }));
+        assert!(r.is_err());
+    }
+
+    #[test]
+    fn list_bumps_sign_epoch() {
+        let mut c = setup();
+        testing_env!(context(accounts(0), 0).build());
+        let before = c.get_seat("1".into(), None).unwrap().key_epoch;
+        let nonce = c.list_seat("1".into(), U128(50), None);
+        let after = c.get_seat("1".into(), None).unwrap();
+        assert_eq!(nonce, 1);
+        assert_eq!(after.key_epoch, before + 1);
+        assert_eq!(after.encumbrance, Encumbrance::Listed);
+    }
+
+    #[test]
+    fn buy_refuses_wash_flag() {
+        let mut c = setup();
+        testing_env!(context(accounts(0), 0).build());
+        c.flag_wash("1".into(), None);
+        let nonce = c.list_seat("1".into(), U128(50), None);
+        testing_env!(context(accounts(2), 50).build());
+        let r = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            c.buy_seat("1".into(), nonce, None);
         }));
         assert!(r.is_err());
     }

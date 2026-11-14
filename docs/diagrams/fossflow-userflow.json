@@ -1,32 +1,103 @@
 {
-  "t": "QuitClaim mid-payout userflow",
+  "t": "CleanDeed mid-payout userflow",
   "i": [
-    ["Buy ticket", "web", "Organizer or fan buy_ticket splits vaults"],
-    ["List seat", "function", "Owner list_seat FREEZE epoch held-sig"],
-    ["Diligence", "security", "RPC diligence PROVABLY CLEAN gate"],
-    ["Buy seat", "api", "Buyer buy_seat fresh nonce rebound"],
-    ["Lab refuse", "firewall", "Old withdraw FAIL explorer receipt"],
-    ["SDK tests", "analytics", "Vitest mid-payout CLEAN path"]
+    [
+      "Buy ticket",
+      "web",
+      "Organizer or fan buy_ticket splits vaults"
+    ],
+    [
+      "List seat",
+      "function",
+      "Owner list_seat FREEZE epoch held-sig"
+    ],
+    [
+      "Diligence",
+      "security",
+      "RPC diligence PROVABLY CLEAN gate"
+    ],
+    [
+      "Buy seat",
+      "api",
+      "Buyer buy_seat fresh nonce rebound"
+    ],
+    [
+      "Lab refuse",
+      "firewall",
+      "Old withdraw FAIL explorer receipt"
+    ],
+    [
+      "SDK tests",
+      "analytics",
+      "Vitest mid-payout CLEAN path"
+    ]
   ],
   "v": [
     [
       [
-        [0, -8, 0],
-        [1, -3, 0],
-        [2, 2, 0],
-        [3, 7, 0],
-        [4, 7, -5],
-        [5, 2, -5]
+        [
+          0,
+          -8,
+          0
+        ],
+        [
+          1,
+          -3,
+          0
+        ],
+        [
+          2,
+          2,
+          0
+        ],
+        [
+          3,
+          7,
+          0
+        ],
+        [
+          4,
+          7,
+          -5
+        ],
+        [
+          5,
+          2,
+          -5
+        ]
       ],
       [
-        [0, 1],
-        [1, 2],
-        [2, 3],
-        [3, 4],
-        [4, 5],
-        [5, 2]
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          2
+        ]
       ]
     ]
   ],
-  "_": { "f": "compact", "v": "1.0" }
+  "_": {
+    "f": "compact",
+    "v": "1.0"
+  },
+  "title": "",
+  "description": ""
 }

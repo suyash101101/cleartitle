@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Load QuitClaim E2E into FossFLOW, then use real "Export as image" PNG
+ * Load CleanDeed E2E into FossFLOW, then use real "Export as image" PNG
  * (dom-to-image), not a viewport screenshot.
  */
 import { chromium } from "@playwright/test";
@@ -38,7 +38,10 @@ await page.evaluate((data) => {
 await page.reload({ waitUntil: "domcontentloaded", timeout: 60000 });
 await page.waitForTimeout(4000);
 
-if (!(await page.getByText("CLEAN gate").count()) && !(await page.getByText("QuitClaim").count())) {
+if (
+  !(await page.getByText("CLEAN gate").count()) &&
+  !(await page.getByText("CleanDeed").count())
+) {
   throw new Error("E2E model did not load into FossFLOW");
 }
 

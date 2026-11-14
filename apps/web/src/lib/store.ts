@@ -13,12 +13,14 @@ import {
   labOldOwnerWithdraw,
   labWashPath,
   listSeat,
+  offerLease,
   runDiligence,
   seedPreviewWorld,
-  type DiligenceReport,
-  type LabResult,
-  type WorldState,
-} from "@/sdk";
+  settleLease,
+  takeLease,
+} from "@/sdk/engine";
+import { assertCleanToBuy } from "@/sdk/policy";
+import type { DiligenceReport, LabResult, WorldState } from "@/sdk/types";
 import { ONCHAIN, txUrl } from "@/lib/evidence";
 
 type Flash = {
@@ -92,6 +94,9 @@ interface AppState {
   doList: (tokenId: string, ask: number) => void;
   doBuySeat: (tokenId: string) => void;
   doDiligence: (tokenId: string) => void;
+  doOfferLease: (tokenId: string, ask: number, durationMs: number) => void;
+  doTakeLease: (tokenId: string) => void;
+  doSettleLease: (tokenId: string) => void;
   runLab: (kind: "old" | "listed" | "held" | "wash" | "mid", tokenId: string) => void;
   runMidPayoutScenario: () => void;
   runJudgePath: () => void;
@@ -242,6 +247,7 @@ export const useApp = create<AppState>((set, get) => ({
       const world = cloneWorld(get().world);
       const seat = world.seats[tokenId];
       if (!seat?.listingAsk) throw new Error("seat not listed");
+      assertCleanToBuy(world, tokenId);
       const { txHash, rebounded } = buySeat(
         world,
         get().actor,
@@ -272,6 +278,43 @@ export const useApp = create<AppState>((set, get) => ({
       set({ flash: flashErr(e instanceof Error ? e.message : String(e)) });
     }
   },
+  doOfferLease: (tokenId, ask, durationMs) => {
+    try {
+      const world = cloneWorld(get().world);
+      const seat = world.seats[tokenId];
+      if (!seat) throw new Error(`seat ${tokenId} missing`);
+      // Prefer current owner so cast drift after mid-payout cannot block the offer.
+      const actor = get().actor === seat.owner ? get().actor : seat.owner;
+      const nonce = offerLease(world, actor, tokenId, ask, durationMs);
+      set({
+        world,
+        actor,
+        flash: flashOk(`Lease offer seat #${tokenId} @ ${ask} · nonce ${nonce}`),
+      });
+    } catch (e) {
+      set({ flash: flashErr(e instanceof Error ? e.message : String(e)) });
+    }
+  },
+  doTakeLease: (tokenId) => {
+    try {
+      const world = cloneWorld(get().world);
+      const seat = world.seats[tokenId];
+      if (!seat?.leaseAsk) throw new Error("no lease offer");
+      takeLease(world, get().actor, tokenId, seat.leaseAsk, seat.leaseNonce);
+      set({ world, flash: flashOk(`Took lease on seat #${tokenId} · cuts until expiry`) });
+    } catch (e) {
+      set({ flash: flashErr(e instanceof Error ? e.message : String(e)) });
+    }
+  },
+  doSettleLease: (tokenId) => {
+    try {
+      const world = cloneWorld(get().world);
+      settleLease(world, get().actor, tokenId);
+      set({ world, flash: flashOk(`Lease settled on seat #${tokenId}`) });
+    } catch (e) {
+      set({ flash: flashErr(e instanceof Error ? e.message : String(e)) });
+    }
+  },
   runLab: (kind, tokenId) => {
     const world = cloneWorld(get().world);
     const seat = world.seats[tokenId];
@@ -282,7 +325,7 @@ export const useApp = create<AppState>((set, get) => ({
     // Arm the threat so one-click Lab buttons always demonstrate the refusal.
     if (kind === "old" && seat.owner === "seller.near") {
       const nonce = listSeat(world, "seller.near", tokenId, 100);
-      buySeat(world, "priya.near", tokenId, 100, nonce);
+      buySeat(world, "buyer.near", tokenId, 100, nonce);
     } else if (kind === "listed" && seat.encumbrance !== "LISTED") {
       listSeat(world, seat.owner, tokenId, 100);
     } else if (kind === "held" && seat.encumbrance !== "LISTED") {
@@ -317,13 +360,13 @@ export const useApp = create<AppState>((set, get) => ({
       const world = seedPreviewWorld();
       const nonce = listSeat(world, "seller.near", "3", 100);
       const held = labHeldSig(world, "seller.near", "3");
-      const { rebounded } = buySeat(world, "priya.near", "3", 100, nonce);
+      const { rebounded } = buySeat(world, "buyer.near", "3", 100, nonce);
       const old = labOldOwnerWithdraw(world, "seller.near", "3");
       const diligence = runDiligence(world, "3");
       const mid = labExplorerProof("mid");
       set({
         world,
-        actor: "priya.near",
+        actor: "buyer.near",
         diligence,
         lastLab: old,
         flash: {
@@ -346,12 +389,12 @@ export const useApp = create<AppState>((set, get) => ({
       const stamps: JudgeStamp[] = [
         {
           step: "01 ready",
-          detail: "Seat #3 · ada · pending cut · FREE — List @ 100 is clickable",
+          detail: "Seat #3 · seller · pending cut · FREE — List @ 100 is clickable",
           ok: true,
         },
         {
           step: "02 film",
-          detail: "Diligence → List @ 100 → priya Buy mid-payout → Lab → Verify",
+          detail: "Diligence → List @ 100 → buyer Buy mid-payout → Lab → Verify",
           ok: true,
         },
       ];
@@ -363,7 +406,7 @@ export const useApp = create<AppState>((set, get) => ({
         lastLab: null,
         judgeStamps: stamps,
         flash: flashOk(
-          "Film ready (Preview) · Seat #3 · ada · pending · FREE. Click List @ 100 on the seat desk.",
+          "Film ready (Preview) · Seat #3 · seller · pending · FREE. Click List @ 100 on the seat desk.",
         ),
       };
       set(next);
