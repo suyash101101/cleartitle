@@ -271,14 +271,14 @@ const RECTS = [
 const TEXT = [
   {
     id: "t_title",
-    tile: { x: -1, y: -3 },
+    tile: { x: 0, y: -2.5 },
     content: "CleanDeed",
     fontSize: 1.65,
     orientation: "Y",
   },
   {
     id: "t_sub",
-    tile: { x: 1, y: -3 },
+    tile: { x: 2, y: -2.5 },
     content: "mid-payout title insurance on NEAR",
     fontSize: 0.4,
     orientation: "Y",

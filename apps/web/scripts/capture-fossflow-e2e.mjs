@@ -101,7 +101,7 @@ if (!dataUrl?.startsWith("data:image/png;base64,")) {
 
 const outE2e = join(diagrams, "e2e-flow.png");
 writeFileSync(outE2e, Buffer.from(dataUrl.split(",")[1], "base64"));
-trimWhitespace(outE2e, 40);
+trimWhitespace(outE2e, 64);
 copyFileSync(outE2e, join(diagrams, "userflow.png"));
 copyFileSync(outE2e, join(diagrams, "architecture.png"));
 
