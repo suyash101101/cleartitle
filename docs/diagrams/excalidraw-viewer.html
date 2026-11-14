@@ -2,46 +2,65 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>QuitClaim claims · Excalidraw</title>
+    <title>QuitClaim · Excalidraw viewer</title>
     <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw.min.css" />
     <style>
-      html,
-      body,
-      #root {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        background: #f3ede3;
-      }
+      html, body, #root { margin: 0; width: 100%; height: 100%; background: #ffffff; }
+      #picker { position: fixed; z-index: 10; top: 8px; left: 8px; display: flex; gap: 8px; }
+      #picker button { font: 14px/1.2 system-ui, sans-serif; padding: 6px 10px; cursor: pointer; }
+      body.capture #picker { display: none; }
+      body.capture .App-menu,
+      body.capture .layer-ui__wrapper,
+      body.capture .App-toolbar,
+      body.capture .Island,
+      body.capture .FixedSideContainer,
+      body.capture footer { display: none !important; }
     </style>
   </head>
   <body>
+    <div id="picker">
+      <button type="button" data-src="./quitclaim-architecture.excalidraw">Architecture</button>
+      <button type="button" data-src="./ada-priya-architecture.excalidraw">Ada / Priya</button>
+    </div>
     <div id="root"></div>
-    <script type="text/javascript" src="https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw.production.min.js"></script>
-    <script type="text/javascript">
+    <script src="https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw.production.min.js"></script>
+    <script>
       (async function () {
-        const scene = await fetch("./quitclaim-claims.excalidraw").then((r) => r.json());
-        const App = () =>
-          React.createElement(
-            "div",
-            { style: { width: "100%", height: "100%" } },
-            React.createElement(ExcalidrawLib.Excalidraw, {
-              initialData: {
-                elements: scene.elements,
-                appState: Object.assign({}, scene.appState || {}, {
-                  viewBackgroundColor: "#f3ede3",
-                  zenModeEnabled: true,
-                  gridSize: 20,
-                }),
-                scrollToContent: true,
-              },
-              UIOptions: { canvasActions: { changeViewBackgroundColor: false } },
-            }),
+        const params = new URLSearchParams(location.search);
+        const src = params.get("src") || "./quitclaim-architecture.excalidraw";
+        if (params.get("capture") === "1") document.body.classList.add("capture");
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        async function load(path) {
+          window.__EXCALIDRAW_READY__ = false;
+          const scene = await fetch(path).then((r) => r.json());
+          root.render(
+            React.createElement(
+              "div",
+              { style: { width: "100%", height: "100%" } },
+              React.createElement(ExcalidrawLib.Excalidraw, {
+                initialData: {
+                  elements: scene.elements,
+                  appState: Object.assign({}, scene.appState || {}, {
+                    viewBackgroundColor: "#ffffff",
+                    zenModeEnabled: true,
+                    viewModeEnabled: true,
+                  }),
+                  files: scene.files || {},
+                  scrollToContent: true,
+                },
+                UIOptions: { canvasActions: { changeViewBackgroundColor: false } },
+              }),
+            ),
           );
-        ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
-        window.__CLAIMS_READY__ = true;
+          setTimeout(() => { window.__EXCALIDRAW_READY__ = true; }, 1200);
+        }
+        document.getElementById("picker").addEventListener("click", (e) => {
+          const btn = e.target.closest("button[data-src]");
+          if (btn) load(btn.dataset.src);
+        });
+        await load(src);
       })();
     </script>
   </body>

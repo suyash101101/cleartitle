@@ -37,22 +37,43 @@ On-chain title insurance for memberships that earn. Demo world: **Nearnight Live
 
 ## Architecture
 
+**FossFLOW** (full E2E map: people → Live UI → mid-payout story → Lab/evidence → SDK/contract):
+
 ![QuitClaim E2E mid-payout flow](docs/diagrams/e2e-flow.png)
 
-![QuitClaim claims](docs/diagrams/quitclaim-claims.png)
+**Excalidraw** stack board:
 
-One FossFLOW end-to-end diagram (33 nodes, NEAR tool logos, mixed sleeping/vertical islands: people → Live → mid-payout story → Lab/evidence → SDK/contract). Claims sheet is Excalidraw.
+![QuitClaim complete architecture](docs/diagrams/quitclaim-architecture.png)
 
-Regenerate FossFLOW: FossFLOW on `:3000`, then `node scripts/generate-fossflow-e2e.mjs` and `node apps/web/scripts/capture-fossflow-e2e.mjs`.
+**Excalidraw** Ada / Priya flows (clear-title sale + mid-air attack fails):
 
-Sources: [`fossflow-e2e.json`](docs/diagrams/fossflow-e2e.json) · [`quitclaim-claims.excalidraw`](docs/diagrams/quitclaim-claims.excalidraw)
+![Ada and Priya demo flows](docs/diagrams/ada-priya-architecture.png)
+
+Sources: [`fossflow-e2e.json`](docs/diagrams/fossflow-e2e.json) · [`quitclaim-architecture.excalidraw`](docs/diagrams/quitclaim-architecture.excalidraw) · [`ada-priya-architecture.excalidraw`](docs/diagrams/ada-priya-architecture.excalidraw)
+
+## Contract
+
+Deployed testnet: [`cleartitle562464.testnet`](https://explorer.testnet.near.org/accounts/cleartitle562464.testnet) · source [`contracts/cleartitle`](contracts/cleartitle).
+
+Nearnight Live seats are NEP-171 deeds bound to keyless vaults (`seat-N.<contract>`). Ticket revenue splits by BPS into those vaults plus club treasury. A seat can be listed and sold while a payout is still pending; pending cuts stay bound to `token_id` and rebound to the buyer.
+
+| Method | Role |
+| --- | --- |
+| `create_club` / `mint_seats` / `set_paused` | Organizer setup · BPS must sum to 10000 |
+| `buy_ticket` | Fan payment · treasury + per-seat cuts |
+| `claim_payout` | Owner moves vault balance into PENDING |
+| `list_seat` / `buy_seat` | LISTED freeze · sale with `sync_nonce` · REBOUND_TO_BUYER |
+| `withdraw` / `request_raw_sign` | Owner-only · refused while LISTED/SETTLING or after ownership flip |
+| `diligence` | View: keys=0 · epoch · continuity · raw sigs · pending · wash · nonce → CLEAN or FIX |
+
+Seat encumbrance: `FREE → LISTED → SETTLING → FREE(buyer)`. Payout: `PENDING → SETTLED` or `REBOUND_TO_BUYER`.
 
 ## Why QuitClaim
 
 - **Mid-payout clear title:** Pending ticket cuts rebound to the buyer. Seller recall withdraw is an expected fail with explorer proof.
 - **Diligence stamp:** Six named on-chain checks unlock buy. Same view the SDK and UI call.
 - **Keyless vaults:** `access_key_count === 0` after mint. Epoch freeze while listed blocks held raw sign.
-- **Shippable SDK:** Integrators run `createClub → list → buy → diligence CLEAN` without the demo UI.
+- **Shippable SDK:** Integrators run `createClub → list → buy → diligence CLEAN` without the web UI.
 - **Honest roadmap:** NEP-141 USDC tickets and intent-routed door fees are labeled roadmap, not fake UI.
 
 ## Real vs simulated
@@ -132,13 +153,9 @@ cleartitle/
   packages/sdk     engine + NEAR view/encode + Vitest
   apps/web         Next.js Live + Preview UI
   contracts/       near-sdk Rust
-  scripts/         evidence, refresh-onchain-evidence, demo-night, hostile
-  docs/            threat model, demo script, economics, diagrams
+  scripts/         evidence, hostile, diagram export
+  docs/            threat model, economics, diagrams
 ```
-
-## Demo film
-
-See [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md). Preview Film ready for clicks; Live explorer for refuse receipts; end on `/scale` if time allows.
 
 ## Non-goals (this submission)
 
