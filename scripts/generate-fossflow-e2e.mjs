@@ -254,8 +254,8 @@ const COLORS = [
  * Gaps between different colors so islands never touch.
  */
 const RECTS = [
-  // Brand pad: NEAR tools (x≤6) + open front strip for CleanDeed (Y).
-  { id: "r_brand", color: "c_brand", from: { x: -1, y: -12 }, to: { x: 11, y: -7 } },
+  // Brand pad hugs NEAR tools only — title lives front-center of the whole stack.
+  { id: "r_brand", color: "c_brand", from: { x: -1, y: -12 }, to: { x: 8, y: -7 } },
   { id: "r_people", color: "c_people", from: { x: -1, y: -5 }, to: { x: 15, y: -3 } },
   { id: "r_ui", color: "c_ui", from: { x: -1, y: -2 }, to: { x: 17, y: 2 } },
   { id: "r_story", color: "c_story", from: { x: -1, y: 3 }, to: { x: 10, y: 7 } },
@@ -264,24 +264,23 @@ const RECTS = [
 ];
 
 /**
- * CleanDeed on the front brand face — orientation Y (same as earlier),
- * centered in the open strip between NEAR icons (x≤6) and pad edge (x=11).
+ * CleanDeed + tagline: keep Y orientation. Anchor on the left of the
+ * People front so the Y-run text lands mid-stack (not the brand tip).
  * Block labels only in empty corners — never on node coords.
  */
 const TEXT = [
   {
-    // Anchor left of open strip so Y-run text mass sits mid-pad (not edge).
     id: "t_title",
-    tile: { x: 7, y: -10.5 },
+    tile: { x: -1, y: -3 },
     content: "CleanDeed",
-    fontSize: 1.7,
+    fontSize: 1.65,
     orientation: "Y",
   },
   {
     id: "t_sub",
-    tile: { x: 9, y: -10.5 },
+    tile: { x: 1, y: -3 },
     content: "mid-payout title insurance on NEAR",
-    fontSize: 0.42,
+    fontSize: 0.4,
     orientation: "Y",
   },
   // empty corners (no node at these tiles)
