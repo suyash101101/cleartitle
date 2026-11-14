@@ -5,23 +5,16 @@ import { useCallback, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { RollTicket } from "@/components/TicketRoll";
 
-const DEFAULTS: RollTicket[] = [
-  { id: "1", tier: "Floor", owner: "organizer.near", keys: 0 },
-  { id: "2", tier: "Lounge", owner: "organizer.near", keys: 0 },
-  { id: "3", tier: "Suite", owner: "ada.near", keys: 0, status: "CLEAN" },
-  { id: "4", tier: "VIP", owner: "organizer.near", keys: 0 },
-  { id: "5", tier: "Press", owner: "organizer.near", keys: 0 },
-];
-
 const TEAR_AT = 240;
 const SHEET_MIN = 168;
 
 /**
  * Side-view toilet-paper roll (2D illusion):
  * wrap bands scroll with pull; hanging sheet is pure white.
+ * Tickets come from the active venue — no baked-in seat catalog.
  */
 export function TicketRoll3D({
-  tickets = DEFAULTS,
+  tickets = [],
   mode = "display",
   onMint,
 }: {

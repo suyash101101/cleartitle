@@ -8,7 +8,7 @@ export function SeatDeedCard({ owner = "ada.near", epoch = 1 }: { owner?: string
       <div className="asset-card-inner">
         <p className="asset-kicker">NEP-171 · suite deed</p>
         <h3>Seat #3</h3>
-        <p className="asset-line">vault · seat-3.cleartitle…</p>
+        <p className="asset-line">vault · seat vault · QuitClaim</p>
         <p className="asset-line highlight">0 access keys · epoch {epoch}</p>
         <p className="asset-line">owner · {owner}</p>
         <div className="asset-footer">
@@ -25,7 +25,7 @@ export function NightTicketCard() {
   return (
     <div className="asset-card night-ticket">
       <div className="asset-card-inner">
-        <p className="asset-kicker">Nearnight Live</p>
+        <p className="asset-kicker">QuitClaim</p>
         <h3>Door ticket</h3>
         <p className="asset-price">
           10 <small>USDC</small>
@@ -81,7 +81,7 @@ export function OwnershipFlipCard() {
   return (
     <div className="asset-card flip-card">
       <div className="asset-card-inner">
-        <p className="asset-kicker">Mid-payout · one breath · clear title</p>
+        <p className="asset-kicker">Mid-payout · one breath · QuitClaim</p>
         <div className="flip-row">
           <div>
             <span className="meta">Seller</span>

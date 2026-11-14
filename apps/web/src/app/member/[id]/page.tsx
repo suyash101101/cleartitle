@@ -61,7 +61,7 @@ export default function MemberRoomPage() {
     return (
       <section className="section" style={{ borderTop: "none" }}>
         <h2>Member Room</h2>
-        <p className="lede">Seat missing. Seed QuitClaim specimen from Club Console.</p>
+        <p className="lede">Seat missing. Create a venue in Club Console.</p>
       </section>
     );
   }

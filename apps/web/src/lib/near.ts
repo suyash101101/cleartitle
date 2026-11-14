@@ -1,17 +1,18 @@
-/** Read-only NEAR testnet helpers (no wallet / no private keys in the browser). */
+/** Read-only NEAR helpers (no wallet / no private keys in the browser). */
+
+import { NETWORK_EXPLORER, NETWORK_RPC, SPECIMEN_TESTNET_CONTRACT } from "@/sdk";
 
 export const CONTRACT_ID =
-  process.env.NEXT_PUBLIC_CONTRACT_ID ?? "cleartitle562464.testnet";
-export const NETWORK = process.env.NEXT_PUBLIC_NEAR_NETWORK ?? "testnet";
+  process.env.NEXT_PUBLIC_CONTRACT_ID?.trim() || SPECIMEN_TESTNET_CONTRACT;
+export const NETWORK = (process.env.NEXT_PUBLIC_NEAR_NETWORK ?? "testnet") as
+  | "testnet"
+  | "mainnet"
+  | "local";
 export const RPC =
   process.env.NEXT_PUBLIC_NEAR_RPC ??
-  (NETWORK === "mainnet"
-    ? "https://free.rpc.fastnear.com"
-    : "https://test.rpc.fastnear.com");
+  NETWORK_RPC[NETWORK === "mainnet" ? "mainnet" : NETWORK === "local" ? "local" : "testnet"];
 export const EXPLORER =
-  NETWORK === "mainnet"
-    ? "https://explorer.near.org"
-    : "https://explorer.testnet.near.org";
+  NETWORK_EXPLORER[NETWORK === "mainnet" ? "mainnet" : NETWORK === "local" ? "local" : "testnet"];
 
 function toBase64(str: string): string {
   if (typeof window === "undefined") {
@@ -30,7 +31,7 @@ export async function viewMethod<T>(method: string, args: Record<string, unknown
       signal: ctrl.signal,
       body: JSON.stringify({
         jsonrpc: "2.0",
-        id: "cleartitle",
+        id: "quitclaim",
         method: "query",
         params: {
           request_type: "call_function",

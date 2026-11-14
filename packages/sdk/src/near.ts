@@ -7,14 +7,14 @@
  */
 
 import {
-  DEMO_TESTNET_CONTRACT,
+  SPECIMEN_TESTNET_CONTRACT,
   resolveRpc,
   type QuitClaimConfig,
   type NearNetwork,
 } from "./config";
 
-/** @deprecated Prefer QuitClaimClient / explicit contractId. Demo account only. */
-export const DEFAULT_TESTNET_CONTRACT = DEMO_TESTNET_CONTRACT;
+/** @deprecated Prefer QuitClaimClient / explicit contractId. */
+export const DEFAULT_TESTNET_CONTRACT = SPECIMEN_TESTNET_CONTRACT;
 /** @deprecated Prefer resolveRpc({ network }) or QuitClaimClient. */
 export const DEFAULT_TESTNET_RPC = "https://test.rpc.fastnear.com";
 
@@ -109,7 +109,7 @@ export async function nearView<T>(
       signal: ctrl.signal,
       body: JSON.stringify({
         jsonrpc: "2.0",
-        id: "cleartitle-sdk",
+        id: "quitclaim-sdk",
         method: "query",
         params: {
           request_type: "call_function",

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { QuitClaimClient, DEMO_TESTNET_CONTRACT, seatBuyNonce } from "../src/index";
+import { QuitClaimClient, SPECIMEN_TESTNET_CONTRACT, seatBuyNonce } from "../src/index";
 
 const live = process.env.QUITCLAIM_LIVE_RPC === "1";
-const contractId = process.env.CLEARTITLE_CONTRACT_ID ?? DEMO_TESTNET_CONTRACT;
+const contractId = process.env.QUITCLAIM_CONTRACT_ID ?? SPECIMEN_TESTNET_CONTRACT;
 
 describe.runIf(live)("live RPC (QUITCLAIM_LIVE_RPC=1)", () => {
   it("reads club, seats, diligence via QuitClaimClient", async () => {

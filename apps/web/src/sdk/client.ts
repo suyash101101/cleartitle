@@ -173,21 +173,20 @@ export function clientFromEnv(
   env: Record<string, string | undefined> = typeof process !== "undefined" ? process.env : {},
 ): QuitClaimClient {
   const contractId =
-    env.CLEARTITLE_CONTRACT_ID ??
+    env.QUITCLAIM_CONTRACT_ID ??
     env.NEXT_PUBLIC_CONTRACT_ID ??
+    env.CLEARTITLE_CONTRACT_ID ??
     env.CONTRACT_ID;
   if (!contractId) {
     throw new Error(
-      "Set CLEARTITLE_CONTRACT_ID or NEXT_PUBLIC_CONTRACT_ID to your deployed contract",
+      "Set QUITCLAIM_CONTRACT_ID or NEXT_PUBLIC_CONTRACT_ID to your deployed contract",
     );
   }
-  const network = (env.CLEARTITLE_NETWORK ??
+  const network = (env.QUITCLAIM_NETWORK ??
     env.NEXT_PUBLIC_NEAR_NETWORK ??
+    env.CLEARTITLE_NETWORK ??
     "testnet") as NearNetwork;
-  const clubId = env.CLEARTITLE_CLUB_ID ?? env.NEXT_PUBLIC_CLUB_ID;
-  const rpcUrl = env.CLEARTITLE_RPC ?? env.NEXT_PUBLIC_NEAR_RPC;
+  const clubId = env.QUITCLAIM_CLUB_ID ?? env.NEXT_PUBLIC_CLUB_ID ?? env.CLEARTITLE_CLUB_ID;
+  const rpcUrl = env.QUITCLAIM_RPC ?? env.NEXT_PUBLIC_NEAR_RPC ?? env.CLEARTITLE_RPC;
   return new QuitClaimClient({ contractId, network, clubId, rpcUrl });
 }
-
-/** @deprecated Use QuitClaimClient */
-export const ClearTitleClient = QuitClaimClient;

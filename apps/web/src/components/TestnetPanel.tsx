@@ -2,51 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { CONTRACT_ID, EXPLORER, viewMethod } from "@/lib/near";
+import { CONTRACT_ID, EXPLORER } from "@/lib/near";
+import { viewClub, viewDiligence, viewSeats, type ChainClub, type ChainSeat } from "@/lib/chainViews";
 
-type Club = {
-  name: string;
-  tickets_sold: number;
-  treasury_balance: number;
-  organizer: string;
-};
-
-type Diligence = {
-  verdict: string;
-  checks: { id: string; pass: boolean; detail: string }[];
-};
-
-type SeatView = {
-  token_id: string;
-  owner_id: string;
-  vault_account_id: string;
-  encumbrance: string;
-  seat_bps: number;
-  access_key_count: number;
-  wash_flagged: boolean;
-};
-
-const SEAT_IDS = ["1", "2", "3", "4", "5"];
-
-async function loadSeats(): Promise<SeatView[]> {
-  const rows = await Promise.all(
-    SEAT_IDS.map(async (token_id) => {
-      try {
-        const s = await viewMethod<SeatView | null>("get_seat", { token_id });
-        return s ? { ...s, token_id: s.token_id ?? token_id } : null;
-      } catch {
-        return null;
-      }
-    }),
-  );
-  return rows.filter((s): s is SeatView => Boolean(s));
-}
-
-/** Compact single-row live strip — no sprawling empty cards. */
+/** Compact live strip: club + any seats from chain (no hardcoded token ids). */
 export function TestnetPanel({ compact = false }: { compact?: boolean }) {
-  const [club, setClub] = useState<Club | null>(null);
-  const [diligence, setDiligence] = useState<Diligence | null>(null);
-  const [seats, setSeats] = useState<SeatView[]>([]);
+  const [club, setClub] = useState<ChainClub | null>(null);
+  const [diligence, setDiligence] = useState<{ verdict: string } | null>(null);
+  const [seats, setSeats] = useState<ChainSeat[]>([]);
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -59,15 +22,16 @@ export function TestnetPanel({ compact = false }: { compact?: boolean }) {
     }, 7000);
 
     try {
-      const [rows, clubView, dil] = await Promise.all([
-        loadSeats(),
-        viewMethod<Club>("get_club", {}).catch(() => null),
-        viewMethod<Diligence>("diligence", { token_id: "3" }).catch(() => null),
-      ]);
+      const rows = await viewSeats().catch(() => [] as ChainSeat[]);
+      const clubView = await viewClub().catch(() => null);
+      const focus = rows[0]?.token_id;
+      const dil = focus
+        ? await viewDiligence(focus).catch(() => null)
+        : null;
       setSeats(rows);
       setClub(clubView);
       setDiligence(dil);
-      if (rows.length === 0) setErr("No seats from RPC");
+      if (rows.length === 0 && !clubView) setErr("No venue on this contract yet");
     } catch (e) {
       setSeats([]);
       setErr(e instanceof Error ? e.message : String(e));
@@ -81,19 +45,20 @@ export function TestnetPanel({ compact = false }: { compact?: boolean }) {
     void refresh();
   }, [refresh]);
 
-  const seat3 = seats.find((s) => s.token_id === "3") ?? seats[0];
+  const focus = seats[0];
   const clean = diligence?.verdict?.includes("CLEAN");
 
   return (
     <div className={`live-rail live-rail-line${compact ? " live-rail-compact" : ""}`}>
       <div className="live-rail-row">
-        <span className="badge rpc">Testnet</span>
+        <span className="badge rpc">Live</span>
         <a className="mono live-rail-id" href={`${EXPLORER}/accounts/${CONTRACT_ID}`} target="_blank" rel="noreferrer">
           {CONTRACT_ID}
         </a>
         {club && (
           <span className="live-rail-stat">
-            sold {club.tickets_sold} · treasury {club.treasury_balance}
+            {club.name ?? club.club_id ?? "venue"} · sold {club.tickets_sold ?? 0} · ticket{" "}
+            {String(club.ticket_price ?? "—")}
           </span>
         )}
         {diligence && (
@@ -101,9 +66,9 @@ export function TestnetPanel({ compact = false }: { compact?: boolean }) {
             {clean ? "CLEAN" : diligence.verdict}
           </span>
         )}
-        {seat3 && (
-          <Link href={`/seat/${seat3.token_id}`} className="live-rail-seat mono">
-            #{seat3.token_id} · {seat3.owner_id}
+        {focus && (
+          <Link href={`/seat/${focus.token_id}`} className="live-rail-seat mono">
+            #{focus.token_id} · {focus.owner_id}
           </Link>
         )}
         <button
@@ -118,7 +83,11 @@ export function TestnetPanel({ compact = false }: { compact?: boolean }) {
           Seats →
         </Link>
       </div>
-      {err && <p className="meta live-rail-err">{err}</p>}
+      {err && (
+        <p className="meta" style={{ marginTop: "0.35rem", color: "var(--color-warn)" }}>
+          {err}
+        </p>
+      )}
     </div>
   );
 }

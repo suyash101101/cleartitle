@@ -1,4 +1,4 @@
-/** Network + venue configuration for real deployments. */
+/** Network + venue configuration for QuitClaim deployments. */
 
 export type NearNetwork = "testnet" | "mainnet" | "local";
 
@@ -25,8 +25,14 @@ export const NETWORK_EXPLORER: Record<NearNetwork, string> = {
   local: "http://127.0.0.1:3030",
 };
 
-/** Optional published demo deployment — never implied by the client constructor. */
-export const DEMO_TESTNET_CONTRACT = "cleartitle562464.testnet";
+/**
+ * Optional published specimen account (hackathon deploy).
+ * Never used unless you pass it or set it in env yourself.
+ */
+export const SPECIMEN_TESTNET_CONTRACT = "cleartitle562464.testnet";
+
+/** @deprecated Use SPECIMEN_TESTNET_CONTRACT */
+export const DEMO_TESTNET_CONTRACT = SPECIMEN_TESTNET_CONTRACT;
 
 export function resolveRpc(cfg: Pick<QuitClaimConfig, "network" | "rpcUrl">): string {
   if (cfg.rpcUrl) return cfg.rpcUrl;
@@ -37,12 +43,12 @@ export function resolveExplorer(network: NearNetwork = "testnet"): string {
   return NETWORK_EXPLORER[network];
 }
 
-/** Venue blueprint used by createVenue (local engine) and encodeCreateClub (chain). */
+/** Venue blueprint for createVenue (local) and encodeCreateClub (chain). */
 export type VenueSpec = {
   clubId: string;
   name: string;
   organizer: string;
-  /** Integer ticket price in the venue's on-chain denomination (yocto / smallest unit). */
+  /** Integer ticket price in the venue's on-chain denomination. */
   ticketPrice: number;
   seatBps: number[];
   treasuryBps: number;
@@ -64,6 +70,3 @@ export function assertVenueSpec(spec: VenueSpec): void {
     throw new Error("seatKinds length must match seatBps");
   }
 }
-
-/** @deprecated Use QuitClaimConfig */
-export type ClearTitleConfig = QuitClaimConfig;

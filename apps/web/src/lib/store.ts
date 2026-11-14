@@ -14,7 +14,7 @@ import {
   labWashPath,
   listSeat,
   runDiligence,
-  seedDemoNight,
+  seedPreviewWorld,
   type DiligenceReport,
   type LabResult,
   type WorldState,
@@ -52,7 +52,7 @@ export type JudgeStamp = { step: string; detail: string; ok: boolean };
 /** live = wallet + RPC product path; preview = local scenario / film. */
 export type ProductMode = "live" | "preview";
 
-const MODE_KEY = "cleartitle-product-mode";
+const MODE_KEY = "quitclaim-product-mode";
 
 function readProductMode(): ProductMode {
   if (typeof window === "undefined") return "live";
@@ -104,7 +104,7 @@ function flashErr(text: string): Flash {
   return { kind: "err", text };
 }
 
-const JUDGE_STATE_KEY = "cleartitle-judge-state";
+const JUDGE_STATE_KEY = "quitclaim-judge-state";
 
 type PersistedJudge = {
   world: WorldState;
@@ -148,13 +148,13 @@ export function hydrateJudgeFromSession() {
 }
 
 export const useApp = create<AppState>((set, get) => ({
-  world: seedDemoNight(),
+  world: createWorld(),
   diligence: null,
   lastLab: null,
   lastSplit: null,
   flash: null,
   judgeStamps: [],
-  actor: "ada.near",
+  actor: "seller.near",
   productMode: "live",
   setProductMode: (productMode) => {
     writeProductMode(productMode);
@@ -162,33 +162,38 @@ export const useApp = create<AppState>((set, get) => ({
       productMode,
       flash: flashOk(
         productMode === "live"
-          ? "Live mode · connect wallet · RPC diligence and signed list/buy."
-          : "Preview mode · local scenario engine · Film ready still available.",
+          ? "Live mode · connect wallet · create your venue on-chain."
+          : "Preview mode · local scenario engine for walkthroughs.",
       ),
     });
   },
   setActor: (actor) => set({ actor }),
   resetDemo: () =>
     set({
-      world: seedDemoNight(),
-      actor: "ada.near",
+      world: seedPreviewWorld(),
+      actor: "seller.near",
       productMode: "preview",
       diligence: null,
       lastLab: null,
       lastSplit: null,
       judgeStamps: [],
-      flash: flashOk("QuitClaim specimen seeded (Preview). Seat #3 suite pending. Ready for mid-payout."),
+      flash: flashOk("Preview venue seeded · seat #3 has a pending cut · ready to list."),
     }),
   bootstrapClub: () => {
     try {
-      const world = createWorld(["organizer.near", "ada.near", "priya.near", "fan.near"]);
+      const world = createWorld(["organizer.near", "seller.near", "buyer.near", "fan.near"]);
       createVenue(world, {
-        clubId: "nearnight",
-        name: "Nearnight Live",
+        clubId: "venue",
+        name: "My venue",
         organizer: "organizer.near",
         ticketPrice: 10,
-        seatBps: [1000, 1000, 1000, 1000, 1000],
-        treasuryBps: 5000,
+        seatBps: [2000, 2000, 2000, 2000, 2000],
+        treasuryBps: 0,
+        seatKinds: [1, 2, 3, 4, 5].map((n) => ({
+          id: `seat-${n}`,
+          label: `Seat ${n}`,
+          blurb: "Earning seat",
+        })),
       });
       set({
         world,
@@ -249,7 +254,7 @@ export const useApp = create<AppState>((set, get) => ({
         world,
         diligence,
         flash: flashOk(
-          `Bought seat #${tokenId} mid-payout · rebound ${rebounded} · ${txHash} · clear title.`,
+          `Bought seat #${tokenId} mid-payout · rebound ${rebounded} · ${txHash}.`,
         ),
       });
     } catch (e) {
@@ -271,12 +276,12 @@ export const useApp = create<AppState>((set, get) => ({
     const world = cloneWorld(get().world);
     const seat = world.seats[tokenId];
     if (!seat) {
-      set({ flash: flashErr(`Seat ${tokenId} missing. Seed QuitClaim specimen from Club first.`) });
+      set({ flash: flashErr(`Seat ${tokenId} missing. Create or seed a venue first.`) });
       return;
     }
     // Arm the threat so one-click Lab buttons always demonstrate the refusal.
-    if (kind === "old" && seat.owner === "ada.near") {
-      const nonce = listSeat(world, "ada.near", tokenId, 100);
+    if (kind === "old" && seat.owner === "seller.near") {
+      const nonce = listSeat(world, "seller.near", tokenId, 100);
       buySeat(world, "priya.near", tokenId, 100, nonce);
     } else if (kind === "listed" && seat.encumbrance !== "LISTED") {
       listSeat(world, seat.owner, tokenId, 100);
@@ -285,7 +290,7 @@ export const useApp = create<AppState>((set, get) => ({
     }
 
     let lastLab: LabResult;
-    if (kind === "old") lastLab = labOldOwnerWithdraw(world, "ada.near", tokenId);
+    if (kind === "old") lastLab = labOldOwnerWithdraw(world, "seller.near", tokenId);
     else if (kind === "listed") lastLab = labListedWithdraw(world, world.seats[tokenId]!.owner, tokenId);
     else if (kind === "held") lastLab = labHeldSig(world, world.seats[tokenId]!.owner, tokenId);
     else if (kind === "mid") {
@@ -309,11 +314,11 @@ export const useApp = create<AppState>((set, get) => ({
   },
   runMidPayoutScenario: () => {
     try {
-      const world = seedDemoNight();
-      const nonce = listSeat(world, "ada.near", "3", 100);
-      const held = labHeldSig(world, "ada.near", "3");
+      const world = seedPreviewWorld();
+      const nonce = listSeat(world, "seller.near", "3", 100);
+      const held = labHeldSig(world, "seller.near", "3");
       const { rebounded } = buySeat(world, "priya.near", "3", 100, nonce);
-      const old = labOldOwnerWithdraw(world, "ada.near", "3");
+      const old = labOldOwnerWithdraw(world, "seller.near", "3");
       const diligence = runDiligence(world, "3");
       const mid = labExplorerProof("mid");
       set({
@@ -337,7 +342,7 @@ export const useApp = create<AppState>((set, get) => ({
     try {
       // Film-ready seed — do NOT auto list/buy. Demo must click List @ 100.
       writeProductMode("preview");
-      const world = seedDemoNight();
+      const world = seedPreviewWorld();
       const stamps: JudgeStamp[] = [
         {
           step: "01 ready",
@@ -352,7 +357,7 @@ export const useApp = create<AppState>((set, get) => ({
       ];
       const next = {
         world,
-        actor: "ada.near" as const,
+        actor: "seller.near" as const,
         productMode: "preview" as const,
         diligence: null,
         lastLab: null,
@@ -367,12 +372,12 @@ export const useApp = create<AppState>((set, get) => ({
         diligence: null,
         lastLab: null,
         judgeStamps: stamps,
-        actor: "ada.near",
+        actor: "seller.near",
       });
 
       if (typeof window !== "undefined") {
         // "film" = no auto-advance tour; user clicks List @ 100 live
-        window.sessionStorage.setItem("cleartitle-judge", "film");
+        window.sessionStorage.setItem("quitclaim-judge", "film");
       }
     } catch (e) {
       set({

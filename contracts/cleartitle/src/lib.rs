@@ -540,7 +540,7 @@ pub struct DiligenceView {
 fn continuity_hash(vault: &str) -> String {
     // Domain-separated FNV-style digest mirrored by the SDK continuity helper intent.
     // Contract keeps a cheap on-chain form; SDK uses SHA-256 for address previews.
-    let s = format!("cleartitle/continuity/v1|{}|bitcoin|solana", vault);
+    let s = format!("quitclaim/continuity/v1|{}|bitcoin|solana", vault);
     let mut h: u32 = 0;
     for b in s.bytes() {
         h = h.wrapping_mul(31).wrapping_add(b as u32);
@@ -565,8 +565,8 @@ mod tests {
         let mut c = Contract::new();
         testing_env!(context(accounts(0), 0).build());
         c.create_club(
-            "nearnight".into(),
-            "Nearnight Live".into(),
+            "venue-a".into(),
+            "Venue A".into(),
             U128(10),
             vec![1000, 1000, 1000, 1000, 1000],
             5000,
@@ -598,9 +598,9 @@ mod tests {
         let c = setup();
         let seat = c.get_seat("1".into(), None).unwrap();
         assert_eq!(seat.access_key_count, 0);
-        assert!(seat.vault_account_id.as_str().contains("s-nearnight-1"));
+        assert!(seat.vault_account_id.as_str().contains("s-venue-a-1"));
         assert_eq!(seat.kind, "floor");
-        assert_eq!(seat.club_id, "nearnight");
+        assert_eq!(seat.club_id, "venue-a");
         assert_eq!(c.list_seats(None).len(), 5);
     }
 
@@ -687,7 +687,7 @@ mod tests {
         c.mint_seats(Some("dayfest".into()));
         assert_eq!(c.list_clubs().len(), 2);
         assert_eq!(c.get_club(Some("dayfest".into())).unwrap().ticket_price, 25);
-        assert_eq!(c.get_club(Some("nearnight".into())).unwrap().ticket_price, 10);
+        assert_eq!(c.get_club(Some("venue-a".into())).unwrap().ticket_price, 10);
         testing_env!(context(accounts(1), 25).build());
         c.buy_ticket(Some("dayfest".into()));
         assert_eq!(
@@ -697,6 +697,6 @@ mod tests {
             6
         );
         // Nearnight seats untouched
-        assert_eq!(c.get_seat("1".into(), Some("nearnight".into())).unwrap().balance, 0);
+        assert_eq!(c.get_seat("1".into(), Some("venue-a".into())).unwrap().balance, 0);
     }
 }

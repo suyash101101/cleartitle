@@ -5,7 +5,7 @@ import Link from "next/link";
 /** Orbit rings with headline centered between them; CTA + meta below. */
 export function OrbitalCTA() {
   return (
-    <section className="orbital-cta" aria-label="Start with Nearnight">
+    <section className="orbital-cta" aria-label="Start with QuitClaim">
       <div className="orbital-stage">
         <div className="orbital-ellipse outer" aria-hidden />
         <div className="orbital-ellipse mid" aria-hidden />

@@ -23,12 +23,12 @@ export function chainSigPathDigest(
   chain: "bitcoin" | "solana",
   path = "seat-earnings-v1",
 ): Uint8Array {
-  const material = `cleartitle/chain-sig/v1\0${vaultAccountId}\0${chain}\0${path}`;
+  const material = `quitclaim/chain-sig/v1\0${vaultAccountId}\0${chain}\0${path}`;
   return sha256Bytes(utf8(material));
 }
 
 export function continuityHash(vaultAccountId: string): string {
-  const digest = sha256Bytes(utf8(`cleartitle/continuity/v1\0${vaultAccountId}\0bitcoin\0solana`));
+  const digest = sha256Bytes(utf8(`quitclaim/continuity/v1\0${vaultAccountId}\0bitcoin\0solana`));
   return `cont_${Array.from(digest.slice(0, 8))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("")}`;

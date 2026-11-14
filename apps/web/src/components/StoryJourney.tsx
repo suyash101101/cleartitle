@@ -62,7 +62,7 @@ const BEATS = [
   {
     id: "vault",
     kicker: "02 · Five NEP-171 seat deeds",
-    title: "Floor, lounge, suite, VIP, press. Each earns every night.",
+    title: "Any seat classes you define. Each earns on every ticket.",
     body: "QuitClaim venues mint founding seat NFTs. Each is a keyless vault that takes a cut of every door fee. Control flips. Continuity does not.",
     href: "/inventory",
     cta: "Browse seat inventory",

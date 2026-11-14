@@ -16,7 +16,7 @@ import {
   listSeat,
   mintSeats,
   runDiligence,
-  seedDemoNight,
+  seedPreviewWorld,
 } from "../src/index";
 
 describe("integration: end-to-end mid-payout product path", () => {
@@ -32,29 +32,29 @@ describe("integration: end-to-end mid-payout product path", () => {
     });
     mintSeats(world, "organizer.near");
     // Hand seat 3 to ada like a founding sale
-    world.seats["3"]!.owner = "ada.near";
+    world.seats["3"]!.owner = "seller.near";
     buyTicket(world, "fan.near", 10);
-    claimPayout(world, "ada.near", "3");
+    claimPayout(world, "seller.near", "3");
     expect(world.seats["3"]!.pending.some((p) => p.status === "PENDING")).toBe(true);
 
-    const nonce = listSeat(world, "ada.near", "3", 100);
-    expect(labHeldSig(world, "ada.near", "3").success).toBe(false);
-    const { rebounded } = buySeat(world, "priya.near", "3", 100, nonce);
+    const nonce = listSeat(world, "seller.near", "3", 100);
+    expect(labHeldSig(world, "seller.near", "3").success).toBe(false);
+    const { rebounded } = buySeat(world, "buyer.near", "3", 100, nonce);
     expect(rebounded).toBeGreaterThan(0);
-    expect(world.seats["3"]!.owner).toBe("priya.near");
+    expect(world.seats["3"]!.owner).toBe("buyer.near");
     expect(runDiligence(world, "3").verdict).toBe("PROVABLY CLEAN");
-    expect(labOldOwnerWithdraw(world, "ada.near", "3").reason).toMatch(/not current owner/);
+    expect(labOldOwnerWithdraw(world, "seller.near", "3").reason).toMatch(/not current owner/);
   });
 
-  it("seedDemoNight film path matches integrator snippet", () => {
-    const world = seedDemoNight();
-    const nonce = listSeat(world, "ada.near", "3", 100);
-    buySeat(world, "priya.near", "3", 100, nonce);
+  it("seedPreviewWorld film path matches integrator snippet", () => {
+    const world = seedPreviewWorld();
+    const nonce = listSeat(world, "seller.near", "3", 100);
+    buySeat(world, "buyer.near", "3", 100, nonce);
     expect(runDiligence(world, "3").verdict).toBe("PROVABLY CLEAN");
   });
 
   it("wash flag fails one named diligence check → FIX BEFORE BUY", () => {
-    const world = seedDemoNight();
+    const world = seedPreviewWorld();
     const clean = runDiligence(world, "3");
     expect(clean.verdict).toBe("PROVABLY CLEAN");
     expect(clean.checks.every((c) => c.pass)).toBe(true);
@@ -93,8 +93,8 @@ describe("multi-venue engine", () => {
   it("hosts independent clubs without clobbering the first venue", () => {
     const world = createWorld();
     createVenue(world, {
-      clubId: "nearnight",
-      name: "Nearnight Live",
+      clubId: "venue",
+      name: "Preview venue",
       organizer: "organizer.near",
       ticketPrice: 10,
       seatBps: [5000, 5000],
@@ -117,11 +117,11 @@ describe("multi-venue engine", () => {
       },
       { setActive: false },
     );
-    buyTicket(world, "fan.near", 10, "nearnight");
+    buyTicket(world, "fan.near", 10, "venue");
     buyTicket(world, "fan.near", 25, "dayfest");
-    expect(world.clubs.nearnight!.ticketPrice).toBe(10);
+    expect(world.clubs.venue!.ticketPrice).toBe(10);
     expect(world.clubs.dayfest!.ticketPrice).toBe(25);
-    expect(world.seats["nearnight:1"]!.balance).toBe(5);
+    expect(world.seats["venue:1"]!.balance).toBe(5);
     expect(world.seats["dayfest:1"]!.balance).toBe(6);
     expect(world.seats["dayfest:1"]!.kind).toBe("ga");
   });

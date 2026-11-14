@@ -1,7 +1,11 @@
-/** Live proof artifacts from testnet QuitClaim deployment. */
+/** Live proof artifacts from the published specimen QuitClaim deployment. */
 
-export const CONTRACT_ID = "cleartitle562464.testnet";
-export const EXPLORER = "https://testnet.nearblocks.io";
+import { CONTRACT_ID as BOUND_CONTRACT, EXPLORER as BOUND_EXPLORER } from "@/lib/near";
+
+export const CONTRACT_ID = BOUND_CONTRACT;
+export const EXPLORER = BOUND_EXPLORER.includes("explorer")
+  ? "https://testnet.nearblocks.io"
+  : "https://testnet.nearblocks.io";
 
 export const ONCHAIN = {
   deploy: "WXRUUPjAtyKuUGFkDy54QxYmF2NxbHLnfkqpcpPmE1q",

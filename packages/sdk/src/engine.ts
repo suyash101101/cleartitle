@@ -1,7 +1,6 @@
 import { assertVenueSpec, type VenueSpec } from "./config";
 import { continuityHash, deriveBtcAddress, deriveSolAddress } from "./derive";
 import {
-  NEARNIGHT_SEAT_KINDS,
   type ClubConfig,
   type DiligenceReport,
   type LabResult,
@@ -547,30 +546,64 @@ export function labWashPath(world: WorldState, tokenId: string): LabResult {
 }
 
 /**
- * Optional story preset (hackathon film). Prefer `createVenue` for real apps.
- * Leaves seat #3 mid-payout so List → Buy can be exercised locally.
+ * Local preview world with a mid-payout seat ready to list/buy.
+ * Not a product default — Live apps should start empty and load from chain.
  */
-export function seedDemoNight(): WorldState {
-  const world = createWorld(["organizer.near", "ada.near", "priya.near", "fan.near"], "demo");
+export function seedPreviewWorld(
+  opts: {
+    clubId?: string;
+    name?: string;
+    organizer?: string;
+    seller?: string;
+    buyer?: string;
+    fan?: string;
+    ticketPrice?: number;
+    seatCount?: number;
+    storySeat?: string;
+  } = {},
+): WorldState {
+  const clubId = opts.clubId ?? "venue";
+  const organizer = opts.organizer ?? "organizer.near";
+  const seller = opts.seller ?? "seller.near";
+  const fan = opts.fan ?? "fan.near";
+  const ticketPrice = opts.ticketPrice ?? 10;
+  const seatCount = opts.seatCount ?? 5;
+  const storySeat = opts.storySeat ?? "3";
+  const perSeat = Math.floor(5000 / seatCount);
+  const seatBps = Array.from({ length: seatCount }, () => perSeat);
+  const treasuryBps = 10000 - seatBps.reduce((a, b) => a + b, 0);
+  const seatKinds = seatBps.map((_, i) => ({
+    id: `seat-${i + 1}`,
+    label: `Seat ${i + 1}`,
+    blurb: "Venue-defined earning seat",
+  }));
+
+  const world = createWorld([organizer, seller, opts.buyer ?? "buyer.near", fan], "demo");
   createVenue(world, {
-    clubId: "nearnight",
-    name: "Nearnight Live",
-    organizer: "organizer.near",
-    ticketPrice: 10,
-    seatBps: [1000, 1000, 1000, 1000, 1000],
-    treasuryBps: 5000,
+    clubId,
+    name: opts.name ?? "Preview venue",
+    organizer,
+    ticketPrice,
+    seatBps,
+    treasuryBps,
     royaltyBps: 500,
-    seatKinds: NEARNIGHT_SEAT_KINDS,
+    seatKinds,
   });
-  const seat3 = world.seats["3"]!;
-  seat3.owner = "ada.near";
-  seat3.holderHistory[0]!.to = Date.now();
-  seat3.holderHistory.push({ owner: "ada.near", from: Date.now(), to: null });
-  buyTicket(world, "fan.near", 10);
-  buyTicket(world, "fan.near", 10);
-  claimPayout(world, "ada.near", "3", 0.5);
+  const seat = world.seats[storySeat];
+  if (seat) {
+    seat.owner = seller;
+    seat.holderHistory[0]!.to = Date.now();
+    seat.holderHistory.push({ owner: seller, from: Date.now(), to: null });
+    buyTicket(world, fan, ticketPrice);
+    buyTicket(world, fan, ticketPrice);
+    const claim = Math.min(0.5, seat.balance);
+    if (claim > 0) claimPayout(world, seller, storySeat, claim);
+  }
   return world;
 }
+
+/** @deprecated Use seedPreviewWorld */
+export const seedDemoNight = seedPreviewWorld;
 
 export const VERIFY_CLAIMS = [
   {

@@ -64,7 +64,7 @@ export default function ConsolePage() {
               router.push("/seat/3");
             }}
           >
-            Film ready · Seat #3
+            Preview mid-payout
           </button>
         )}
         {productMode === "preview" && (
@@ -73,13 +73,13 @@ export default function ConsolePage() {
               Create club + mint 5 seats
             </button>
             <button type="button" className="ghost" onClick={seedNight}>
-              Seed QuitClaim specimen
+              Seed preview venue
             </button>
           </>
         )}
         {productMode === "live" && (
-          <Link className="btn" href="/seat/3">
-            Open seat #3 (live)
+          <Link className="btn" href="/inventory">
+            Open inventory (live)
           </Link>
         )}
         <Link className="btn ghost" href="/box-office">
@@ -103,7 +103,7 @@ export default function ConsolePage() {
           <div className="panel" style={{ marginBottom: "1.5rem" }}>
             <h3>Judge path · manual (Preview)</h3>
             <p className="meta" style={{ marginBottom: "0.85rem" }}>
-              Film path: seed leaves Seat #3 FREE for Ada. You click List @ 100 and Buy in Preview.
+              Preview path: seed leaves a seat FREE with a pending cut. List then buy in Preview.
             </p>
             <ol className="seat-timeline">
               <li className="hot">
@@ -123,13 +123,13 @@ export default function ConsolePage() {
               <li className="hot">
                 <span className="seat-timeline-kind">02 list</span>
                 <span className="seat-timeline-body">
-                  <Link href="/seat/3">Ada lists @ 100</Link> · FREEZE · diligence CLEAN
+                  <Link href="/inventory">Ada lists @ 100</Link> · FREEZE · diligence CLEAN
                 </span>
               </li>
               <li className="hot">
                 <span className="seat-timeline-kind">03 buy</span>
                 <span className="seat-timeline-body">
-                  <Link href="/seat/3">Priya buys mid-payout</Link> · REBOUND_TO_BUYER
+                  <Link href="/inventory">Priya buys mid-payout</Link> · REBOUND_TO_BUYER
                 </span>
               </li>
               <li className="hot">

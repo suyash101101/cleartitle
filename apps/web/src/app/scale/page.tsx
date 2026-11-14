@@ -7,7 +7,7 @@ import { CONTRACT_ID } from "@/lib/near";
 const NEED = [
   {
     title: "Memberships that earn",
-    body: "Clubs, DAOs, and venues sell seats that take a cut of every ticket. Buyers need clear title when money is still in flight.",
+    body: "Clubs, DAOs, and venues sell seats that take a cut of every ticket. Buyers need QuitClaim when money is still in flight.",
   },
   {
     title: "Mid-payout transfers",
@@ -28,7 +28,7 @@ const STEPS = [
   {
     n: "02",
     title: "SDK surface",
-    body: "Publish @cleartitle/sdk so organizers and agents run the mid-payout path without forking the demo UI.",
+    body: "Publish @quitclaim/sdk so organizers and agents run the mid-payout path without forking the demo UI.",
   },
   {
     n: "03",
@@ -67,7 +67,7 @@ export default function ScalePage() {
     <section className="section scale-page" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="QuitClaim beyond the night"
-        lede="How clear title for earning seats becomes a product: market need, GTM steps, technical scale, and honest risks."
+        lede="How QuitClaim for earning seats becomes a product: market need, GTM steps, technical scale, and honest risks."
       />
 
       <div className="panel" style={{ marginBottom: "1.75rem" }}>
@@ -76,7 +76,7 @@ export default function ScalePage() {
           Sell the seat. Keep nothing.
         </h2>
         <p className="lede" style={{ maxWidth: "38rem" }}>
-          Ticket money follows clear title. The Live path already binds to{" "}
+          Ticket money follows QuitClaim. The Live path already binds to{" "}
           <span className="mono">{CONTRACT_ID}</span>. This page is the post-hackathon plan, not a mockup of fake metrics.
         </p>
         <div className="cta-row" style={{ marginTop: "1rem" }}>
@@ -86,7 +86,7 @@ export default function ScalePage() {
           <Link className="btn ghost" href="/verify">
             Claim matrix
           </Link>
-          <Link className="btn ghost" href="https://github.com/suyash101101/cleartitle">
+          <Link className="btn ghost" href="https://github.com/suyash101101/QuitClaim">
             Repository
           </Link>
         </div>
@@ -119,7 +119,7 @@ export default function ScalePage() {
           <div>
             <strong>QuitClaim wedge</strong>
             <p className="meta" style={{ marginTop: "0.35rem" }}>
-              Clear title mid-payout: FREEZE, diligence CLEAN, REBOUND_TO_BUYER, explorer refuse, shippable SDK, Live organizer path.
+              QuitClaim mid-payout: FREEZE, diligence CLEAN, REBOUND_TO_BUYER, explorer refuse, shippable SDK, Live organizer path.
             </p>
           </div>
         </div>

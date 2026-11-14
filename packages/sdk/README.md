@@ -1,41 +1,39 @@
-# `@cleartitle/sdk`
+# `@quitclaim/sdk`
 
 QuitClaim client + domain engine for mid-payout seat NFTs on NEAR.
 
-Plug this into your app: point at **your** contract, create **your** venue, sell tickets at **your** price, list/buy seats with diligence.
+Point at your contract, create your venue, sell tickets at your price, list/buy seats with diligence.
 
 ## Install
 
 ```bash
-pnpm add @cleartitle/sdk
+pnpm add @quitclaim/sdk
 # workspace:
-pnpm --filter @cleartitle/sdk test
+pnpm --filter @quitclaim/sdk test
 ```
 
-Web app sync: `pnpm sync:sdk` copies sources into `apps/web/src/sdk`.
+Web sync: `pnpm sync:sdk` copies sources into `apps/web/src/sdk`.
 
-## Live client (production path)
+## Live client
 
 ```ts
-import { QuitClaimClient } from "@cleartitle/sdk";
+import { QuitClaimClient } from "@quitclaim/sdk";
 
-const ct = new QuitClaimClient({
-  contractId: "your-quitclaim.testnet", // required — no silent demo fallback
+const qc = new QuitClaimClient({
+  contractId: "your-quitclaim.testnet",
   network: "testnet",
-  clubId: "dayfest", // optional default venue
+  clubId: "dayfest",
 });
 
-// Read
-const club = await ct.getClub();
-const seats = await ct.listSeats();
-const dil = await ct.diligence("1");
+const club = await qc.getClub();
+const seats = await qc.listSeats();
+const dil = await qc.diligence(seats[0].token_id);
 
-// Encode wallet calls (sign with near-connect / wallet selector)
-const create = ct.encodeCreateVenue({
+const create = qc.encodeCreateVenue({
   clubId: "dayfest",
   name: "Dayfest",
   organizer: "you.near",
-  ticketPrice: 25, // on-chain deposit units
+  ticketPrice: 25,
   seatBps: [2500, 2500, 5000],
   treasuryBps: 0,
   royaltyBps: 250,
@@ -45,33 +43,21 @@ const create = ct.encodeCreateVenue({
     { id: "box", label: "Box", blurb: "Private" },
   ],
 });
-const mint = ct.encodeMintSeats("dayfest");
-const buyTicket = await ct.encodeBuyTicket(); // deposit = on-chain ticket_price
-const list = ct.encodeListSeat("1", "100");
-const buy = ct.encodeBuySeat("1", ct.buyNonce(await ct.getSeat("1")), "100");
+const mint = qc.encodeMintSeats("dayfest");
+const buyTicket = await qc.encodeBuyTicket();
 ```
 
-From env (Next / Node):
+From env:
 
 ```ts
-import { clientFromEnv } from "@cleartitle/sdk";
-
-const ct = clientFromEnv(); // CLEARTITLE_CONTRACT_ID or NEXT_PUBLIC_CONTRACT_ID
+import { clientFromEnv } from "@quitclaim/sdk";
+const qc = clientFromEnv(); // QUITCLAIM_CONTRACT_ID or NEXT_PUBLIC_CONTRACT_ID
 ```
 
-| Env | Purpose |
-| --- | --- |
-| `CLEARTITLE_CONTRACT_ID` / `NEXT_PUBLIC_CONTRACT_ID` | Deployed contract (required) |
-| `CLEARTITLE_NETWORK` / `NEXT_PUBLIC_NEAR_NETWORK` | `testnet` \| `mainnet` |
-| `CLEARTITLE_CLUB_ID` / `NEXT_PUBLIC_CLUB_ID` | Default venue |
-| `CLEARTITLE_RPC` / `NEXT_PUBLIC_NEAR_RPC` | RPC override |
-
-`DEMO_TESTNET_CONTRACT` exists only as a named constant for the public specimen. The client never uses it unless you pass it yourself.
-
-## Local engine (sim / tests)
+## Local engine
 
 ```ts
-import { createWorld, createVenue, listSeat, buySeat, runDiligence } from "@cleartitle/sdk";
+import { createWorld, createVenue, listSeat, buySeat, runDiligence } from "@quitclaim/sdk";
 
 const world = createWorld(["you.near", "buyer.near"]);
 createVenue(world, {
@@ -84,15 +70,11 @@ createVenue(world, {
 });
 ```
 
-`seedDemoNight()` is an optional story preset for the film UI — not required for integration.
+`seedPreviewWorld()` is an optional local walkthrough helper. Live apps should start empty and load from chain.
 
 ## Multi-venue
 
-One contract hosts many `club_id`s. Each venue has its own ticket price, BPS split, and seats. Pass `clubId` on views/encodes or set it on the client with `withClub("dayfest")`.
-
-## Chain-sig path previews
-
-`deriveBtcAddress` / `deriveSolAddress` are deterministic SHA-256 → bech32/base58 path previews for continuity checks. They are not live MPC spends (roadmap).
+One contract hosts many `club_id`s. Pass `clubId` on views/encodes or use `withClub("dayfest")`.
 
 ## License
 

@@ -10,18 +10,12 @@ import { FlaskConical, ShieldCheck, Ticket } from "lucide-react";
 import { CONTRACT_ID, EXPLORER } from "@/lib/near";
 import { viewSeats } from "@/lib/chainViews";
 import { useApp } from "@/lib/store";
-import { listSeats, NEARNIGHT_SEAT_KINDS } from "@/sdk";
+import { listSeats } from "@/sdk";
 import type { RollTicket } from "@/components/TicketRoll";
 
-function kindMeta(kindId: string, index: number) {
-  return (
-    NEARNIGHT_SEAT_KINDS.find((k) => k.id === kindId) ??
-    NEARNIGHT_SEAT_KINDS[index] ?? {
-      id: kindId,
-      label: kindId,
-      blurb: "",
-    }
-  );
+function kindMeta(kindId: string) {
+  const id = kindId || "seat";
+  return { id, label: id, blurb: "" };
 }
 
 type SeatView = {
@@ -100,7 +94,7 @@ export default function InventoryPage() {
 
   const filmSeats = listSeats(world);
   const rollTickets: RollTicket[] = filmSeats.map((s, i) => {
-    const kind = kindMeta(s.kind, i);
+    const kind = kindMeta(s.kind);
     return {
       id: s.tokenId,
       tier: kind.label,
@@ -149,7 +143,7 @@ export default function InventoryPage() {
       </h3>
       <BentoGrid className="inv-bento">
         {filmSeats.map((s, i) => {
-          const kind = kindMeta(s.kind, i);
+          const kind = kindMeta(s.kind);
           return (
             <Link key={s.tokenId} href={`/seat/${s.tokenId}`} className="bento-card inv-bento-card">
               <div className="bento-card-body">
@@ -177,7 +171,7 @@ export default function InventoryPage() {
       )}
       <div className="inv-grid">
         {live.map((s, i) => {
-          const kind = kindMeta(typeof s.kind === "string" ? s.kind : "", i);
+          const kind = kindMeta(typeof s.kind === "string" ? s.kind : s.token_id);
           return (
             <div key={s.token_id} className="inv-tile">
               <p className="chapter-kicker">{kind.label}</p>

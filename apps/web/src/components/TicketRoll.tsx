@@ -12,18 +12,10 @@ export type RollTicket = {
   accent?: string;
 };
 
-const DEFAULTS: RollTicket[] = [
-  { id: "1", tier: "Floor", owner: "organizer.near", keys: 0, accent: "#ff4fd8" },
-  { id: "2", tier: "Lounge", owner: "organizer.near", keys: 0, accent: "#4fd8ff" },
-  { id: "3", tier: "Suite", owner: "ada.near", keys: 0, accent: "#ffe14f", status: "CLEAN" },
-  { id: "4", tier: "VIP", owner: "organizer.near", keys: 0, accent: "#7cff4f" },
-  { id: "5", tier: "Press", owner: "organizer.near", keys: 0, accent: "#ff7a4f" },
-];
-
 /** Toilet-paper / graphic ticket-roll UI for mint + seat NFT display. */
 export function TicketRoll({
-  tickets = DEFAULTS,
-  title = "Nearnight seat roll",
+  tickets = [],
+  title = "Seat roll",
   mode = "display",
   onMint,
 }: {

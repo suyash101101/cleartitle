@@ -37,7 +37,7 @@ export default function SeatPage() {
     return (
       <section className="section" style={{ borderTop: "none" }}>
         <h2>Seat not found</h2>
-        <p className="lede">Seed QuitClaim specimen from Club Console.</p>
+        <p className="lede">Open Club Console to create or select a venue.</p>
       </section>
     );
   }
@@ -54,7 +54,7 @@ export default function SeatPage() {
 
   return (
     <section className="section seat-desk" style={{ borderTop: "none", paddingTop: 0 }}>
-      <p className="chapter-kicker">Seat desk · QuitClaim</p>
+      <p className="chapter-kicker">Seat desk</p>
       <div className="seat-desk-head">
         <h1 className="page-title">Seat #{seat.tokenId}</h1>
         <div className="seat-desk-chips">
@@ -220,7 +220,7 @@ export default function SeatPage() {
         </div>
       </div>
 
-      <ChainSigPanel vaultAccountId={`seat-${id}.cleartitle562464.testnet`} />
+      <ChainSigPanel vaultAccountId={seat.vaultAccountId} />
       <div className="console-end-spacer" aria-hidden />
     </section>
   );

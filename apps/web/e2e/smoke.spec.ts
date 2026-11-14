@@ -116,14 +116,14 @@ test("verify matrix @smoke", async ({ page }) => {
   await expect(page.getByLabel(/Claim window/i)).toBeVisible();
   await expect(page.getByText(/Transfer threat model/i)).toBeVisible();
   await expect(page.getByText(/Receipt wall/i)).toBeVisible();
-  await expect(page.getByText(/ClearTitle vs the NFT ticket field/i)).toHaveCount(0);
+  await expect(page.getByText(/QuitClaim vs the NFT ticket field/i)).toHaveCount(0);
   await expect(page.getByText(/Seatlab|TicketMaker|SolTix|Matcha/i)).toHaveCount(0);
 });
 
 test("console cast no overlap @smoke", async ({ page }) => {
   await enterPreview(page);
   const cast = page.getByRole("group", { name: /Scenario cast/i });
-  const seed = page.getByRole("button", { name: /Seed Nearnight/i });
+  const seed = page.getByRole("button", { name: /Seed preview venue|Preview mid-payout/i });
   await expect(cast).toBeVisible();
   await expect(seed).toBeVisible();
   const castBox = await cast.boundingBox();
@@ -159,7 +159,7 @@ test("night river + inventory @smoke", async ({ page }) => {
   test.setTimeout(90_000);
   await page.goto("/night", { waitUntil: "domcontentloaded" });
   await hideDevChrome(page);
-  await expect(page.getByText(/ticket river|Nearnight/i).first()).toBeVisible();
+  await expect(page.getByText(/ticket river|QuitClaim|venue/i).first()).toBeVisible();
   await expect(page.getByLabel(/Settlement pulse/i)).toHaveCount(0);
   await expect(page.getByLabel(/Ticket cut ticker/i)).toBeVisible();
   await page.goto("/inventory", { waitUntil: "domcontentloaded" });

@@ -1,8 +1,8 @@
 {
-  "name": "@cleartitle/sdk",
+  "name": "@quitclaim/sdk",
   "version": "0.1.0",
   "private": true,
-  "description": "QuitClaim QuitClaimClient + domain engine for mid-payout seat NFTs on NEAR",
+  "description": "QuitClaim client + domain engine for mid-payout seat NFTs on NEAR",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

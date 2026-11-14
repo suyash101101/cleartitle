@@ -21,7 +21,7 @@ export function JudgeStampPanel() {
       setMode("off");
       return;
     }
-    const flag = window.sessionStorage.getItem("cleartitle-judge");
+    const flag = window.sessionStorage.getItem("quitclaim-judge");
     if (flag === "film") {
       setMode("film");
       return;
@@ -34,7 +34,7 @@ export function JudgeStampPanel() {
     const idx = ROUTE_ORDER.findIndex((p) => pathname === p || pathname.startsWith(`${p}/`));
     if (idx < 0 || idx >= ROUTE_ORDER.length - 1) {
       if (pathname.startsWith("/verify")) {
-        window.sessionStorage.removeItem("cleartitle-judge");
+        window.sessionStorage.removeItem("quitclaim-judge");
       }
       return;
     }

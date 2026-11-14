@@ -2,7 +2,7 @@
 
 import { useApp } from "@/lib/store";
 
-const FILM = ["organizer.near", "ada.near", "priya.near", "fan.near"];
+const FILM = ["organizer.near", "seller.near", "buyer.near", "fan.near"];
 
 export function ActorBar() {
   const actor = useApp((s) => s.actor);
