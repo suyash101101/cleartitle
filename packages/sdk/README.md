@@ -1,75 +1,98 @@
 # `@cleartitle/sdk`
 
-QuitClaim domain engine + thin NEAR helpers.
+QuitClaim client + domain engine for mid-payout seat NFTs on NEAR.
 
-Use this package to model mid-payout seat sales locally, assert diligence, and call the same view methods the Live UI uses on testnet.
+Plug this into your app: point at **your** contract, create **your** venue, sell tickets at **your** price, list/buy seats with diligence.
 
-## Install (workspace)
+## Install
 
 ```bash
-pnpm install
+pnpm add @cleartitle/sdk
+# workspace:
 pnpm --filter @cleartitle/sdk test
 ```
 
-From the monorepo web app, sources sync into `apps/web/src/sdk` via `pnpm sync:sdk`.
+Web app sync: `pnpm sync:sdk` copies sources into `apps/web/src/sdk`.
 
-## Quick start (engine)
-
-```ts
-import {
-  seedDemoNight,
-  listSeat,
-  buySeat,
-  runDiligence,
-  labOldOwnerWithdraw,
-} from "@cleartitle/sdk";
-
-const world = seedDemoNight();
-const nonce = listSeat(world, "ada.near", "3", 100);
-buySeat(world, "priya.near", "3", 100, nonce);
-console.log(runDiligence(world, "3").verdict); // PROVABLY CLEAN
-console.log(labOldOwnerWithdraw(world, "ada.near", "3").reason);
-```
-
-## NEAR views (no wallet)
+## Live client (production path)
 
 ```ts
-import { viewClub, viewSeat, viewDiligence, seatBuyNonce } from "@cleartitle/sdk";
+import { QuitClaimClient } from "@cleartitle/sdk";
 
-const club = await viewClub();
-const seat = await viewSeat("3");
-const dil = await viewDiligence("3");
-const nonce = seatBuyNonce(seat);
+const ct = new QuitClaimClient({
+  contractId: "your-quitclaim.testnet", // required — no silent demo fallback
+  network: "testnet",
+  clubId: "dayfest", // optional default venue
+});
+
+// Read
+const club = await ct.getClub();
+const seats = await ct.listSeats();
+const dil = await ct.diligence("1");
+
+// Encode wallet calls (sign with near-connect / wallet selector)
+const create = ct.encodeCreateVenue({
+  clubId: "dayfest",
+  name: "Dayfest",
+  organizer: "you.near",
+  ticketPrice: 25, // on-chain deposit units
+  seatBps: [2500, 2500, 5000],
+  treasuryBps: 0,
+  royaltyBps: 250,
+  seatKinds: [
+    { id: "ga", label: "GA", blurb: "General" },
+    { id: "balcony", label: "Balcony", blurb: "Upper" },
+    { id: "box", label: "Box", blurb: "Private" },
+  ],
+});
+const mint = ct.encodeMintSeats("dayfest");
+const buyTicket = await ct.encodeBuyTicket(); // deposit = on-chain ticket_price
+const list = ct.encodeListSeat("1", "100");
+const buy = ct.encodeBuySeat("1", ct.buyNonce(await ct.getSeat("1")), "100");
 ```
 
-Optional live check (skipped in CI unless set):
-
-```bash
-QUITCLAIM_LIVE_RPC=1 pnpm --filter @cleartitle/sdk test
-```
-
-## Call encoding (wallet)
+From env (Next / Node):
 
 ```ts
-import { encodeBuyTicket, encodeListSeat, encodeBuySeat } from "@cleartitle/sdk";
+import { clientFromEnv } from "@cleartitle/sdk";
 
-encodeBuyTicket(); // buy_ticket + 10 yocto
-encodeListSeat("3", "100");
-encodeBuySeat("3", nonce, "100");
+const ct = clientFromEnv(); // CLEARTITLE_CONTRACT_ID or NEXT_PUBLIC_CONTRACT_ID
 ```
 
-## Claims covered by Vitest
-
-| Claim | Test |
+| Env | Purpose |
 | --- | --- |
-| BPS sum 10000 | `bps_sum_10000_and_immutable` |
-| Keys empty after mint | `keys_empty_after_mint` |
-| Ticket split | `ticket_splits_treasury_and_seats` |
-| Mid-payout rebound | `sale_mid_payout_rebinds_pending` |
-| Old owner withdraw fails | `old_owner_withdraw_fails_after_sale` |
-| Diligence CLEAN | `diligence_clean_when_healthy` |
-| Continuity stable | `continuity_hash_stable` |
-| Held-sig refused | `held_sig_refused_while_listed` |
+| `CLEARTITLE_CONTRACT_ID` / `NEXT_PUBLIC_CONTRACT_ID` | Deployed contract (required) |
+| `CLEARTITLE_NETWORK` / `NEXT_PUBLIC_NEAR_NETWORK` | `testnet` \| `mainnet` |
+| `CLEARTITLE_CLUB_ID` / `NEXT_PUBLIC_CLUB_ID` | Default venue |
+| `CLEARTITLE_RPC` / `NEXT_PUBLIC_NEAR_RPC` | RPC override |
+
+`DEMO_TESTNET_CONTRACT` exists only as a named constant for the public specimen. The client never uses it unless you pass it yourself.
+
+## Local engine (sim / tests)
+
+```ts
+import { createWorld, createVenue, listSeat, buySeat, runDiligence } from "@cleartitle/sdk";
+
+const world = createWorld(["you.near", "buyer.near"]);
+createVenue(world, {
+  clubId: "dayfest",
+  name: "Dayfest",
+  organizer: "you.near",
+  ticketPrice: 25,
+  seatBps: [2500, 2500, 5000],
+  treasuryBps: 0,
+});
+```
+
+`seedDemoNight()` is an optional story preset for the film UI — not required for integration.
+
+## Multi-venue
+
+One contract hosts many `club_id`s. Each venue has its own ticket price, BPS split, and seats. Pass `clubId` on views/encodes or set it on the client with `withClub("dayfest")`.
+
+## Chain-sig path previews
+
+`deriveBtcAddress` / `deriveSolAddress` are deterministic SHA-256 → bech32/base58 path previews for continuity checks. They are not live MPC spends (roadmap).
 
 ## License
 

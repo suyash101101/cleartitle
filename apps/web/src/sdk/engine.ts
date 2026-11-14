@@ -1,9 +1,12 @@
+import { assertVenueSpec, type VenueSpec } from "./config";
+import { continuityHash, deriveBtcAddress, deriveSolAddress } from "./derive";
 import {
-  SEAT_KINDS,
+  NEARNIGHT_SEAT_KINDS,
   type ClubConfig,
   type DiligenceReport,
   type LabResult,
   type Seat,
+  type SeatKindMeta,
   type TicketEvent,
   type WorldState,
 } from "./types";
@@ -16,27 +19,74 @@ function txHash(n: number): string {
   return `0xct${n.toString(16).padStart(8, "0")}`;
 }
 
-function continuityHash(vaultAccountId: string): string {
-  // Stable across sales — derivation fixed to vault account id
-  let h = 0;
-  const s = `${vaultAccountId}|bitcoin|solana`;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
-  return `cont_${h.toString(16)}`;
+function resolveClub(world: WorldState, clubId?: string): ClubConfig {
+  if (clubId) {
+    const club = world.clubs[clubId];
+    assert(club, `club not found: ${clubId}`);
+    return club;
+  }
+  assert(world.club, "no club");
+  return world.club;
 }
 
-function deriveBtc(vaultAccountId: string): string {
-  const h = continuityHash(vaultAccountId).slice(5);
-  return `bc1q${h.padEnd(38, "0").slice(0, 38)}`;
+function seatsForClub(world: WorldState, clubId: string): Seat[] {
+  const seen = new Set<string>();
+  const out: Seat[] = [];
+  for (const s of Object.values(world.seats)) {
+    if (s.clubId !== clubId) continue;
+    const id = `${s.clubId}:${s.tokenId}`;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    out.push(s);
+  }
+  return out;
 }
 
-function deriveSol(vaultAccountId: string): string {
-  const h = continuityHash(vaultAccountId).slice(5);
-  return `${h}SoL${"1".repeat(32)}`.slice(0, 44);
+/** Resolve a seat by token id, optionally scoped to a club. */
+export function getSeat(world: WorldState, tokenId: string, clubId?: string): Seat | undefined {
+  if (clubId) return world.seats[`${clubId}:${tokenId}`] ?? world.seats[tokenId];
+  return world.seats[tokenId] ?? (world.club ? world.seats[`${world.club.clubId}:${tokenId}`] : undefined);
 }
 
-export function createWorld(actors: string[] = ["organizer.near", "ada.near", "priya.near", "fan.near"]): WorldState {
+/**
+ * Rebuild numeric aliases for the active club from canonical `clubId:tokenId` keys.
+ * Call after structured clones (e.g. JSON round-trips in UI stores).
+ */
+export function hydrateWorld(world: WorldState): WorldState {
+  if (!world.clubs) world.clubs = {};
+  if (world.club && !world.clubs[world.club.clubId]) {
+    world.clubs[world.club.clubId] = world.club;
+  }
+  for (const club of Object.values(world.clubs)) {
+    if (!world.club) world.club = club;
+  }
+  const active = world.club?.clubId;
+  if (!active) return world;
+  for (const seat of seatsForClub(world, active)) {
+    world.seats[`${seat.clubId}:${seat.tokenId}`] = seat;
+    world.seats[seat.tokenId] = seat;
+  }
+  return world;
+}
+
+export function listSeats(world: WorldState, clubId?: string): Seat[] {
+  const id = clubId ?? world.club?.clubId;
+  if (!id) return [];
+  return seatsForClub(world, id).sort((a, b) => Number(a.tokenId) - Number(b.tokenId));
+}
+
+/** Deep-clone a world and re-link active-club seat aliases. */
+export function cloneWorld(world: WorldState): WorldState {
+  return hydrateWorld(JSON.parse(JSON.stringify(world)) as WorldState);
+}
+
+export function createWorld(
+  actors: string[] = [],
+  network: WorldState["network"] = "testnet",
+): WorldState {
   return {
-    network: "demo",
+    network,
+    clubs: {},
     club: null,
     seats: {},
     tickets: [],
@@ -44,6 +94,38 @@ export function createWorld(actors: string[] = ["organizer.near", "ada.near", "p
     nextPayoutId: 1,
     nextTx: 1,
   };
+}
+
+/**
+ * Create a venue + mint founding seats in one call (local engine).
+ * Use QuitClaimClient.encodeCreateVenue + encodeMintSeats for on-chain.
+ */
+export function createVenue(
+  world: WorldState,
+  spec: VenueSpec,
+  opts?: { setActive?: boolean },
+): { club: ClubConfig; seats: Seat[] } {
+  assertVenueSpec(spec);
+  const club = createClub(world, {
+    clubId: spec.clubId,
+    name: spec.name,
+    organizer: spec.organizer,
+    ticketPrice: spec.ticketPrice,
+    seatBps: spec.seatBps,
+    treasuryBps: spec.treasuryBps,
+    royaltyBps: spec.royaltyBps,
+    seatKinds: spec.seatKinds,
+    setActive: opts?.setActive,
+  });
+  const seats = mintSeats(world, spec.organizer, spec.clubId);
+  return { club, seats };
+}
+
+export function selectClub(world: WorldState, clubId: string): ClubConfig {
+  const club = world.clubs[clubId];
+  assert(club, `club not found: ${clubId}`);
+  world.club = club;
+  return club;
 }
 
 export function createClub(
@@ -56,16 +138,31 @@ export function createClub(
     seatBps: number[];
     treasuryBps: number;
     royaltyBps?: number;
+    seatKinds?: SeatKindMeta[];
+    /** When true (default), also set world.club to this venue. */
+    setActive?: boolean;
   },
 ): ClubConfig {
-  assert(!world.club, "club already exists");
-  const sum = opts.seatBps.reduce((a, b) => a + b, 0) + opts.treasuryBps;
-  assert(sum === 10000, `bps must sum to 10000, got ${sum}`);
-  assert(opts.seatBps.length > 0, "need at least one seat bps");
-  assert(opts.ticketPrice > 0, "ticket price must be positive");
+  const clubId =
+    opts.clubId ??
+    (opts.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "venue");
+  assertVenueSpec({
+    clubId,
+    name: opts.name,
+    organizer: opts.organizer,
+    ticketPrice: opts.ticketPrice,
+    seatBps: opts.seatBps,
+    treasuryBps: opts.treasuryBps,
+    royaltyBps: opts.royaltyBps,
+    seatKinds: opts.seatKinds,
+  });
+  assert(!world.clubs[clubId], `club already exists: ${clubId}`);
 
   const club: ClubConfig = {
-    clubId: opts.clubId ?? "nearnight",
+    clubId,
     name: opts.name,
     organizer: opts.organizer,
     ticketPrice: opts.ticketPrice,
@@ -76,26 +173,31 @@ export function createClub(
     paused: false,
     treasuryBalance: 0,
     ticketsSold: 0,
+    seatKinds: opts.seatKinds ? [...opts.seatKinds] : undefined,
   };
-  world.club = club;
+  world.clubs[clubId] = club;
+  if (opts.setActive !== false) world.club = club;
   return club;
 }
 
-export function mintSeats(world: WorldState, owner: string): Seat[] {
-  const club = world.club;
-  assert(club, "no club");
-  assert(Object.keys(world.seats).length === 0, "seats already minted");
+export function mintSeats(world: WorldState, owner: string, clubId?: string): Seat[] {
+  const club = resolveClub(world, clubId);
   assert(owner === club.organizer, "only organizer mints");
+  assert(seatsForClub(world, club.clubId).length === 0, "seats already minted");
 
+  const kinds = club.seatKinds;
   const seats: Seat[] = [];
   for (let i = 0; i < club.maxSeats; i++) {
     const tokenId = String(i + 1);
+    const seatKey = `${club.clubId}:${tokenId}`;
     const vaultAccountId = `seat-${tokenId}.${club.clubId}.near`;
+    const kind = kinds?.[i]?.id ?? `seat-${tokenId}`;
     const seat: Seat = {
       tokenId,
+      clubId: club.clubId,
       vaultAccountId,
       owner,
-      kind: SEAT_KINDS[i]?.id ?? "floor",
+      kind,
       encumbrance: "FREE",
       balance: 0,
       pending: [],
@@ -105,39 +207,42 @@ export function mintSeats(world: WorldState, owner: string): Seat[] {
       listingAsk: null,
       listingNonce: 0,
       continuityHash: continuityHash(vaultAccountId),
-      btcAddress: deriveBtc(vaultAccountId),
-      solAddress: deriveSol(vaultAccountId),
+      btcAddress: deriveBtcAddress(vaultAccountId),
+      solAddress: deriveSolAddress(vaultAccountId),
       accessKeyCount: 0,
       openRawSigs: 0,
       washFlagged: false,
       holderHistory: [{ owner, from: Date.now(), to: null }],
       ledger: [{ at: Date.now(), kind: "mint", amount: 0, note: "founding seat minted · 0 access keys" }],
     };
-    world.seats[tokenId] = seat;
+    world.seats[seatKey] = seat;
+    // Alias numeric token ids for the active club so demo call sites keep seats["3"].
+    if (world.club?.clubId === club.clubId) {
+      world.seats[tokenId] = seat;
+    }
     seats.push(seat);
   }
   return seats;
 }
 
-export function setPaused(world: WorldState, organizer: string, paused: boolean): void {
-  const club = world.club;
-  assert(club, "no club");
+export function setPaused(world: WorldState, organizer: string, paused: boolean, clubId?: string): void {
+  const club = resolveClub(world, clubId);
   assert(organizer === club.organizer, "only organizer");
   club.paused = paused;
 }
 
-export function buyTicket(world: WorldState, buyer: string, payment: number): TicketEvent {
-  const club = world.club;
-  assert(club, "no club");
+export function buyTicket(world: WorldState, buyer: string, payment: number, clubId?: string): TicketEvent {
+  const club = resolveClub(world, clubId);
   assert(!club.paused, "club paused");
-  assert(Object.keys(world.seats).length === club.maxSeats, "seats not minted");
+  const clubSeats = seatsForClub(world, club.clubId);
+  assert(clubSeats.length === club.maxSeats, "seats not minted");
   assert(payment === club.ticketPrice, `price mismatch: need ${club.ticketPrice}`);
 
   const treasuryCut = Math.floor((payment * club.treasuryBps) / 10000);
   const seatCuts: { tokenId: string; amount: number }[] = [];
   let allocated = treasuryCut;
 
-  for (const seat of Object.values(world.seats)) {
+  for (const seat of clubSeats) {
     const amount = Math.floor((payment * seat.seatBps) / 10000);
     seat.balance += amount;
     seat.ticketsAccrued += 1;
@@ -151,13 +256,13 @@ export function buyTicket(world: WorldState, buyer: string, payment: number): Ti
     allocated += amount;
   }
 
-  // Dust to treasury so split is exact
   const dust = payment - allocated;
   club.treasuryBalance += treasuryCut + dust;
   club.ticketsSold += 1;
 
   const event: TicketEvent = {
     at: Date.now(),
+    clubId: club.clubId,
     buyer,
     price: payment,
     treasuryCut: treasuryCut + dust,
@@ -185,7 +290,7 @@ export function claimPayout(world: WorldState, actor: string, tokenId: string, a
     amount: claimAmount,
     status: "PENDING",
     createdAt: Date.now(),
-    sourceTicket: world.club?.ticketsSold ?? 0,
+    sourceTicket: world.clubs[seat.clubId]?.ticketsSold ?? 0,
   });
   seat.ledger.push({ at: Date.now(), kind: "claim_pending", amount: claimAmount, note: id });
   return id;
@@ -233,10 +338,10 @@ export function buySeat(
   payment: number,
   syncNonce: number,
 ): { txHash: string; rebounded: number } {
-  const club = world.club;
-  assert(club, "no club");
   const seat = world.seats[tokenId];
   assert(seat, "seat not found");
+  const club = world.clubs[seat.clubId];
+  assert(club, "club not found");
   assert(seat.encumbrance === "LISTED", "seat not listed");
   assert(seat.listingAsk !== null, "no ask");
   assert(payment === seat.listingAsk, `ask mismatch: need ${seat.listingAsk}`);
@@ -266,7 +371,6 @@ export function buySeat(
   seat.accessKeyCount = 0;
   seat.encumbrance = "FREE";
   seat.listingAsk = null;
-  // continuity addresses unchanged — intentional
   seat.ledger.push({
     at: Date.now(),
     kind: "sale",
@@ -308,6 +412,8 @@ export function runDiligence(world: WorldState, tokenId: string): DiligenceRepor
   const seat = world.seats[tokenId];
   assert(seat, "seat not found");
   const expectedCont = continuityHash(seat.vaultAccountId);
+  const expectedBtc = deriveBtcAddress(seat.vaultAccountId);
+  const expectedSol = deriveSolAddress(seat.vaultAccountId);
   const checks = [
     {
       id: "keys",
@@ -326,6 +432,18 @@ export function runDiligence(world: WorldState, tokenId: string): DiligenceRepor
       label: "Chain-sig continuity hash stable",
       pass: seat.continuityHash === expectedCont,
       detail: seat.continuityHash,
+    },
+    {
+      id: "btc_path",
+      label: "BTC path address matches derivation",
+      pass: seat.btcAddress === expectedBtc,
+      detail: seat.btcAddress,
+    },
+    {
+      id: "sol_path",
+      label: "SOL path address matches derivation",
+      pass: seat.solAddress === expectedSol,
+      detail: seat.solAddress,
     },
     {
       id: "raw_sigs",
@@ -428,19 +546,22 @@ export function labWashPath(world: WorldState, tokenId: string): LabResult {
   };
 }
 
-/** Seed Nearnight Live demo world ready for mid-payout sale. */
+/**
+ * Optional story preset (hackathon film). Prefer `createVenue` for real apps.
+ * Leaves seat #3 mid-payout so List → Buy can be exercised locally.
+ */
 export function seedDemoNight(): WorldState {
-  const world = createWorld();
-  createClub(world, {
+  const world = createWorld(["organizer.near", "ada.near", "priya.near", "fan.near"], "demo");
+  createVenue(world, {
+    clubId: "nearnight",
     name: "Nearnight Live",
     organizer: "organizer.near",
     ticketPrice: 10,
     seatBps: [1000, 1000, 1000, 1000, 1000],
     treasuryBps: 5000,
     royaltyBps: 500,
+    seatKinds: NEARNIGHT_SEAT_KINDS,
   });
-  mintSeats(world, "organizer.near");
-  // Transfer seat 3 to Ada for the story
   const seat3 = world.seats["3"]!;
   seat3.owner = "ada.near";
   seat3.holderHistory[0]!.to = Date.now();
@@ -491,5 +612,10 @@ export const VERIFY_CLAIMS = [
     claim: "BPS immutable after mint; sum always 10000",
     method: "create_club",
     test: "bps_sum_10000_and_immutable",
+  },
+  {
+    claim: "Multiple venues coexist without redeploy",
+    method: "create_club",
+    test: "multi_venue_clubs",
   },
 ] as const;

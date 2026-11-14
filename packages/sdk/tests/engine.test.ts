@@ -25,6 +25,7 @@ describe("S1 bps + pause", () => {
     const world = createWorld();
     expect(() =>
       createClub(world, {
+        clubId: "ok-venue",
         name: "X",
         organizer: "organizer.near",
         ticketPrice: 10,
@@ -34,6 +35,7 @@ describe("S1 bps + pause", () => {
     ).not.toThrow();
     expect(() =>
       createClub(createWorld(), {
+        clubId: "bad-bps",
         name: "Bad",
         organizer: "organizer.near",
         ticketPrice: 10,
@@ -46,6 +48,7 @@ describe("S1 bps + pause", () => {
   it("pause_stops_ticket", () => {
     const world = createWorld();
     createClub(world, {
+      clubId: "pause-club",
       name: "N",
       organizer: "organizer.near",
       ticketPrice: 10,
@@ -62,6 +65,7 @@ describe("S2 mint keys", () => {
   it("keys_empty_after_mint", () => {
     const world = createWorld();
     createClub(world, {
+      clubId: "nearnight",
       name: "Nearnight Live",
       organizer: "organizer.near",
       ticketPrice: 10,
@@ -73,6 +77,7 @@ describe("S2 mint keys", () => {
     for (const s of seats) {
       expect(s.accessKeyCount).toBe(0);
       expect(s.vaultAccountId).toMatch(/^seat-\d+\.nearnight\.near$/);
+      expect(s.btcAddress.startsWith("bc1")).toBe(true);
     }
   });
 });
@@ -81,6 +86,7 @@ describe("S3 ticket split", () => {
   it("ticket_splits_treasury_and_seats", () => {
     const world = createWorld();
     createClub(world, {
+      clubId: "split-club",
       name: "N",
       organizer: "organizer.near",
       ticketPrice: 10,
@@ -193,6 +199,8 @@ describe("film-ready seed (no auto sale)", () => {
     expect(seat.encumbrance).toBe("FREE");
     expect(seat.pending.some((p) => p.status === "PENDING")).toBe(true);
     expect(seat.accessKeyCount).toBe(0);
+    expect(seat.btcAddress.startsWith("bc1")).toBe(true);
+    expect(seat.solAddress.length).toBeGreaterThan(30);
     const d = runDiligence(world, "3");
     expect(d.verdict).toBe("PROVABLY CLEAN");
     const nonce = listSeat(world, "ada.near", "3", 100);
@@ -206,5 +214,31 @@ describe("film-ready seed (no auto sale)", () => {
     buySeat(world, "priya.near", "3", 100, nonce);
     expect(runDiligence(world, "3").verdict).toBe("PROVABLY CLEAN");
     expect(labOldOwnerWithdraw(world, "ada.near", "3").reason).toMatch(/not current owner/);
+  });
+});
+
+describe("multi_venue_clubs", () => {
+  it("multi_venue_clubs", () => {
+    const world = createWorld();
+    createClub(world, {
+      clubId: "venue-a",
+      name: "A",
+      organizer: "organizer.near",
+      ticketPrice: 10,
+      seatBps: [10000],
+      treasuryBps: 0,
+    });
+    createClub(world, {
+      clubId: "venue-b",
+      name: "B",
+      organizer: "organizer.near",
+      ticketPrice: 99,
+      seatBps: [4000, 6000],
+      treasuryBps: 0,
+      setActive: false,
+    });
+    expect(Object.keys(world.clubs)).toEqual(["venue-a", "venue-b"]);
+    expect(world.club!.clubId).toBe("venue-a");
+    expect(world.clubs["venue-b"]!.ticketPrice).toBe(99);
   });
 });

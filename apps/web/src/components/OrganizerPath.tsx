@@ -13,20 +13,20 @@ const STEPS = [
   {
     n: "02",
     title: "Sell a ticket",
-    body: "Box office → Buy ticket (10 yocto). Cuts hit founding seat vaults.",
+    body: "Box office → Buy ticket (deposit = on-chain ticket_price). Cuts hit founding seat vaults.",
     href: "/box-office",
   },
   {
     n: "03",
     title: "List mid-payout",
-    body: "Seat desk → Refresh chain state → List while pending is live.",
-    href: "/seat/3",
+    body: "Inventory → seat desk → Refresh chain state → List while pending is live.",
+    href: "/inventory",
   },
   {
     n: "04",
     title: "Diligence then buy",
     body: "Buyer wallet re-reads RPC diligence, then Buy mid-payout with fresh nonce.",
-    href: "/seat/3",
+    href: "/inventory",
   },
   {
     n: "05",

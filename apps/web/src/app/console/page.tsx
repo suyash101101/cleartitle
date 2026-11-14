@@ -12,7 +12,9 @@ import { OrganizerPath } from "@/components/OrganizerPath";
 import { TestnetPanel } from "@/components/TestnetPanel";
 import { TicketRoll3D } from "@/components/TicketRoll3D";
 import { PageHeader } from "@/components/ui/page-header";
+import { VenueBootstrap } from "@/components/VenueBootstrap";
 import { useApp } from "@/lib/store";
+import { listSeats } from "@/sdk";
 
 export default function ConsolePage() {
   const router = useRouter();
@@ -22,7 +24,7 @@ export default function ConsolePage() {
   const resetDemo = useApp((s) => s.resetDemo);
   const runJudgePath = useApp((s) => s.runJudgePath);
   const club = world.club;
-  const seats = Object.values(world.seats);
+  const seats = listSeats(world);
   const seedNight = () => {
     resetDemo();
     router.push("/seat/3");
@@ -32,7 +34,7 @@ export default function ConsolePage() {
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
         title="Club Console"
-        lede="Organizer controls for Nearnight Live: BPS, mint, pause, treasury. Live mode talks to testnet; Preview is film-only."
+        lede="Organizer console: create any venue, mint seats, pause sales, watch treasury. Live mode talks to your bound contract; Preview is a local scenario engine."
       />
       <ModeToggle />
       {productMode === "live" && (
@@ -42,6 +44,9 @@ export default function ConsolePage() {
             <TestnetPanel />
           </div>
           <LiveClubPanel />
+          <div style={{ marginBottom: "1.5rem" }}>
+            <VenueBootstrap />
+          </div>
         </>
       )}
       {productMode === "preview" && (
@@ -68,7 +73,7 @@ export default function ConsolePage() {
               Create club + mint 5 seats
             </button>
             <button type="button" className="ghost" onClick={seedNight}>
-              Seed Nearnight
+              Seed QuitClaim specimen
             </button>
           </>
         )}

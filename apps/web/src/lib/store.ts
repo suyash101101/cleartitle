@@ -5,14 +5,14 @@ import {
   buySeat,
   buyTicket,
   claimPayout,
-  createClub,
+  cloneWorld,
+  createVenue,
   createWorld,
   labHeldSig,
   labListedWithdraw,
   labOldOwnerWithdraw,
   labWashPath,
   listSeat,
-  mintSeats,
   runDiligence,
   seedDemoNight,
   type DiligenceReport,
@@ -177,22 +177,22 @@ export const useApp = create<AppState>((set, get) => ({
       lastLab: null,
       lastSplit: null,
       judgeStamps: [],
-      flash: flashOk("Nearnight seeded (Preview). Seat #3 suite pending. Ready for mid-payout."),
+      flash: flashOk("QuitClaim specimen seeded (Preview). Seat #3 suite pending. Ready for mid-payout."),
     }),
   bootstrapClub: () => {
     try {
-      const world = createWorld();
-      createClub(world, {
+      const world = createWorld(["organizer.near", "ada.near", "priya.near", "fan.near"]);
+      createVenue(world, {
+        clubId: "nearnight",
         name: "Nearnight Live",
         organizer: "organizer.near",
         ticketPrice: 10,
         seatBps: [1000, 1000, 1000, 1000, 1000],
         treasuryBps: 5000,
       });
-      mintSeats(world, "organizer.near");
       set({
         world,
-        flash: flashOk("Club created · 5 seats minted · 0 access keys each."),
+        flash: flashOk("Venue created · seats minted · 0 access keys each."),
         diligence: null,
         lastLab: null,
         lastSplit: null,
@@ -203,7 +203,7 @@ export const useApp = create<AppState>((set, get) => ({
   },
   doBuyTicket: () => {
     try {
-      const world = JSON.parse(JSON.stringify(get().world)) as WorldState;
+      const world = cloneWorld(get().world);
       const ev = buyTicket(world, get().actor, world.club!.ticketPrice);
       set({
         world,
@@ -216,7 +216,7 @@ export const useApp = create<AppState>((set, get) => ({
   },
   doClaim: (tokenId) => {
     try {
-      const world = JSON.parse(JSON.stringify(get().world)) as WorldState;
+      const world = cloneWorld(get().world);
       const id = claimPayout(world, get().actor, tokenId);
       set({ world, flash: flashOk(`Payout ${id} pending on seat #${tokenId}`) });
     } catch (e) {
@@ -225,7 +225,7 @@ export const useApp = create<AppState>((set, get) => ({
   },
   doList: (tokenId, ask) => {
     try {
-      const world = JSON.parse(JSON.stringify(get().world)) as WorldState;
+      const world = cloneWorld(get().world);
       const nonce = listSeat(world, get().actor, tokenId, ask);
       set({ world, flash: flashOk(`Seat #${tokenId} listed @ ${ask} · nonce ${nonce} · FREEZE`) });
     } catch (e) {
@@ -234,7 +234,7 @@ export const useApp = create<AppState>((set, get) => ({
   },
   doBuySeat: (tokenId) => {
     try {
-      const world = JSON.parse(JSON.stringify(get().world)) as WorldState;
+      const world = cloneWorld(get().world);
       const seat = world.seats[tokenId];
       if (!seat?.listingAsk) throw new Error("seat not listed");
       const { txHash, rebounded } = buySeat(
@@ -268,10 +268,10 @@ export const useApp = create<AppState>((set, get) => ({
     }
   },
   runLab: (kind, tokenId) => {
-    const world = JSON.parse(JSON.stringify(get().world)) as WorldState;
+    const world = cloneWorld(get().world);
     const seat = world.seats[tokenId];
     if (!seat) {
-      set({ flash: flashErr(`Seat ${tokenId} missing. Seed Nearnight from Club first.`) });
+      set({ flash: flashErr(`Seat ${tokenId} missing. Seed QuitClaim specimen from Club first.`) });
       return;
     }
     // Arm the threat so one-click Lab buttons always demonstrate the refusal.

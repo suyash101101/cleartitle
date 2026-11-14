@@ -35,7 +35,7 @@ export default function TitleCertificatePage() {
     return (
       <section className="section" style={{ borderTop: "none" }}>
         <h2>Certificate unavailable</h2>
-        <p className="lede">Seed Nearnight from Club Console, then reopen.</p>
+        <p className="lede">Seed QuitClaim specimen from Club Console, then reopen.</p>
         <Link className="btn" href="/console">
           Club Console
         </Link>

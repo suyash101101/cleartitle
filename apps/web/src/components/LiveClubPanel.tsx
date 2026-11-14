@@ -3,9 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { CONTRACT_ID, EXPLORER } from "@/lib/near";
-import { viewClub, viewSeat, type ChainClub, type ChainSeat } from "@/lib/chainViews";
-
-const SEAT_IDS = ["1", "2", "3", "4", "5"];
+import { viewClub, viewSeats, type ChainClub, type ChainSeat } from "@/lib/chainViews";
+import { clubIdFromEnv } from "@/lib/client";
 
 function encLabel(raw: string | undefined): string {
   return (raw ?? "FREE").toUpperCase();
@@ -17,29 +16,27 @@ export function LiveClubPanel() {
   const [seats, setSeats] = useState<ChainSeat[]>([]);
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const clubId = clubIdFromEnv();
 
   const refresh = useCallback(async () => {
     setLoading(true);
     setErr(null);
     try {
-      const c = await viewClub();
+      const c = await viewClub(clubId);
       setClub(c);
-      const rows = await Promise.all(
-        SEAT_IDS.map(async (id) => {
-          try {
-            return await viewSeat(id);
-          } catch {
-            return null;
-          }
-        }),
-      );
-      setSeats(rows.filter((s): s is ChainSeat => Boolean(s)));
+      try {
+        const rows = await viewSeats(clubId);
+        setSeats(rows);
+      } catch {
+        // Older deployments without list_seats: fall back empty; inventory still works via get_seat.
+        setSeats([]);
+      }
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [clubId]);
 
   useEffect(() => {
     void refresh();
@@ -49,7 +46,7 @@ export function LiveClubPanel() {
     <div className="grid-2" style={{ marginBottom: "1.5rem" }}>
       <div className="panel">
         <h3>
-          <span className="badge rpc">Live club</span> {club?.name ?? CONTRACT_ID}
+          <span className="badge rpc">Live venue</span> {club?.name ?? CONTRACT_ID}
         </h3>
         {loading && <p className="meta">Reading RPC…</p>}
         {err && (
@@ -59,6 +56,7 @@ export function LiveClubPanel() {
         )}
         {club && (
           <>
+            <p className="meta">club_id · {club.club_id ?? clubId ?? "active"}</p>
             <p className="meta">organizer · {club.organizer ?? "—"}</p>
             <p className="meta">ticket · {String(club.ticket_price ?? "—")}</p>
             <p className="meta">treasury · {String(club.treasury_balance ?? "—")}</p>
@@ -72,6 +70,9 @@ export function LiveClubPanel() {
               </a>
             </p>
           </>
+        )}
+        {!club && !loading && !err && (
+          <p className="meta">No venue yet — create one below or set NEXT_PUBLIC_CLUB_ID.</p>
         )}
         <div className="cta-row" style={{ marginTop: "0.85rem" }}>
           <button type="button" className="ghost" onClick={() => void refresh()}>
@@ -89,10 +90,11 @@ export function LiveClubPanel() {
         ) : (
           <ul className="checklist">
             {seats.map((s) => (
-              <li key={s.token_id}>
+              <li key={`${s.club_id ?? ""}-${s.token_id}`}>
                 <span className="pass">○</span>
                 <span>
                   <Link href={`/seat/${s.token_id}`}>#{s.token_id}</Link>
+                  {s.kind ? ` · ${s.kind}` : ""}
                   {" · "}
                   {s.owner_id}
                   {" · "}

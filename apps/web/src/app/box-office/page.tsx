@@ -56,7 +56,7 @@ export default function BoxOfficePage() {
         <>
           {liveClub && (
             <div className="panel" style={{ marginBottom: "1.25rem" }}>
-              <h3>{liveClub.name ?? "Nearnight Live"}</h3>
+              <h3>{liveClub.name ?? "QuitClaim venue"}</h3>
               <p className="meta">
                 tickets sold · {liveClub.tickets_sold ?? 0} · treasury ·{" "}
                 {String(liveClub.treasury_balance ?? "—")} · ticket ·{" "}

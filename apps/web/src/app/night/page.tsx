@@ -35,7 +35,7 @@ export default function NightPage() {
   return (
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
       <PageHeader
-        title="Nearnight Live"
+        title="QuitClaim ticket river"
         lede="Every ticket sale splits treasury and seat vaults. Live mode reads chain tickets_sold; Preview uses the scenario river."
       />
       <div style={{ marginBottom: "1.25rem" }}>

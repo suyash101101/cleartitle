@@ -7,10 +7,22 @@ import { TicketRoll3D } from "@/components/TicketRoll3D";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { PageHeader } from "@/components/ui/page-header";
 import { FlaskConical, ShieldCheck, Ticket } from "lucide-react";
-import { CONTRACT_ID, EXPLORER, viewMethod } from "@/lib/near";
+import { CONTRACT_ID, EXPLORER } from "@/lib/near";
+import { viewSeats } from "@/lib/chainViews";
 import { useApp } from "@/lib/store";
-import { SEAT_KINDS } from "@/sdk";
+import { listSeats, NEARNIGHT_SEAT_KINDS } from "@/sdk";
 import type { RollTicket } from "@/components/TicketRoll";
+
+function kindMeta(kindId: string, index: number) {
+  return (
+    NEARNIGHT_SEAT_KINDS.find((k) => k.id === kindId) ??
+    NEARNIGHT_SEAT_KINDS[index] ?? {
+      id: kindId,
+      label: kindId,
+      blurb: "",
+    }
+  );
+}
 
 type SeatView = {
   token_id: string;
@@ -22,6 +34,7 @@ type SeatView = {
   wash_flagged: boolean;
   continuity_hash: string;
   listing_ask: string | number | null;
+  kind?: string;
 };
 
 function encLabel(e: SeatView["encumbrance"]): string {
@@ -44,32 +57,39 @@ export default function InventoryPage() {
     let alive = true;
     setLoading(true);
     setErr(null);
-    const ids = ["1", "2", "3", "4", "5"];
     const hardStop = window.setTimeout(() => {
       if (!alive) return;
       setLoading(false);
-      setErr((prev) => prev ?? "RPC slow · showing cast seats below");
+      setErr((prev) => prev ?? "RPC slow · showing local seats below");
     }, 9000);
 
     void (async () => {
-      const loaded: SeatView[] = [];
-      await Promise.all(
-        ids.map(async (token_id) => {
-          try {
-            const s = await viewMethod<SeatView | null>("get_seat", { token_id });
-            if (!alive || !s) return;
-            const row = { ...s, token_id: s.token_id ?? token_id };
-            loaded.push(row);
-            setLive([...loaded].sort((a, b) => Number(a.token_id) - Number(b.token_id)));
-          } catch {
-            /* soft fail */
-          }
-        }),
-      );
-      if (!alive) return;
-      window.clearTimeout(hardStop);
-      setLoading(false);
-      if (loaded.length === 0) setErr("No seats returned from RPC");
+      try {
+        const rows = await viewSeats();
+        if (!alive) return;
+        setLive(
+          rows.map((s) => ({
+            token_id: s.token_id,
+            owner_id: s.owner_id,
+            vault_account_id: s.vault_account_id ?? "",
+            encumbrance: s.encumbrance ?? "FREE",
+            seat_bps: s.seat_bps ?? 0,
+            access_key_count: s.access_key_count ?? 0,
+            wash_flagged: s.wash_flagged ?? false,
+            continuity_hash: s.continuity_hash ?? "",
+            listing_ask: s.listing_ask ?? null,
+            kind: s.kind,
+          })),
+        );
+        if (rows.length === 0) setErr("No seats returned from RPC");
+      } catch (e) {
+        if (!alive) return;
+        setErr(e instanceof Error ? e.message : String(e));
+      } finally {
+        if (!alive) return;
+        window.clearTimeout(hardStop);
+        setLoading(false);
+      }
     })();
 
     return () => {
@@ -78,9 +98,9 @@ export default function InventoryPage() {
     };
   }, []);
 
-  const filmSeats = Object.values(world.seats);
-  const rollTickets: RollTicket[] = filmSeats.map((s) => {
-    const kind = SEAT_KINDS[Number(s.tokenId) - 1] ?? SEAT_KINDS[0]!;
+  const filmSeats = listSeats(world);
+  const rollTickets: RollTicket[] = filmSeats.map((s, i) => {
+    const kind = kindMeta(s.kind, i);
     return {
       id: s.tokenId,
       tier: kind.label,
@@ -128,8 +148,8 @@ export default function InventoryPage() {
         <span className="badge rpc">Live path</span> Cast seats
       </h3>
       <BentoGrid className="inv-bento">
-        {filmSeats.map((s) => {
-          const kind = SEAT_KINDS[Number(s.tokenId) - 1] ?? SEAT_KINDS[0]!;
+        {filmSeats.map((s, i) => {
+          const kind = kindMeta(s.kind, i);
           return (
             <Link key={s.tokenId} href={`/seat/${s.tokenId}`} className="bento-card inv-bento-card">
               <div className="bento-card-body">
@@ -156,8 +176,8 @@ export default function InventoryPage() {
         </p>
       )}
       <div className="inv-grid">
-        {live.map((s) => {
-          const kind = SEAT_KINDS[Number(s.token_id) - 1] ?? SEAT_KINDS[0]!;
+        {live.map((s, i) => {
+          const kind = kindMeta(typeof s.kind === "string" ? s.kind : "", i);
           return (
             <div key={s.token_id} className="inv-tile">
               <p className="chapter-kicker">{kind.label}</p>

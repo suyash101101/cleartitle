@@ -1,11 +1,34 @@
-/** Typed RPC views for the live QuitClaim contract (thin re-export of SDK). */
+/** Typed RPC views bound to NEXT_PUBLIC_CONTRACT_ID via QuitClaimClient. */
 
-export {
-  viewSeat,
-  viewDiligence,
-  viewClub,
-  seatBuyNonce,
-  type ChainSeatView as ChainSeat,
-  type ChainDiligenceView as ChainDiligence,
-  type ChainClubView as ChainClub,
+import { getQuitClaimClient, clubIdFromEnv } from "@/lib/client";
+import type {
+  ChainClubView as ChainClub,
+  ChainDiligenceView as ChainDiligence,
+  ChainSeatView as ChainSeat,
 } from "@/sdk";
+
+export type { ChainClub, ChainDiligence, ChainSeat };
+
+export function seatBuyNonce(seat: ChainSeat): number {
+  return getQuitClaimClient().buyNonce(seat);
+}
+
+export function viewClub(clubId?: string) {
+  return getQuitClaimClient().getClub(clubId ?? clubIdFromEnv());
+}
+
+export function viewSeat(tokenId: string, clubId?: string) {
+  return getQuitClaimClient().getSeat(tokenId, clubId ?? clubIdFromEnv());
+}
+
+export function viewDiligence(tokenId: string, clubId?: string) {
+  return getQuitClaimClient().diligence(tokenId, clubId ?? clubIdFromEnv());
+}
+
+export function viewSeats(clubId?: string) {
+  return getQuitClaimClient().listSeats(clubId ?? clubIdFromEnv());
+}
+
+export function viewClubIds() {
+  return getQuitClaimClient().listClubs();
+}

@@ -37,7 +37,7 @@ export default function SeatPage() {
     return (
       <section className="section" style={{ borderTop: "none" }}>
         <h2>Seat not found</h2>
-        <p className="lede">Seed Nearnight from Club Console.</p>
+        <p className="lede">Seed QuitClaim specimen from Club Console.</p>
       </section>
     );
   }
@@ -54,7 +54,7 @@ export default function SeatPage() {
 
   return (
     <section className="section seat-desk" style={{ borderTop: "none", paddingTop: 0 }}>
-      <p className="chapter-kicker">Seat desk · Nearnight</p>
+      <p className="chapter-kicker">Seat desk · QuitClaim</p>
       <div className="seat-desk-head">
         <h1 className="page-title">Seat #{seat.tokenId}</h1>
         <div className="seat-desk-chips">

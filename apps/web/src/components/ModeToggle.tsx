@@ -11,7 +11,7 @@ const MODES: { id: ProductMode; label: string; hint: string }[] = [
   {
     id: "preview",
     label: "Preview",
-    hint: "Local scenario engine for film and judge walkthroughs.",
+    hint: "Optional local sim for walkthroughs. Live is the product path.",
   },
 ];
 

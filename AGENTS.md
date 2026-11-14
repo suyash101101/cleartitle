@@ -1,7 +1,8 @@
 # AGENTS.md — QuitClaim
 
-- Product: title insurance for ticket-earning seat NFTs (Nearnight Live).
+- Product: title insurance for ticket-earning seat NFTs. Nearnight is one specimen venue; the SDK/contract are multi-venue.
 - Do **not** name competitor projects in code, UI, README, commits, or demos.
+- Live path binds `NEXT_PUBLIC_CONTRACT_ID` via `QuitClaimClient` — never hardcode the demo account in new call sites.
 - Do **not** use em dashes in user-facing copy or README.
 - Shared logic lives in `packages/sdk`. Sync to `apps/web/src/sdk` via `pnpm sync:sdk`.
 - **Live** mode (default): wallet + RPC. **Preview**: scenario engine / Film ready only.

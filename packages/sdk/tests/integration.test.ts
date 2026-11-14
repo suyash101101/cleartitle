@@ -3,7 +3,9 @@ import {
   buySeat,
   buyTicket,
   claimPayout,
+  QuitClaimClient,
   createClub,
+  createVenue,
   createWorld,
   encodeBuySeat,
   encodeBuyTicket,
@@ -21,6 +23,7 @@ describe("integration: end-to-end mid-payout product path", () => {
   it("createClub → mint → ticket → claim → list → buy → CLEAN → old withdraw fail", () => {
     const world = createWorld();
     createClub(world, {
+      clubId: "integrator",
       name: "Integrator Club",
       organizer: "organizer.near",
       ticketPrice: 10,
@@ -66,8 +69,13 @@ describe("integration: end-to-end mid-payout product path", () => {
 });
 
 describe("call encoding", () => {
-  it("encodes wallet FunctionCall shapes", () => {
-    expect(encodeBuyTicket()).toEqual({
+  it("encodes wallet FunctionCall shapes with explicit deposits + club ids", () => {
+    expect(encodeBuyTicket("25", "dayfest")).toEqual({
+      methodName: "buy_ticket",
+      args: { club_id: "dayfest" },
+      depositYocto: "25",
+    });
+    expect(encodeBuyTicket(10)).toEqual({
       methodName: "buy_ticket",
       args: {},
       depositYocto: "10",
@@ -78,5 +86,71 @@ describe("call encoding", () => {
       args: { token_id: "3", sync_nonce: 2 },
       depositYocto: "100",
     });
+  });
+});
+
+describe("multi-venue engine", () => {
+  it("hosts independent clubs without clobbering the first venue", () => {
+    const world = createWorld();
+    createVenue(world, {
+      clubId: "nearnight",
+      name: "Nearnight Live",
+      organizer: "organizer.near",
+      ticketPrice: 10,
+      seatBps: [5000, 5000],
+      treasuryBps: 0,
+    });
+    createVenue(
+      world,
+      {
+        clubId: "dayfest",
+        name: "Dayfest",
+        organizer: "organizer.near",
+        ticketPrice: 25,
+        seatBps: [2500, 2500, 5000],
+        treasuryBps: 0,
+        seatKinds: [
+          { id: "ga", label: "GA", blurb: "general" },
+          { id: "balcony", label: "Balcony", blurb: "upper" },
+          { id: "box", label: "Box", blurb: "private" },
+        ],
+      },
+      { setActive: false },
+    );
+    buyTicket(world, "fan.near", 10, "nearnight");
+    buyTicket(world, "fan.near", 25, "dayfest");
+    expect(world.clubs.nearnight!.ticketPrice).toBe(10);
+    expect(world.clubs.dayfest!.ticketPrice).toBe(25);
+    expect(world.seats["nearnight:1"]!.balance).toBe(5);
+    expect(world.seats["dayfest:1"]!.balance).toBe(6);
+    expect(world.seats["dayfest:1"]!.kind).toBe("ga");
+  });
+});
+
+describe("QuitClaimClient encodings", () => {
+  it("encodes a venue create from VenueSpec without demo defaults", () => {
+    const client = new QuitClaimClient({
+      contractId: "my-venue.testnet",
+      network: "testnet",
+      clubId: "dayfest",
+    });
+    const enc = client.encodeCreateVenue({
+      clubId: "dayfest",
+      name: "Dayfest",
+      organizer: "you.near",
+      ticketPrice: 25,
+      seatBps: [2500, 2500, 5000],
+      treasuryBps: 0,
+      seatKinds: [
+        { id: "ga", label: "GA", blurb: "" },
+        { id: "balcony", label: "Balcony", blurb: "" },
+        { id: "box", label: "Box", blurb: "" },
+      ],
+    });
+    expect(enc.methodName).toBe("create_club");
+    expect(enc.args.club_id).toBe("dayfest");
+    expect(enc.args.ticket_price).toBe("25");
+    expect(client.encodeMintSeats().args).toEqual({ club_id: "dayfest" });
+    expect(client.encodeBuySeat("1", 2, "100").depositYocto).toBe("100");
   });
 });

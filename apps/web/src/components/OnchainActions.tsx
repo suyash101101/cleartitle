@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@/lib/wallet";
-import { EXPLORER } from "@/lib/near";
+import { CONTRACT_ID, EXPLORER } from "@/lib/near";
 import { seatBuyNonce, viewSeat, type ChainSeat } from "@/lib/chainViews";
 
 const DEFAULT_TOKEN = "3";
@@ -61,8 +61,8 @@ export function OnchainActions() {
       </h3>
       <p className="meta">
         {accountId
-          ? `Signing as ${accountId} against cleartitle562464.testnet`
-          : "Connect a testnet wallet above to enable buy_ticket / list / buy_seat."}
+          ? `Signing as ${accountId} against ${CONTRACT_ID}`
+          : "Connect a wallet above to enable buy_ticket / list / buy_seat."}
       </p>
       <label className="meta" style={{ display: "block", marginTop: "0.65rem" }}>
         Seat token id{" "}

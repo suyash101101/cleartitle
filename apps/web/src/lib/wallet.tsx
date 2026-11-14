@@ -10,17 +10,23 @@ import {
   type ReactNode,
 } from "react";
 import { NearConnector } from "@hot-labs/near-connect";
-import { encodeBuySeat, encodeBuyTicket, encodeListSeat } from "@/sdk";
-import { CONTRACT_ID } from "@/lib/near";
+import { getQuitClaimClient, clubIdFromEnv } from "@/lib/client";
+import { NETWORK } from "@/lib/near";
+import { encodeBuyTicket, type VenueSpec } from "@/sdk";
 
 type WalletCtx = {
   accountId: string | null;
   connecting: boolean;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  buyTicket: () => Promise<string>;
-  listSeat: (tokenId: string, ask: string) => Promise<string>;
-  buySeat: (tokenId: string, syncNonce: number, ask: string) => Promise<string>;
+  createVenue: (spec: VenueSpec) => Promise<string>;
+  mintSeats: (clubId?: string) => Promise<string>;
+  setPaused: (paused: boolean, clubId?: string) => Promise<string>;
+  buyTicket: (depositYocto?: string, clubId?: string) => Promise<string>;
+  listSeat: (tokenId: string, ask: string, clubId?: string) => Promise<string>;
+  delistSeat: (tokenId: string, clubId?: string) => Promise<string>;
+  buySeat: (tokenId: string, syncNonce: number, ask: string, clubId?: string) => Promise<string>;
+  claimPayout: (tokenId: string, amount: string, clubId?: string) => Promise<string>;
 };
 
 const Ctx = createContext<WalletCtx | null>(null);
@@ -29,9 +35,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [connector, setConnector] = useState<NearConnector | null>(null);
   const [accountId, setAccountId] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
+  const client = useMemo(() => getQuitClaimClient(), []);
 
   useEffect(() => {
-    const c = new NearConnector({ network: "testnet" });
+    const network = NETWORK === "mainnet" ? "mainnet" : "testnet";
+    const c = new NearConnector({ network });
     setConnector(c);
     c.on("wallet:signIn", async () => {
       try {
@@ -43,7 +51,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       }
     });
     c.on("wallet:signOut", () => setAccountId(null));
-    // try restore
     void (async () => {
       try {
         const w = await c.wallet();
@@ -76,10 +83,10 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   const call = useCallback(
     async (method: string, args: object, depositYoctor: string) => {
-      if (!connector || !accountId) throw new Error("Connect a testnet wallet first");
+      if (!connector || !accountId) throw new Error("Connect a wallet first");
       const w = await connector.wallet();
       const outcome = await w.signAndSendTransaction({
-        receiverId: CONTRACT_ID,
+        receiverId: client.contractId,
         actions: [
           {
             type: "FunctionCall",
@@ -99,8 +106,10 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         "unknown";
       return String(hash);
     },
-    [connector, accountId],
+    [connector, accountId, client.contractId],
   );
+
+  const resolveClub = (clubId?: string) => clubId ?? clubIdFromEnv() ?? client.clubId;
 
   const value = useMemo<WalletCtx>(
     () => ({
@@ -108,20 +117,44 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       connecting,
       connect,
       disconnect,
-      buyTicket: () => {
-        const e = encodeBuyTicket();
+      createVenue: (spec) => {
+        const e = client.encodeCreateVenue(spec);
         return call(e.methodName, e.args, e.depositYocto);
       },
-      listSeat: (tokenId, ask) => {
-        const e = encodeListSeat(tokenId, ask);
+      mintSeats: (clubId) => {
+        const e = client.encodeMintSeats(resolveClub(clubId));
         return call(e.methodName, e.args, e.depositYocto);
       },
-      buySeat: (tokenId, syncNonce, ask) => {
-        const e = encodeBuySeat(tokenId, syncNonce, ask);
+      setPaused: (paused, clubId) => {
+        const e = client.encodeSetPaused(paused, resolveClub(clubId));
+        return call(e.methodName, e.args, e.depositYocto);
+      },
+      buyTicket: async (depositYocto, clubId) => {
+        const id = resolveClub(clubId);
+        const e =
+          depositYocto != null
+            ? encodeBuyTicket(depositYocto, id)
+            : await client.encodeBuyTicket(id);
+        return call(e.methodName, e.args, e.depositYocto);
+      },
+      listSeat: (tokenId, ask, clubId) => {
+        const e = client.encodeListSeat(tokenId, ask, resolveClub(clubId));
+        return call(e.methodName, e.args, e.depositYocto);
+      },
+      delistSeat: (tokenId, clubId) => {
+        const e = client.encodeDelistSeat(tokenId, resolveClub(clubId));
+        return call(e.methodName, e.args, e.depositYocto);
+      },
+      buySeat: (tokenId, syncNonce, ask, clubId) => {
+        const e = client.encodeBuySeat(tokenId, syncNonce, ask, resolveClub(clubId));
+        return call(e.methodName, e.args, e.depositYocto);
+      },
+      claimPayout: (tokenId, amount, clubId) => {
+        const e = client.encodeClaimPayout(tokenId, amount, resolveClub(clubId));
         return call(e.methodName, e.args, e.depositYocto);
       },
     }),
-    [accountId, connecting, connect, disconnect, call],
+    [accountId, connecting, connect, disconnect, call, client],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
