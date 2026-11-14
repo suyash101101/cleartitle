@@ -1630,21 +1630,21 @@
         {
           "id": "t_title",
           "tile": {
-            "x": 0,
-            "y": -2.5
+            "x": -7,
+            "y": -6.5
           },
           "content": "CleanDeed",
-          "fontSize": 1.65,
+          "fontSize": 1.55,
           "orientation": "Y"
         },
         {
           "id": "t_sub",
           "tile": {
-            "x": 2,
-            "y": -2.5
+            "x": -5,
+            "y": -6.5
           },
           "content": "mid-payout title insurance on NEAR",
-          "fontSize": 0.4,
+          "fontSize": 0.38,
           "orientation": "Y"
         },
         {

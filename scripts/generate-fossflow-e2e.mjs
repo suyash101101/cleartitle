@@ -264,23 +264,24 @@ const RECTS = [
 ];
 
 /**
- * CleanDeed + tagline: keep Y orientation. Anchor on the left of the
- * People front so the Y-run text lands mid-stack (not the brand tip).
+ * CleanDeed + tagline: keep Y orientation. Sit in the empty front-left
+ * whitespace (outside pads) so it does not overlap Organizer / green paths.
  * Block labels only in empty corners — never on node coords.
  */
 const TEXT = [
   {
+    // Front white void under People — clear of Organizer / green paths.
     id: "t_title",
-    tile: { x: 0, y: -2.5 },
+    tile: { x: -7, y: -6.5 },
     content: "CleanDeed",
-    fontSize: 1.65,
+    fontSize: 1.55,
     orientation: "Y",
   },
   {
     id: "t_sub",
-    tile: { x: 2, y: -2.5 },
+    tile: { x: -5, y: -6.5 },
     content: "mid-payout title insurance on NEAR",
-    fontSize: 0.4,
+    fontSize: 0.38,
     orientation: "Y",
   },
   // empty corners (no node at these tiles)
