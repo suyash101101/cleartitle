@@ -582,7 +582,7 @@
         {
           "id": "item_22",
           "tile": {
-            "x": 1,
+            "x": 0,
             "y": 6
           },
           "labelHeight": 72
@@ -590,7 +590,7 @@
         {
           "id": "item_23",
           "tile": {
-            "x": 4,
+            "x": 3,
             "y": 6
           },
           "labelHeight": 72
@@ -598,7 +598,7 @@
         {
           "id": "item_24",
           "tile": {
-            "x": 7,
+            "x": 6,
             "y": 6
           },
           "labelHeight": 72
@@ -1561,7 +1561,7 @@
             "y": -12
           },
           "to": {
-            "x": 17,
+            "x": 11,
             "y": -7
           }
         },
@@ -1630,32 +1630,22 @@
         {
           "id": "t_title",
           "tile": {
-            "x": 8,
-            "y": -10.4
+            "x": 7,
+            "y": -10.5
           },
           "content": "CleanDeed",
-          "fontSize": 1.65,
-          "orientation": "X"
+          "fontSize": 1.7,
+          "orientation": "Y"
         },
         {
           "id": "t_sub",
           "tile": {
-            "x": 8,
-            "y": -8.8
+            "x": 9,
+            "y": -10.5
           },
           "content": "mid-payout title insurance on NEAR",
           "fontSize": 0.42,
-          "orientation": "X"
-        },
-        {
-          "id": "t_brand",
-          "tile": {
-            "x": 8,
-            "y": -11.5
-          },
-          "content": "NEAR",
-          "fontSize": 0.38,
-          "orientation": "X"
+          "orientation": "Y"
         },
         {
           "id": "t_people",
@@ -1694,16 +1684,6 @@
             "y": 3.4
           },
           "content": "Lab",
-          "fontSize": 0.38,
-          "orientation": "X"
-        },
-        {
-          "id": "t_stack",
-          "tile": {
-            "x": 7.5,
-            "y": 10
-          },
-          "content": "SDK",
           "fontSize": 0.38,
           "orientation": "X"
         }

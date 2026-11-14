@@ -147,14 +147,14 @@ const POS = [
   [16, 15, -1],
   [17, 15, 2],
 
-  // story — multiline (4+3)
+  // story — multiline (4+3), same step-3 grid (no half-step stagger)
   [18, 0, 4],
   [19, 3, 4],
   [20, 6, 4],
   [21, 9, 4],
-  [22, 1, 6],
-  [23, 4, 6],
-  [24, 7, 6],
+  [22, 0, 6],
+  [23, 3, 6],
+  [24, 6, 6],
 
   // Lab·evidence — vertical, right of story
   [25, 12, 4],
@@ -254,8 +254,8 @@ const COLORS = [
  * Gaps between different colors so islands never touch.
  */
 const RECTS = [
-  // Full-width brand banner so CleanDeed sits mid-board (not left-rail).
-  { id: "r_brand", color: "c_brand", from: { x: -1, y: -12 }, to: { x: 17, y: -7 } },
+  // Brand pad: NEAR tools (x≤6) + open front strip for CleanDeed (Y).
+  { id: "r_brand", color: "c_brand", from: { x: -1, y: -12 }, to: { x: 11, y: -7 } },
   { id: "r_people", color: "c_people", from: { x: -1, y: -5 }, to: { x: 15, y: -3 } },
   { id: "r_ui", color: "c_ui", from: { x: -1, y: -2 }, to: { x: 17, y: 2 } },
   { id: "r_story", color: "c_story", from: { x: -1, y: 3 }, to: { x: 10, y: 7 } },
@@ -264,31 +264,31 @@ const RECTS = [
 ];
 
 /**
- * CleanDeed title centered on the full-width brand strip.
+ * CleanDeed on the front brand face — orientation Y (same as earlier),
+ * centered in the open strip between NEAR icons (x≤6) and pad edge (x=11).
  * Block labels only in empty corners — never on node coords.
  */
 const TEXT = [
   {
+    // Anchor left of open strip so Y-run text mass sits mid-pad (not edge).
     id: "t_title",
-    tile: { x: 8.0, y: -10.4 },
+    tile: { x: 7, y: -10.5 },
     content: "CleanDeed",
-    fontSize: 1.65,
-    orientation: "X",
+    fontSize: 1.7,
+    orientation: "Y",
   },
   {
     id: "t_sub",
-    tile: { x: 8.0, y: -8.8 },
+    tile: { x: 9, y: -10.5 },
     content: "mid-payout title insurance on NEAR",
     fontSize: 0.42,
-    orientation: "X",
+    orientation: "Y",
   },
   // empty corners (no node at these tiles)
-  { id: "t_brand", tile: { x: 8.0, y: -11.5 }, content: "NEAR", fontSize: 0.38, orientation: "X" },
   { id: "t_people", tile: { x: 13.5, y: -4.5 }, content: "People", fontSize: 0.38, orientation: "X" },
   { id: "t_ui", tile: { x: 13.5, y: 1.3 }, content: "Live UI", fontSize: 0.38, orientation: "X" },
   { id: "t_story", tile: { x: 9.2, y: 3.4 }, content: "Story", fontSize: 0.38, orientation: "X" },
   { id: "t_lab", tile: { x: 13.5, y: 3.4 }, content: "Lab", fontSize: 0.38, orientation: "X" },
-  { id: "t_stack", tile: { x: 7.5, y: 10 }, content: "SDK", fontSize: 0.38, orientation: "X" },
 ];
 
 // --- validate coverage + island gaps ---
