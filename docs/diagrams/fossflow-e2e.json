@@ -1,0 +1,1714 @@
+{
+  "title": "QuitClaim E2E mid-payout title insurance",
+  "version": "1.0",
+  "description": "Clustered QuitClaim E2E: every node linked, island gaps, essential edges",
+  "icons": [
+    {
+      "id": "user",
+      "name": "user",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "mobiledevice",
+      "name": "mobiledevice",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "firewall",
+      "name": "firewall",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "desktop",
+      "name": "desktop",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "cardterminal",
+      "name": "cardterminal",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "sphere",
+      "name": "sphere",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "laptop",
+      "name": "laptop",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "document",
+      "name": "document",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "block",
+      "name": "block",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "lock",
+      "name": "lock",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "cube",
+      "name": "cube",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "paymentcard",
+      "name": "paymentcard",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "cronjob",
+      "name": "cronjob",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "truck",
+      "name": "truck",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "package-module",
+      "name": "package-module",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "server",
+      "name": "server",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "storage",
+      "name": "storage",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "switch-module",
+      "name": "switch-module",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "pyramid",
+      "name": "pyramid",
+      "url": "",
+      "isIsometric": true
+    },
+    {
+      "id": "logo-near",
+      "name": "near",
+      "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBCMTIyMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxNDMwMmEiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgcng9IjE4IiBmaWxsPSJ1cmwoI2cpIi8+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9Ijg4IiBoZWlnaHQ9Ijg4IiByeD0iMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwRUM5NyIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIwLjg1Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjQgMTQpIHNjYWxlKDIpIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIDIpIHNjYWxlKDAuNzUpIj48cGF0aCBmaWxsPSIjMDBFQzk3IiBkPSJNMjEuNDQzIDBjLS44OSAwLTEuNzE0LjQ2LTIuMTggMS4yMThsLTUuMDE3IDcuNDQ4YS41MzMuNTMzIDAgMCAwIC43OTIuN2w0LjkzOC00LjI4MmEuMi4yIDAgMCAxIC4zMzQuMTUxdjEzLjQxYS4yLjIgMCAwIDEtLjM1NC4xMjhMNS4wMy45MDVBMi41NTUgMi41NTUgMCAwIDAgMy4wNzggMGgtLjUyMUEyLjU1NyAyLjU1NyAwIDAgMCAwIDIuNTU3djE4Ljg4NmEyLjU1NyAyLjU1NyAwIDAgMCA0LjczNiAxLjMzOGw1LjAxNy03LjQ0OGEuNTMzLjUzMyAwIDAgMC0uNzkyLS43bC00LjkzOCA0LjI4M2EuMi4yIDAgMCAxLS4zMzMtLjE1MlY1LjM1MmEuMi4yIDAgMCAxIC4zNTQtLjEyOGwxNC45MjQgMTcuODdjLjQ4Ni41NzQgMS4yLjkwNSAxLjk1Mi45MDZoLjUyMUEyLjU1OCAyLjU1OCAwIDAgMCAyNCAyMS40NDVWMi41NTdBMi41NTggMi41NTggMCAwIDAgMjEuNDQzIDBaIi8+PC9nPjwvZz4KICA8dGV4dCB4PSI0OCIgeT0iODYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iOSIgZmlsbD0iIzlBRTZDNSIgZm9udC1mYW1pbHk9InVpLXNhbnMtc2VyaWYsc3lzdGVtLXVpIj5ORUFSPC90ZXh0Pgo8L3N2Zz4=",
+      "collection": "imported",
+      "isIsometric": false
+    },
+    {
+      "id": "logo-near-connect",
+      "name": "near-connect",
+      "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBCMTIyMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxNDMwMmEiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgcng9IjE4IiBmaWxsPSJ1cmwoI2cpIi8+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9Ijg4IiBoZWlnaHQ9Ijg4IiByeD0iMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwRUM5NyIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIwLjg1Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjQgMTQpIHNjYWxlKDIpIj48Y2lyY2xlIGN4PSIyNCIgY3k9IjE4IiByPSI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMEVDOTciIHN0cm9rZS13aWR0aD0iMyIvPgogICAgIDxwYXRoIGQ9Ik04IDM4YzUtMTEgMjctMTEgMzIgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBFQzk3IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvZz4KICA8dGV4dCB4PSI0OCIgeT0iODYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iOSIgZmlsbD0iIzlBRTZDNSIgZm9udC1mYW1pbHk9InVpLXNhbnMtc2VyaWYsc3lzdGVtLXVpIj5uZWFyLWNvbm5lY3Q8L3RleHQ+Cjwvc3ZnPg==",
+      "collection": "imported",
+      "isIsometric": false
+    },
+    {
+      "id": "logo-chain-sigs",
+      "name": "chain-sigs",
+      "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBCMTIyMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxNDMwMmEiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgcng9IjE4IiBmaWxsPSJ1cmwoI2cpIi8+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9Ijg4IiBoZWlnaHQ9Ijg4IiByeD0iMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwRUM5NyIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIwLjg1Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjQgMTQpIHNjYWxlKDIpIj48Y2lyY2xlIGN4PSIxNCIgY3k9IjI0IiByPSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBFQzk3IiBzdHJva2Utd2lkdGg9IjMiLz4KICAgICA8Y2lyY2xlIGN4PSIzNCIgY3k9IjI0IiByPSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjN0NGRkNCIiBzdHJva2Utd2lkdGg9IjMiLz4KICAgICA8cGF0aCBkPSJNMjAgMjRoOCIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvZz4KICA8dGV4dCB4PSI0OCIgeT0iODYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iOSIgZmlsbD0iIzlBRTZDNSIgZm9udC1mYW1pbHk9InVpLXNhbnMtc2VyaWYsc3lzdGVtLXVpIj5DaGFpbiBTaWdzPC90ZXh0Pgo8L3N2Zz4=",
+      "collection": "imported",
+      "isIsometric": false
+    },
+    {
+      "id": "logo-nearblocks",
+      "name": "nearblocks",
+      "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBCMTIyMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxNDMwMmEiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgcng9IjE4IiBmaWxsPSJ1cmwoI2cpIi8+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9Ijg4IiBoZWlnaHQ9Ijg4IiByeD0iMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwRUM5NyIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIwLjg1Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjQgMTQpIHNjYWxlKDIpIj48cmVjdCB4PSI2IiB5PSIxMCIgd2lkdGg9IjM2IiBoZWlnaHQ9IjI4IiByeD0iNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBFQzk3IiBzdHJva2Utd2lkdGg9IjMiLz4KICAgICA8cGF0aCBkPSJNMTIgMThoMjRNMTIgMjRoMTZNMTIgMzBoMjAiIHN0cm9rZT0iIzdDRkZDQiIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvZz4KICA8dGV4dCB4PSI0OCIgeT0iODYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iOSIgZmlsbD0iIzlBRTZDNSIgZm9udC1mYW1pbHk9InVpLXNhbnMtc2VyaWYsc3lzdGVtLXVpIj5OZWFyYmxvY2tzPC90ZXh0Pgo8L3N2Zz4=",
+      "collection": "imported",
+      "isIsometric": false
+    },
+    {
+      "id": "logo-near-sdk",
+      "name": "near-sdk",
+      "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBCMTIyMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxNDMwMmEiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgcng9IjE4IiBmaWxsPSJ1cmwoI2cpIi8+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9Ijg4IiBoZWlnaHQ9Ijg4IiByeD0iMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwRUM5NyIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIwLjg1Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjQgMTQpIHNjYWxlKDIpIj48cGF0aCBkPSJNOCAxMmwxMiAxMi0xMiAxMk0yOCAzNmgxNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBFQzk3IiBzdHJva2Utd2lkdGg9IjMuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9nPgogIDx0ZXh0IHg9IjQ4IiB5PSI4NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI5IiBmaWxsPSIjOUFFNkM1IiBmb250LWZhbWlseT0idWktc2Fucy1zZXJpZixzeXN0ZW0tdWkiPm5lYXItc2RrPC90ZXh0Pgo8L3N2Zz4=",
+      "collection": "imported",
+      "isIsometric": false
+    },
+    {
+      "id": "logo-nep171",
+      "name": "nep171",
+      "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBCMTIyMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxNDMwMmEiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgcng9IjE4IiBmaWxsPSJ1cmwoI2cpIi8+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9Ijg4IiBoZWlnaHQ9Ijg4IiByeD0iMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwRUM5NyIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIwLjg1Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjQgMTQpIHNjYWxlKDIpIj48cmVjdCB4PSIxMCIgeT0iOCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjM0IiByeD0iNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDBFQzk3IiBzdHJva2Utd2lkdGg9IjMiLz4KICAgICA8Y2lyY2xlIGN4PSIyNCIgY3k9IjIyIiByPSI2IiBmaWxsPSIjMDBFQzk3Ii8+PC9nPgogIDx0ZXh0IHg9IjQ4IiB5PSI4NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI5IiBmaWxsPSIjOUFFNkM1IiBmb250LWZhbWlseT0idWktc2Fucy1zZXJpZixzeXN0ZW0tdWkiPk5FUC0xNzE8L3RleHQ+Cjwvc3ZnPg==",
+      "collection": "imported",
+      "isIsometric": false
+    }
+  ],
+  "colors": [
+    {
+      "id": "ink",
+      "value": "#5a6577"
+    },
+    {
+      "id": "near",
+      "value": "#00EC97"
+    },
+    {
+      "id": "c_brand",
+      "value": "#d2f5e4"
+    },
+    {
+      "id": "c_people",
+      "value": "#e6e6e6"
+    },
+    {
+      "id": "c_ui",
+      "value": "#c5e9ec"
+    },
+    {
+      "id": "c_story",
+      "value": "#f3e2bb"
+    },
+    {
+      "id": "c_proof",
+      "value": "#efc6c1"
+    },
+    {
+      "id": "c_stack",
+      "value": "#cdd6f5"
+    },
+    {
+      "id": "c_sell",
+      "value": "#c4a8e8"
+    }
+  ],
+  "items": [
+    {
+      "id": "item_0",
+      "name": "NEAR",
+      "icon": "logo-near",
+      "description": "testnet RPC"
+    },
+    {
+      "id": "item_1",
+      "name": "near-connect",
+      "icon": "logo-near-connect",
+      "description": "Live wallet"
+    },
+    {
+      "id": "item_2",
+      "name": "near-sdk",
+      "icon": "logo-near-sdk",
+      "description": "Rust contract"
+    },
+    {
+      "id": "item_3",
+      "name": "NEP-171",
+      "icon": "logo-nep171",
+      "description": "Seat NFTs"
+    },
+    {
+      "id": "item_4",
+      "name": "Chain Sigs",
+      "icon": "logo-chain-sigs",
+      "description": "MPC tips"
+    },
+    {
+      "id": "item_5",
+      "name": "Nearblocks",
+      "icon": "logo-nearblocks",
+      "description": "Explorer"
+    },
+    {
+      "id": "item_6",
+      "name": "Organizer",
+      "icon": "user",
+      "description": "Mints + BPS"
+    },
+    {
+      "id": "item_7",
+      "name": "Fan",
+      "icon": "mobiledevice",
+      "description": "Buys ticket"
+    },
+    {
+      "id": "item_8",
+      "name": "Ada",
+      "icon": "user",
+      "description": "Seller"
+    },
+    {
+      "id": "item_9",
+      "name": "Priya",
+      "icon": "user",
+      "description": "Buyer"
+    },
+    {
+      "id": "item_10",
+      "name": "Judge",
+      "icon": "firewall",
+      "description": "Hostile Lab"
+    },
+    {
+      "id": "item_11",
+      "name": "Console",
+      "icon": "desktop",
+      "description": "/console"
+    },
+    {
+      "id": "item_12",
+      "name": "Box office",
+      "icon": "cardterminal",
+      "description": "/box-office"
+    },
+    {
+      "id": "item_13",
+      "name": "Night",
+      "icon": "sphere",
+      "description": "/night"
+    },
+    {
+      "id": "item_14",
+      "name": "Seat #3",
+      "icon": "laptop",
+      "description": "/seat/3"
+    },
+    {
+      "id": "item_15",
+      "name": "Diligence UI",
+      "icon": "document",
+      "description": "/title/3"
+    },
+    {
+      "id": "item_16",
+      "name": "Lab",
+      "icon": "block",
+      "description": "/lab"
+    },
+    {
+      "id": "item_17",
+      "name": "Verify",
+      "icon": "lock",
+      "description": "/verify · /proof"
+    },
+    {
+      "id": "item_18",
+      "name": "Mint seats",
+      "icon": "cube",
+      "description": "create_club"
+    },
+    {
+      "id": "item_19",
+      "name": "Set BPS",
+      "icon": "document",
+      "description": "ticket + cuts"
+    },
+    {
+      "id": "item_20",
+      "name": "buy_ticket",
+      "icon": "paymentcard",
+      "description": "split vaults"
+    },
+    {
+      "id": "item_21",
+      "name": "PENDING",
+      "icon": "cronjob",
+      "description": "claim cut"
+    },
+    {
+      "id": "item_22",
+      "name": "FREEZE list",
+      "icon": "lock",
+      "description": "list_seat"
+    },
+    {
+      "id": "item_23",
+      "name": "CLEAN gate",
+      "icon": "firewall",
+      "description": "diligence"
+    },
+    {
+      "id": "item_24",
+      "name": "buy_seat",
+      "icon": "truck",
+      "description": "rebound"
+    },
+    {
+      "id": "item_25",
+      "name": "Lab refuse",
+      "icon": "block",
+      "description": "expected fail"
+    },
+    {
+      "id": "item_26",
+      "name": "Evidence",
+      "icon": "package-module",
+      "description": "tx hashes"
+    },
+    {
+      "id": "item_27",
+      "name": "SDK",
+      "icon": "package-module",
+      "description": "@cleartitle/sdk"
+    },
+    {
+      "id": "item_28",
+      "name": "Contract",
+      "icon": "server",
+      "description": "testnet"
+    },
+    {
+      "id": "item_29",
+      "name": "Vault #3",
+      "icon": "storage",
+      "description": "0 keys"
+    },
+    {
+      "id": "item_30",
+      "name": "Live mode",
+      "icon": "switch-module",
+      "description": "vs Preview"
+    },
+    {
+      "id": "item_31",
+      "name": "Tests",
+      "icon": "desktop",
+      "description": "Vitest · e2e"
+    },
+    {
+      "id": "item_32",
+      "name": "Scale",
+      "icon": "pyramid",
+      "description": "/scale"
+    }
+  ],
+  "views": [
+    {
+      "id": "view_0",
+      "name": "E2E mid-payout",
+      "items": [
+        {
+          "id": "item_0",
+          "tile": {
+            "x": 0,
+            "y": -11
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_1",
+          "tile": {
+            "x": 3,
+            "y": -11
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_2",
+          "tile": {
+            "x": 6,
+            "y": -11
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_3",
+          "tile": {
+            "x": 0,
+            "y": -8
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_4",
+          "tile": {
+            "x": 3,
+            "y": -8
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_5",
+          "tile": {
+            "x": 6,
+            "y": -8
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_6",
+          "tile": {
+            "x": 0,
+            "y": -4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_7",
+          "tile": {
+            "x": 3,
+            "y": -4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_8",
+          "tile": {
+            "x": 6,
+            "y": -4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_9",
+          "tile": {
+            "x": 9,
+            "y": -4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_10",
+          "tile": {
+            "x": 12,
+            "y": -4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_11",
+          "tile": {
+            "x": 0,
+            "y": -1
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_12",
+          "tile": {
+            "x": 3,
+            "y": -1
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_14",
+          "tile": {
+            "x": 6,
+            "y": -1
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_13",
+          "tile": {
+            "x": 9,
+            "y": -1
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_15",
+          "tile": {
+            "x": 12,
+            "y": -1
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_16",
+          "tile": {
+            "x": 15,
+            "y": -1
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_17",
+          "tile": {
+            "x": 15,
+            "y": 2
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_18",
+          "tile": {
+            "x": 0,
+            "y": 4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_19",
+          "tile": {
+            "x": 3,
+            "y": 4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_20",
+          "tile": {
+            "x": 6,
+            "y": 4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_21",
+          "tile": {
+            "x": 9,
+            "y": 4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_22",
+          "tile": {
+            "x": 1,
+            "y": 6
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_23",
+          "tile": {
+            "x": 4,
+            "y": 6
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_24",
+          "tile": {
+            "x": 7,
+            "y": 6
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_25",
+          "tile": {
+            "x": 12,
+            "y": 4
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_26",
+          "tile": {
+            "x": 12,
+            "y": 6
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_27",
+          "tile": {
+            "x": 0,
+            "y": 9
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_28",
+          "tile": {
+            "x": 3,
+            "y": 9
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_29",
+          "tile": {
+            "x": 6,
+            "y": 9
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_30",
+          "tile": {
+            "x": 0,
+            "y": 11
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_31",
+          "tile": {
+            "x": 3,
+            "y": 11
+          },
+          "labelHeight": 72
+        },
+        {
+          "id": "item_32",
+          "tile": {
+            "x": 6,
+            "y": 11
+          },
+          "labelHeight": 72
+        }
+      ],
+      "connectors": [
+        {
+          "id": "conn_0",
+          "color": "near",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_0_0",
+              "ref": {
+                "item": "item_0"
+              }
+            },
+            {
+              "id": "a_0_1",
+              "ref": {
+                "item": "item_1"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_1",
+          "color": "near",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_1_0",
+              "ref": {
+                "item": "item_1"
+              }
+            },
+            {
+              "id": "a_1_1",
+              "ref": {
+                "item": "item_2"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_2",
+          "color": "near",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_2_0",
+              "ref": {
+                "item": "item_2"
+              }
+            },
+            {
+              "id": "a_2_1",
+              "ref": {
+                "item": "item_5"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_3",
+          "color": "near",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_3_0",
+              "ref": {
+                "item": "item_5"
+              }
+            },
+            {
+              "id": "a_3_1",
+              "ref": {
+                "item": "item_4"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_4",
+          "color": "near",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_4_0",
+              "ref": {
+                "item": "item_4"
+              }
+            },
+            {
+              "id": "a_4_1",
+              "ref": {
+                "item": "item_3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_5",
+          "color": "near",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_5_0",
+              "ref": {
+                "item": "item_3"
+              }
+            },
+            {
+              "id": "a_5_1",
+              "ref": {
+                "item": "item_0"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_6",
+          "color": "near",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_6_0",
+              "ref": {
+                "item": "item_0"
+              }
+            },
+            {
+              "id": "a_6_v0",
+              "ref": {
+                "tile": {
+                  "x": 2,
+                  "y": -1
+                }
+              }
+            },
+            {
+              "id": "a_6_1",
+              "ref": {
+                "item": "item_28"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_7",
+          "color": "near",
+          "width": 7,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_7_0",
+              "ref": {
+                "item": "item_1"
+              }
+            },
+            {
+              "id": "a_7_v0",
+              "ref": {
+                "tile": {
+                  "x": 2,
+                  "y": -6
+                }
+              }
+            },
+            {
+              "id": "a_7_1",
+              "ref": {
+                "item": "item_11"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_8",
+          "color": "near",
+          "width": 7,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_8_0",
+              "ref": {
+                "item": "item_3"
+              }
+            },
+            {
+              "id": "a_8_1",
+              "ref": {
+                "item": "item_18"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_9",
+          "color": "near",
+          "width": 7,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_9_0",
+              "ref": {
+                "item": "item_4"
+              }
+            },
+            {
+              "id": "a_9_v0",
+              "ref": {
+                "tile": {
+                  "x": 5,
+                  "y": 1
+                }
+              }
+            },
+            {
+              "id": "a_9_1",
+              "ref": {
+                "item": "item_29"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_10",
+          "color": "near",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_10_0",
+              "ref": {
+                "item": "item_5"
+              }
+            },
+            {
+              "id": "a_10_v0",
+              "ref": {
+                "tile": {
+                  "x": 9,
+                  "y": -1
+                }
+              }
+            },
+            {
+              "id": "a_10_1",
+              "ref": {
+                "item": "item_26"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_11",
+          "color": "ink",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_11_0",
+              "ref": {
+                "item": "item_6"
+              }
+            },
+            {
+              "id": "a_11_1",
+              "ref": {
+                "item": "item_11"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_12",
+          "color": "ink",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_12_0",
+              "ref": {
+                "item": "item_7"
+              }
+            },
+            {
+              "id": "a_12_1",
+              "ref": {
+                "item": "item_12"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_13",
+          "color": "ink",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_13_0",
+              "ref": {
+                "item": "item_8"
+              }
+            },
+            {
+              "id": "a_13_1",
+              "ref": {
+                "item": "item_14"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_14",
+          "color": "ink",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_14_0",
+              "ref": {
+                "item": "item_9"
+              }
+            },
+            {
+              "id": "a_14_1",
+              "ref": {
+                "item": "item_13"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_15",
+          "color": "ink",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_15_0",
+              "ref": {
+                "item": "item_10"
+              }
+            },
+            {
+              "id": "a_15_1",
+              "ref": {
+                "item": "item_15"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_16",
+          "color": "c_ui",
+          "width": 9,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_16_0",
+              "ref": {
+                "item": "item_11"
+              }
+            },
+            {
+              "id": "a_16_1",
+              "ref": {
+                "item": "item_18"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_17",
+          "color": "c_ui",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_17_0",
+              "ref": {
+                "item": "item_12"
+              }
+            },
+            {
+              "id": "a_17_1",
+              "ref": {
+                "item": "item_19"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_18",
+          "color": "c_ui",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_18_0",
+              "ref": {
+                "item": "item_14"
+              }
+            },
+            {
+              "id": "a_18_1",
+              "ref": {
+                "item": "item_20"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_19",
+          "color": "c_ui",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_19_0",
+              "ref": {
+                "item": "item_13"
+              }
+            },
+            {
+              "id": "a_19_1",
+              "ref": {
+                "item": "item_21"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_20",
+          "color": "c_ui",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_20_0",
+              "ref": {
+                "item": "item_15"
+              }
+            },
+            {
+              "id": "a_20_1",
+              "ref": {
+                "item": "item_22"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_21",
+          "color": "c_proof",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_21_0",
+              "ref": {
+                "item": "item_16"
+              }
+            },
+            {
+              "id": "a_21_1",
+              "ref": {
+                "item": "item_17"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_22",
+          "color": "c_proof",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_22_0",
+              "ref": {
+                "item": "item_17"
+              }
+            },
+            {
+              "id": "a_22_v0",
+              "ref": {
+                "tile": {
+                  "x": 14,
+                  "y": 4
+                }
+              }
+            },
+            {
+              "id": "a_22_1",
+              "ref": {
+                "item": "item_26"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_23",
+          "color": "c_sell",
+          "width": 12,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_23_0",
+              "ref": {
+                "item": "item_18"
+              }
+            },
+            {
+              "id": "a_23_1",
+              "ref": {
+                "item": "item_19"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_24",
+          "color": "c_sell",
+          "width": 12,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_24_0",
+              "ref": {
+                "item": "item_19"
+              }
+            },
+            {
+              "id": "a_24_1",
+              "ref": {
+                "item": "item_20"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_25",
+          "color": "c_sell",
+          "width": 12,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_25_0",
+              "ref": {
+                "item": "item_20"
+              }
+            },
+            {
+              "id": "a_25_1",
+              "ref": {
+                "item": "item_21"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_26",
+          "color": "c_sell",
+          "width": 11,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_26_0",
+              "ref": {
+                "item": "item_21"
+              }
+            },
+            {
+              "id": "a_26_1",
+              "ref": {
+                "item": "item_24"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_27",
+          "color": "c_sell",
+          "width": 11,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_27_0",
+              "ref": {
+                "item": "item_24"
+              }
+            },
+            {
+              "id": "a_27_1",
+              "ref": {
+                "item": "item_23"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_28",
+          "color": "c_sell",
+          "width": 11,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_28_0",
+              "ref": {
+                "item": "item_23"
+              }
+            },
+            {
+              "id": "a_28_1",
+              "ref": {
+                "item": "item_22"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_29",
+          "color": "c_proof",
+          "width": 11,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_29_0",
+              "ref": {
+                "item": "item_24"
+              }
+            },
+            {
+              "id": "a_29_1",
+              "ref": {
+                "item": "item_25"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_30",
+          "color": "c_proof",
+          "width": 11,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_30_0",
+              "ref": {
+                "item": "item_25"
+              }
+            },
+            {
+              "id": "a_30_1",
+              "ref": {
+                "item": "item_26"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_31",
+          "color": "c_stack",
+          "width": 9,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_31_0",
+              "ref": {
+                "item": "item_27"
+              }
+            },
+            {
+              "id": "a_31_1",
+              "ref": {
+                "item": "item_28"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_32",
+          "color": "c_stack",
+          "width": 9,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_32_0",
+              "ref": {
+                "item": "item_28"
+              }
+            },
+            {
+              "id": "a_32_1",
+              "ref": {
+                "item": "item_29"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_33",
+          "color": "c_stack",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_33_0",
+              "ref": {
+                "item": "item_27"
+              }
+            },
+            {
+              "id": "a_33_1",
+              "ref": {
+                "item": "item_30"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_34",
+          "color": "c_stack",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_34_0",
+              "ref": {
+                "item": "item_28"
+              }
+            },
+            {
+              "id": "a_34_1",
+              "ref": {
+                "item": "item_31"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_35",
+          "color": "c_stack",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_35_0",
+              "ref": {
+                "item": "item_29"
+              }
+            },
+            {
+              "id": "a_35_1",
+              "ref": {
+                "item": "item_32"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_36",
+          "color": "c_stack",
+          "width": 8,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_36_0",
+              "ref": {
+                "item": "item_27"
+              }
+            },
+            {
+              "id": "a_36_v0",
+              "ref": {
+                "tile": {
+                  "x": 2,
+                  "y": 8
+                }
+              }
+            },
+            {
+              "id": "a_36_1",
+              "ref": {
+                "item": "item_23"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_37",
+          "color": "ink",
+          "width": 7,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_37_0",
+              "ref": {
+                "item": "item_30"
+              }
+            },
+            {
+              "id": "a_37_1",
+              "ref": {
+                "item": "item_11"
+              }
+            }
+          ]
+        },
+        {
+          "id": "conn_38",
+          "color": "c_stack",
+          "width": 7,
+          "style": "SOLID",
+          "description": "",
+          "anchors": [
+            {
+              "id": "a_38_0",
+              "ref": {
+                "item": "item_32"
+              }
+            },
+            {
+              "id": "a_38_v0",
+              "ref": {
+                "tile": {
+                  "x": 11,
+                  "y": 7
+                }
+              }
+            },
+            {
+              "id": "a_38_1",
+              "ref": {
+                "item": "item_17"
+              }
+            }
+          ]
+        }
+      ],
+      "rectangles": [
+        {
+          "id": "r_brand",
+          "color": "c_brand",
+          "from": {
+            "x": -1,
+            "y": -12
+          },
+          "to": {
+            "x": 8,
+            "y": -7
+          }
+        },
+        {
+          "id": "r_people",
+          "color": "c_people",
+          "from": {
+            "x": -1,
+            "y": -5
+          },
+          "to": {
+            "x": 15,
+            "y": -3
+          }
+        },
+        {
+          "id": "r_ui",
+          "color": "c_ui",
+          "from": {
+            "x": -1,
+            "y": -2
+          },
+          "to": {
+            "x": 17,
+            "y": 2
+          }
+        },
+        {
+          "id": "r_story",
+          "color": "c_story",
+          "from": {
+            "x": -1,
+            "y": 3
+          },
+          "to": {
+            "x": 10,
+            "y": 7
+          }
+        },
+        {
+          "id": "r_proof",
+          "color": "c_proof",
+          "from": {
+            "x": 11,
+            "y": 3
+          },
+          "to": {
+            "x": 15,
+            "y": 7
+          }
+        },
+        {
+          "id": "r_stack",
+          "color": "c_stack",
+          "from": {
+            "x": -1,
+            "y": 8
+          },
+          "to": {
+            "x": 9,
+            "y": 12
+          }
+        }
+      ],
+      "textBoxes": [
+        {
+          "id": "t_title",
+          "tile": {
+            "x": -4,
+            "y": 10
+          },
+          "content": "QuitClaim",
+          "fontSize": 1.7,
+          "orientation": "Y"
+        },
+        {
+          "id": "t_sub",
+          "tile": {
+            "x": -2,
+            "y": 10
+          },
+          "content": "mid-payout title insurance on NEAR",
+          "fontSize": 0.42,
+          "orientation": "Y"
+        },
+        {
+          "id": "t_brand",
+          "tile": {
+            "x": 7.2,
+            "y": -11.5
+          },
+          "content": "NEAR",
+          "fontSize": 0.38,
+          "orientation": "X"
+        },
+        {
+          "id": "t_people",
+          "tile": {
+            "x": 13.5,
+            "y": -4.5
+          },
+          "content": "People",
+          "fontSize": 0.38,
+          "orientation": "X"
+        },
+        {
+          "id": "t_ui",
+          "tile": {
+            "x": 13.5,
+            "y": 1.3
+          },
+          "content": "Live UI",
+          "fontSize": 0.38,
+          "orientation": "X"
+        },
+        {
+          "id": "t_story",
+          "tile": {
+            "x": 9.2,
+            "y": 3.4
+          },
+          "content": "Story",
+          "fontSize": 0.38,
+          "orientation": "X"
+        },
+        {
+          "id": "t_lab",
+          "tile": {
+            "x": 13.5,
+            "y": 3.4
+          },
+          "content": "Lab",
+          "fontSize": 0.38,
+          "orientation": "X"
+        },
+        {
+          "id": "t_stack",
+          "tile": {
+            "x": 7.5,
+            "y": 10
+          },
+          "content": "SDK",
+          "fontSize": 0.38,
+          "orientation": "X"
+        }
+      ]
+    }
+  ],
+  "fitToScreen": true
+}

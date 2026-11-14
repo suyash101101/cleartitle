@@ -8094,3 +8094,73 @@ html[data-theme="light"] .geo-network-lg {
   background: transparent !important;
 }
 
+
+/* Claim table: promise / method / test */
+.claim-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.claim-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr) minmax(0, 0.9fr);
+  gap: 0.65rem 1rem;
+  align-items: start;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.25rem;
+}
+.claim-row p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+.claim-row code {
+  font-size: 0.72rem;
+  word-break: break-word;
+}
+.claim-row-head {
+  border: none;
+  padding: 0 0.85rem 0.15rem;
+  background: transparent;
+}
+.claim-row-head .meta {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+@media (max-width: 720px) {
+  .claim-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+  .claim-row-head {
+    display: none;
+  }
+}
+
+/* Flash toast with clickable explorer hash */
+.flash {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  max-width: min(28rem, 92vw);
+}
+.flash-dismiss {
+  all: unset;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.35;
+}
+.flash-hash {
+  font-size: 0.78rem !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: inherit !important;
+  opacity: 0.85;
+}
+.flash-hash:hover {
+  opacity: 1;
+}

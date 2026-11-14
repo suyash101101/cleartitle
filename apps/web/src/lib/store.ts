@@ -19,8 +19,33 @@ import {
   type LabResult,
   type WorldState,
 } from "@/sdk";
+import { ONCHAIN, txUrl } from "@/lib/evidence";
 
-type Flash = { kind: "ok" | "err" | "lab"; text: string } | null;
+type Flash = {
+  kind: "ok" | "err" | "lab";
+  text: string;
+  href?: string;
+  hrefLabel?: string;
+  ms?: number;
+} | null;
+
+function labExplorerProof(
+  kind: "old" | "listed" | "held" | "mid" | null,
+): { href: string; label: string } | null {
+  if (!kind) return null;
+  const tx =
+    kind === "old"
+      ? ONCHAIN.oldOwnerWithdrawRefuse
+      : kind === "listed"
+        ? ONCHAIN.listedWithdrawRefuse
+        : kind === "held"
+          ? ONCHAIN.heldSigRefuse
+          : ONCHAIN.buySeatMidPayout;
+  return {
+    href: txUrl(tx),
+    label: `${tx.slice(0, 14)}… →`,
+  };
+}
 
 export type JudgeStamp = { step: string; detail: string; ok: boolean };
 
@@ -267,10 +292,18 @@ export const useApp = create<AppState>((set, get) => ({
       get().runMidPayoutScenario();
       return;
     } else lastLab = labWashPath(world, tokenId);
+
+    const proof = labExplorerProof(kind === "wash" ? null : kind);
     set({
       world,
       lastLab,
-      flash: { kind: "lab", text: `Lab · ${lastLab.attack}: ${lastLab.reason}` },
+      flash: {
+        kind: "lab",
+        text: `Lab · ${lastLab.attack}: ${lastLab.reason}`,
+        href: proof?.href,
+        hrefLabel: proof?.label,
+        ms: proof ? 10000 : 5000,
+      },
       diligence: kind === "wash" ? runDiligence(world, tokenId) : get().diligence,
     });
   },
@@ -279,9 +312,10 @@ export const useApp = create<AppState>((set, get) => ({
       const world = seedDemoNight();
       const nonce = listSeat(world, "ada.near", "3", 100);
       const held = labHeldSig(world, "ada.near", "3");
-      const { rebounded, txHash } = buySeat(world, "priya.near", "3", 100, nonce);
+      const { rebounded } = buySeat(world, "priya.near", "3", 100, nonce);
       const old = labOldOwnerWithdraw(world, "ada.near", "3");
       const diligence = runDiligence(world, "3");
+      const mid = labExplorerProof("mid");
       set({
         world,
         actor: "priya.near",
@@ -289,7 +323,10 @@ export const useApp = create<AppState>((set, get) => ({
         lastLab: old,
         flash: {
           kind: "lab",
-          text: `Mid-payout OK · rebound ${rebounded} · held-sig: ${held.reason.slice(0, 40)}… · old withdraw: ${old.reason} · ${txHash}`,
+          text: `Mid-payout OK · rebound ${rebounded} · held refused · old withdraw refused`,
+          href: mid?.href,
+          hrefLabel: mid?.label ?? "Open mid-payout tx →",
+          ms: 12000,
         },
       });
     } catch (e) {

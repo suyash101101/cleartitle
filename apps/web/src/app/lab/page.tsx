@@ -11,8 +11,16 @@ import { SessionBar } from "@/components/SessionBar";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { PageHeader } from "@/components/ui/page-header";
 import { useApp } from "@/lib/store";
-import { LAB_ATTACKS, txUrl } from "@/lib/evidence";
+import { LAB_ATTACKS, ONCHAIN, txUrl } from "@/lib/evidence";
 import { LayoutGrid, ShieldCheck, Ticket } from "lucide-react";
+
+function proofForAttack(attack: string): string | null {
+  if (attack.includes("old_owner")) return ONCHAIN.oldOwnerWithdrawRefuse;
+  if (attack.includes("listed")) return ONCHAIN.listedWithdrawRefuse;
+  if (attack.includes("held")) return ONCHAIN.heldSigRefuse;
+  if (attack.includes("wash")) return null;
+  return ONCHAIN.buySeatMidPayout;
+}
 
 export default function LabPage() {
   const world = useApp((s) => s.world);
@@ -20,6 +28,7 @@ export default function LabPage() {
   const runLab = useApp((s) => s.runLab);
   const runMidPayoutScenario = useApp((s) => s.runMidPayoutScenario);
   const seat = world.seats["3"];
+  const lastTx = lastLab ? proofForAttack(lastLab.attack) : null;
 
   return (
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
@@ -59,6 +68,31 @@ export default function LabPage() {
 
       <JudgeStampPanel />
 
+      <div className="panel lab-receipt-wall" style={{ marginBottom: "1.25rem" }}>
+        <h3>
+          <span className="badge rpc">Testnet RPC</span> Receipt wall
+        </h3>
+        <p className="meta" style={{ marginBottom: "0.85rem" }}>
+          Open these first. Toasts after each attack also keep the hash clickable for ~10s.
+        </p>
+        <ul className="lab-receipt-grid">
+          {LAB_ATTACKS.map((a) => (
+            <li key={a.id} className={a.success ? "pass" : "fail"}>
+              <span className="lab-receipt-mark" aria-hidden>
+                {a.success ? "✓" : "✕"}
+              </span>
+              <div>
+                <strong>{a.title}</strong>
+                <p className="meta">{a.reason}</p>
+                <a className="mono" href={txUrl(a.tx)} target="_blank" rel="noreferrer">
+                  {a.tx.slice(0, 18)}…
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {!seat ? (
         <p className="meta">Load live night from Club Console to unlock scenario attacks.</p>
       ) : (
@@ -84,7 +118,7 @@ export default function LabPage() {
                 Held-sig raw sign
               </button>
               <button type="button" className="danger" onClick={() => runLab("wash", "3")}>
-                Wash flag
+                Wash flag · fail a check
               </button>
             </div>
           </div>
@@ -101,6 +135,13 @@ export default function LabPage() {
                   <strong>{lastLab.attack}</strong>
                 </p>
                 <p className="meta">{lastLab.reason}</p>
+                {lastTx && (
+                  <p style={{ marginTop: "0.75rem" }}>
+                    <a className="mono pin-link" href={txUrl(lastTx)} target="_blank" rel="noreferrer">
+                      {lastTx.slice(0, 22)}… → explorer
+                    </a>
+                  </p>
+                )}
               </>
             ) : (
               <p className="meta">No attack run yet. Buttons arm the threat first, then refuse it.</p>
@@ -115,31 +156,6 @@ export default function LabPage() {
       <OffChainRoyalty />
       <DynamicQrStrip />
       <ResaleClearance />
-
-      <div className="panel lab-receipt-wall" style={{ marginBottom: "2.5rem" }}>
-        <h3>
-          <span className="badge rpc">Testnet RPC</span> Receipt wall
-        </h3>
-        <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          Hostile attempts and the mid-payout success path — explorer-linked.
-        </p>
-        <ul className="lab-receipt-grid">
-          {LAB_ATTACKS.map((a) => (
-            <li key={a.id} className={a.success ? "pass" : "fail"}>
-              <span className="lab-receipt-mark" aria-hidden>
-                {a.success ? "✓" : "✕"}
-              </span>
-              <div>
-                <strong>{a.title}</strong>
-                <p className="meta">{a.reason}</p>
-                <a className="mono" href={txUrl(a.tx)} target="_blank" rel="noreferrer">
-                  {a.tx.slice(0, 18)}…
-                </a>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
     </section>
   );
 }

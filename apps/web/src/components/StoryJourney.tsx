@@ -97,7 +97,7 @@ const BEATS = [
     id: "prove",
     kicker: "05 · Prove it",
     title: "Every refuse has an explorer receipt.",
-    body: "Transfer Lab arms seller-recall, listed drain, and held-sig. Each fails on-chain. The claim ↔ tx matrix on /verify maps the wedge for judges.",
+    body: "Transfer Lab arms seller-recall, listed drain, and held-sig. Each fails on-chain. /verify shows the explorer receipts first, then the promise → method → test map.",
     href: "/verify",
     cta: "Open proof matrix",
     asset: <FailSlipCard title="EXPECTED FAIL" reason="not current owner · live RPC" />,

@@ -1,14 +1,25 @@
 # Diagrams
 
+Prefer Excalidraw for demo narration (skip FossFlow / architecture for now).
+
 | File | Role |
 | --- | --- |
-| `fossflow-architecture.png` | System architecture (README) |
-| `fossflow-userflow.png` | Mid-payout user flow (README) |
-| `quitclaim-claims.png` | Claims one-pager (Excalidraw style) |
-| `fossflow-architecture.json` | FossFLOW compact import |
-| `fossflow-userflow.json` | FossFLOW compact import |
+| `mid-payout-attack.excalidraw` | Mid-air pending-cut attack — whiteboard this in the video |
+| `quitclaim-claims.excalidraw` | Claim → freeze → clean → rebound → refuse strip |
+| `e2e-flow.png` | Granular E2E FossFLOW (optional; not needed if Excalidraw is the flow) |
+| `architecture.png` / `userflow.png` | README embeds (same E2E capture) |
+| `quitclaim-claims.png` | Claims one-pager (Excalidraw) |
+| `fossflow-e2e.json` | Full FossFLOW model (icons + rectangles + connectors) |
+| `fossflow-architecture.json` | Compact companion (small architecture) |
+| `fossflow-userflow.json` | Compact companion (6-step mid-payout) |
 | `quitclaim-claims.excalidraw` | Excalidraw source |
 
-Import FossFLOW JSON via [FossFLOW](https://abrar74774.github.io/FossFLOW/) → Main menu → Open (compact format from `LLM-GENERATION-GUIDE`).
+## Regenerate E2E FossFLOW
 
-Open the `.excalidraw` file at [excalidraw.com](https://excalidraw.com).
+```bash
+# FossFLOW local on :3000
+node scripts/generate-fossflow-e2e.mjs
+cd apps/web && node scripts/capture-fossflow-e2e.mjs
+```
+
+Import `fossflow-e2e.json` in FossFLOW via **Import File** (full model with colored tiles). Compact JSON files open via Main menu → Open.

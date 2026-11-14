@@ -37,15 +37,15 @@ On-chain title insurance for memberships that earn. Demo world: **Nearnight Live
 
 ## Architecture
 
-![QuitClaim system architecture](docs/diagrams/architecture.png)
-
-![QuitClaim user flow](docs/diagrams/userflow.png)
+![QuitClaim E2E mid-payout flow](docs/diagrams/e2e-flow.png)
 
 ![QuitClaim claims](docs/diagrams/quitclaim-claims.png)
 
-Built in FossFLOW (architecture + userflow) and Excalidraw (claims). Re-export with `node apps/web/scripts/capture-diagrams.mjs` while FossFLOW runs on `:3000` and `docs/diagrams` is served on `:8765`.
+One FossFLOW end-to-end diagram (33 nodes, NEAR tool logos, mixed sleeping/vertical islands: people → Live → mid-payout story → Lab/evidence → SDK/contract). Claims sheet is Excalidraw.
 
-Sources: [`fossflow-architecture.json`](docs/diagrams/fossflow-architecture.json) · [`fossflow-userflow.json`](docs/diagrams/fossflow-userflow.json) · [`quitclaim-claims.excalidraw`](docs/diagrams/quitclaim-claims.excalidraw)
+Regenerate FossFLOW: FossFLOW on `:3000`, then `node scripts/generate-fossflow-e2e.mjs` and `node apps/web/scripts/capture-fossflow-e2e.mjs`.
+
+Sources: [`fossflow-e2e.json`](docs/diagrams/fossflow-e2e.json) · [`quitclaim-claims.excalidraw`](docs/diagrams/quitclaim-claims.excalidraw)
 
 ## Why QuitClaim
 

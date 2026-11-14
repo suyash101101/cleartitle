@@ -10,6 +10,7 @@ import {
   encodeListSeat,
   labHeldSig,
   labOldOwnerWithdraw,
+  labWashPath,
   listSeat,
   mintSeats,
   runDiligence,
@@ -47,6 +48,20 @@ describe("integration: end-to-end mid-payout product path", () => {
     const nonce = listSeat(world, "ada.near", "3", 100);
     buySeat(world, "priya.near", "3", 100, nonce);
     expect(runDiligence(world, "3").verdict).toBe("PROVABLY CLEAN");
+  });
+
+  it("wash flag fails one named diligence check → FIX BEFORE BUY", () => {
+    const world = seedDemoNight();
+    const clean = runDiligence(world, "3");
+    expect(clean.verdict).toBe("PROVABLY CLEAN");
+    expect(clean.checks.every((c) => c.pass)).toBe(true);
+
+    labWashPath(world, "3");
+    const broken = runDiligence(world, "3");
+    expect(broken.verdict).toBe("FIX BEFORE BUY");
+    const wash = broken.checks.find((c) => c.id === "wash");
+    expect(wash?.pass).toBe(false);
+    expect(broken.checks.filter((c) => c.pass).length).toBe(broken.checks.length - 1);
   });
 });
 

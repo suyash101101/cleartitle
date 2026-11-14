@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FlaskConical, LayoutGrid, ShieldCheck, Ticket } from "lucide-react";
 import { VERIFY_CLAIMS } from "@/sdk";
-import { CONTRACT_ID, LAB_ATTACKS, ONCHAIN, txUrl } from "@/lib/evidence";
+import { CONTRACT_ID, LAB_ATTACKS, txUrl } from "@/lib/evidence";
 import { ClaimClock } from "@/components/ClaimClock";
 import { JudgeStampPanel } from "@/components/JudgeStampPanel";
 import { ProofShare } from "@/components/ProofShare";
@@ -9,7 +9,7 @@ import { WarrantyStrip } from "@/components/WarrantyStrip";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { PageHeader } from "@/components/ui/page-header";
 
-/** Lean proof page — claims, receipts, threat model. */
+/** Lean proof page — receipts first, then claims map. */
 export default function VerifyPage() {
   return (
     <section className="section" style={{ borderTop: "none", paddingTop: 0 }}>
@@ -17,8 +17,8 @@ export default function VerifyPage() {
         title="/verify"
         lede={
           <>
-            Claims map to tests and live testnet transactions. Re-run{" "}
-            <span className="mono">pnpm evidence</span>.
+            Start with live explorer receipts. The table below is only the promise → method →
+            test map — not another hash list. Re-run <span className="mono">pnpm evidence</span>.
           </>
         }
       />
@@ -57,57 +57,13 @@ export default function VerifyPage() {
 
       <JudgeStampPanel />
 
-      <div className="grid-2" style={{ marginBottom: "1.25rem" }}>
-        <ClaimClock />
-        <ProofShare />
-      </div>
-
-      <WarrantyStrip />
-
-      <div className="panel" style={{ marginBottom: "1.25rem" }}>
-        <h3>Transfer threat model</h3>
-        <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          Every way a seller tries to keep the money, and how QuitClaim refuses it.
-        </p>
-        <ul className="checklist">
-          <li>
-            <span className="fail">✕</span>
-            <span>Old owner withdraw after sale · refused · not current owner</span>
-          </li>
-          <li>
-            <span className="fail">✕</span>
-            <span>Withdraw while listed · refused · encumbered</span>
-          </li>
-          <li>
-            <span className="fail">✕</span>
-            <span>Held raw sign while listed · refused · epoch freeze</span>
-          </li>
-          <li>
-            <span className="pass">✓</span>
-            <span>Mid-payout buy · pending rebound + ownership flip</span>
-          </li>
-        </ul>
-      </div>
-
-      <div className="panel" style={{ marginBottom: "1.25rem" }}>
-        <h3>Claim ↔ tx matrix</h3>
-        <div className="claim-table">
-          {VERIFY_CLAIMS.map((c) => (
-            <div key={c.test} className="claim-row">
-              <code className="mono">{c.test}</code>
-              <p>{c.claim}</p>
-              <p className="meta">{c.method}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="panel lab-receipt-wall" style={{ marginBottom: "2.5rem" }}>
+      <div className="panel lab-receipt-wall" style={{ marginBottom: "1.25rem" }}>
         <h3>
           <span className="badge rpc">Testnet RPC</span> Receipt wall
         </h3>
         <p className="meta" style={{ marginBottom: "0.85rem" }}>
-          Explorer-linked refuses and the mid-payout success path.
+          Click any hash → Nearblocks. These are the on-chain refuses (and one mid-payout
+          success) judges should open in the demo.
         </p>
         <ul className="lab-receipt-grid">
           {LAB_ATTACKS.map((a) => (
@@ -131,6 +87,60 @@ export default function VerifyPage() {
             re-run in Lab →
           </Link>
         </p>
+      </div>
+
+      <div className="grid-2" style={{ marginBottom: "1.25rem" }}>
+        <ClaimClock />
+        <ProofShare />
+      </div>
+
+      <WarrantyStrip />
+
+      <div className="panel" style={{ marginBottom: "1.25rem" }}>
+        <h3>Transfer threat model</h3>
+        <p className="meta" style={{ marginBottom: "0.85rem" }}>
+          Same attacks as the receipt wall — in plain English.
+        </p>
+        <ul className="checklist">
+          <li>
+            <span className="fail">✕</span>
+            <span>Old owner withdraw after sale · refused · not current owner</span>
+          </li>
+          <li>
+            <span className="fail">✕</span>
+            <span>Withdraw while listed · refused · encumbered</span>
+          </li>
+          <li>
+            <span className="fail">✕</span>
+            <span>Held raw sign while listed · refused · epoch freeze</span>
+          </li>
+          <li>
+            <span className="pass">✓</span>
+            <span>Mid-payout buy · pending rebound + ownership flip</span>
+          </li>
+        </ul>
+      </div>
+
+      <div className="panel" style={{ marginBottom: "2.5rem" }}>
+        <h3>What each claim means</h3>
+        <p className="meta" style={{ marginBottom: "0.85rem" }}>
+          Not transactions. Each row = a promise we make · the contract method that enforces
+          it · the automated test that checks it. Hashes stay in the receipt wall above.
+        </p>
+        <div className="claim-table claim-table-labeled">
+          <div className="claim-row claim-row-head" aria-hidden>
+            <span className="meta">Test</span>
+            <span className="meta">Promise</span>
+            <span className="meta">Contract method</span>
+          </div>
+          {VERIFY_CLAIMS.map((c) => (
+            <div key={c.test} className="claim-row">
+              <code className="mono">{c.test}</code>
+              <p>{c.claim}</p>
+              <p className="meta mono">{c.method}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -136,7 +136,7 @@ export default function ConsolePage() {
               <li>
                 <span className="seat-timeline-kind">05 prove</span>
                 <span className="seat-timeline-body">
-                  <Link href="/verify">/verify threat model</Link> + claim ↔ tx matrix
+                  <Link href="/verify">/verify</Link> receipts + claims
                 </span>
               </li>
             </ol>

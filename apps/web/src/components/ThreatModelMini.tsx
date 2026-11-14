@@ -26,7 +26,7 @@ export function ThreatModelMini() {
         ))}
       </ul>
       <Link className="pin-link" href="/verify">
-        Full claim ↔ tx matrix →
+        Full receipts + claims →
       </Link>
     </aside>
   );

@@ -4,7 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Award,
+  ClipboardCheck,
   Club,
+  FileJson,
   FlaskConical,
   Home,
   LayoutGrid,
@@ -25,8 +27,8 @@ const links = [
   { href: "/seat/3", label: "Live", Icon: Award },
   { href: "/title/3", label: "Cert", Icon: ShieldCheck },
   { href: "/lab", label: "Lab", Icon: FlaskConical },
-  { href: "/verify", label: "Verify", Icon: ShieldCheck },
-  { href: "/proof", label: "Proof", Icon: ShieldCheck },
+  { href: "/verify", label: "Verify", Icon: ClipboardCheck },
+  { href: "/proof", label: "Proof", Icon: FileJson },
   { href: "/console", label: "Club", Icon: Club },
   { href: "/scale", label: "Scale", Icon: Map },
 ];

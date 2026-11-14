@@ -41,7 +41,7 @@ export function ProofShare({
           Open certificate
         </Link>
         <Link className="pin-link" href="/verify">
-          /verify matrix
+          /verify receipts
         </Link>
       </div>
     </aside>
